@@ -1,4 +1,4 @@
-package com.yongjinbao.houseinfo.entity;
+package com.yongjinbao.houseValid.entity;
 
 import com.yongjinbao.commons.entity.BaseEntity;
 

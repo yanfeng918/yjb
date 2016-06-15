@@ -9,7 +9,7 @@
 	  
 	 <insert id="add" parameterType="com.yongjinbao.member.entity.BrowseFavoriteInfo" flushCache="true">  
 	   INSERT INTO t_browse_favorite_info (createDate,member_id,houseInfo_id,customerHouseStyle,browseFavoriteStyle) 
-	   VALUES (now(),#{member.id},#{houseInfo.id},#{customerHouseStyle},#{browseFavoriteStyle})
+	   VALUES (now(),#{member.id},#{houseInfoValid.id},#{customerHouseStyle},#{browseFavoriteStyle})
 	</insert>  
 	
 	<update id="update" parameterType="com.yongjinbao.member.entity.BrowseFavoriteInfo">  
@@ -87,7 +87,7 @@
 		SELECT TIMESTAMPDIFF(MINUTE, b.createDate, now()) Minutes FROM
 		t_browse_favorite_info b 
 <!-- 		WHERE b.browseFavoriteStyle= 'Browse' AND b.member_id=#{member_id} -->
-<!-- 		and b.member_id=#{member_id} and b.customerHouseStyle='HouseInfo' -->
+<!-- 		and b.member_id=#{member_id} and b.customerHouseStyle='HouseInfoValid' -->
 		<where>
 			<if test="browseFavoriteStyle!=null"> b.browseFavoriteStyle = #{browseFavoriteStyle}</if>
 			<if test="customerHouseStyle!=null"> and b.customerHouseStyle=#{customerHouseStyle}</if>

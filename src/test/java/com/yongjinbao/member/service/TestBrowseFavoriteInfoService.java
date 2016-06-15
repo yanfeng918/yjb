@@ -58,9 +58,9 @@ public class TestBrowseFavoriteInfoService {
 		dto.setCustomerHouseStyle(CustomerHouseStyle.HouseInfo);
 		dto.setBrowseFavoriteStyle(BrowseFavoriteStyle.Browse);
 		dto.setMember_id(1l);
-//		Pager<HouseInfo> pH = browseHouseInfoService.getFavoriteHouseInfoList(dto);
+//		Pager<HouseInfoValid> pH = browseHouseInfoService.getFavoriteHouseInfoList(dto);
 		
-		/*for (HouseInfo h : pH.getList()) {
+		/*for (HouseInfoValid h : pH.getList()) {
 			
 		}*/
 		

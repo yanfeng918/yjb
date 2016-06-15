@@ -1,14 +1,38 @@
-package com.yongjinbao.houseinfo.service.impl;
+package com.yongjinbao.houseValid.service.impl;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-
+import com.yongjinbao.commons.entity.Area;
+import com.yongjinbao.commons.service.IAreaService;
+import com.yongjinbao.finance.entity.Expenses;
+import com.yongjinbao.finance.entity.Expenses.EXPENSES_TYPE;
+import com.yongjinbao.finance.entity.ExtraAward;
+import com.yongjinbao.finance.entity.Income;
+import com.yongjinbao.finance.entity.Income.INCOME_TYPE;
+import com.yongjinbao.finance.entity.WithDraw;
+import com.yongjinbao.finance.service.IExpensesService;
+import com.yongjinbao.finance.service.IIncomeService;
+import com.yongjinbao.finance.service.IWithDrawService;
+import com.yongjinbao.finance.vo.IncomeAmountVO;
+import com.yongjinbao.houseValid.dao.IHouseInfoValidDao;
+import com.yongjinbao.houseValid.dto.*;
+import com.yongjinbao.houseValid.entity.Community;
+import com.yongjinbao.houseValid.entity.HouseInfoValid;
+import com.yongjinbao.houseValid.entity.State;
+import com.yongjinbao.houseValid.service.IHouseInfoValidService;
+import com.yongjinbao.houseValid.vo.*;
+import com.yongjinbao.member.dto.MyBrowseInfoDto;
+import com.yongjinbao.member.dto.UpdateBalanceDto;
+import com.yongjinbao.member.entity.BrowseFavoriteInfo;
+import com.yongjinbao.member.entity.BrowseFavoriteInfo.BrowseFavoriteStyle;
+import com.yongjinbao.member.entity.BrowseFavoriteInfo.CustomerHouseStyle;
+import com.yongjinbao.member.entity.Member;
+import com.yongjinbao.member.service.IBrowseFavoriteHouseInfoService;
+import com.yongjinbao.member.service.IMemberService;
+import com.yongjinbao.mybatis.entity.Pager;
+import com.yongjinbao.mybatis.service.impl.BaseServiceImpl;
+import com.yongjinbao.utils.CommonUtils;
+import com.yongjinbao.utils.RedisUtils;
+import com.yongjinbao.utils.SerializeUtil;
+import com.yongjinbao.utils.SettingUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
@@ -26,63 +50,23 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.util.EntityUtils;
 import org.springframework.stereotype.Service;
 
-import com.yongjinbao.commons.entity.Area;
-import com.yongjinbao.commons.service.IAreaService;
-import com.yongjinbao.finance.entity.Expenses;
-import com.yongjinbao.finance.entity.Expenses.EXPENSES_TYPE;
-import com.yongjinbao.finance.entity.ExtraAward;
-import com.yongjinbao.finance.entity.Income;
-import com.yongjinbao.finance.entity.Income.INCOME_TYPE;
-import com.yongjinbao.finance.entity.WithDraw;
-import com.yongjinbao.finance.service.IExpensesService;
-import com.yongjinbao.finance.service.IIncomeService;
-import com.yongjinbao.finance.service.IWithDrawService;
-import com.yongjinbao.finance.vo.IncomeAmountVO;
-import com.yongjinbao.houseinfo.dao.IHouseInfoDao;
-import com.yongjinbao.houseinfo.dto.BonusProcessDto;
-import com.yongjinbao.houseinfo.dto.GetCommunityV2Dto;
-import com.yongjinbao.houseinfo.dto.GetHouseInfoDto;
-import com.yongjinbao.houseinfo.dto.HouseInfoExistDto;
-import com.yongjinbao.houseinfo.dto.StateStatusDto;
-import com.yongjinbao.houseinfo.entity.Community;
-import com.yongjinbao.houseinfo.entity.HouseInfo;
-import com.yongjinbao.houseinfo.entity.HouseInfo.HouseInfo_STATUS;
-import com.yongjinbao.houseinfo.entity.HouseInfo.HouseInfo_SaleWay;
-import com.yongjinbao.houseinfo.entity.State;
-import com.yongjinbao.houseinfo.service.IHouseInfoService;
-import com.yongjinbao.houseinfo.vo.AgentDynamicVO;
-import com.yongjinbao.houseinfo.vo.BonusVO;
-import com.yongjinbao.houseinfo.vo.BrowseHouseInfoVO;
-import com.yongjinbao.houseinfo.vo.GetAreaHouseCountByCityVO;
-import com.yongjinbao.houseinfo.vo.HouseInfoAndFavouriteStatusVO;
-import com.yongjinbao.houseinfo.vo.LevelDetailVO;
-import com.yongjinbao.houseinfo.vo.StateStatusVO;
-import com.yongjinbao.houseinfo.vo.TopTenRankingVO;
-import com.yongjinbao.houseinfo.vo.UpdateHouseInfoVO;
-import com.yongjinbao.member.dto.MyBrowseInfoDto;
-import com.yongjinbao.member.dto.UpdateBalanceDto;
-import com.yongjinbao.member.entity.BrowseFavoriteInfo;
-import com.yongjinbao.member.entity.BrowseFavoriteInfo.BrowseFavoriteStyle;
-import com.yongjinbao.member.entity.BrowseFavoriteInfo.CustomerHouseStyle;
-import com.yongjinbao.member.entity.Member;
-import com.yongjinbao.member.service.IBrowseFavoriteHouseInfoService;
-import com.yongjinbao.member.service.IMemberService;
-import com.yongjinbao.mybatis.entity.Pager;
-import com.yongjinbao.mybatis.service.impl.BaseServiceImpl;
-import com.yongjinbao.utils.CommonUtils;
-import com.yongjinbao.utils.RedisUtils;
-import com.yongjinbao.utils.SerializeUtil;
-import com.yongjinbao.utils.SettingUtils;
+import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by yanfeng on 2015/8/18.
  */
 @Service
-public class HouseInfoService extends BaseServiceImpl<HouseInfo,Integer> 
-		implements IHouseInfoService{
+public class HouseInfoValidService extends BaseServiceImpl<HouseInfoValid,Integer>
+		implements IHouseInfoValidService {
 	
     @Inject
-    private IHouseInfoDao houseInfoDao;
+    private IHouseInfoValidDao houseInfoDao;
    
     @Inject
 	private IAreaService areaService;
@@ -103,7 +87,7 @@ public class HouseInfoService extends BaseServiceImpl<HouseInfo,Integer>
     private IWithDrawService withDrawService;
     
     @Inject
-    public void setBaseDao(IHouseInfoDao houseInfoDao) {
+    public void setBaseDao(IHouseInfoValidDao houseInfoDao) {
         super.setBaseDao(houseInfoDao);
     }
     
@@ -155,9 +139,9 @@ public class HouseInfoService extends BaseServiceImpl<HouseInfo,Integer>
 	@Override
     public <T> Pager<T> getHouseInfo(GetHouseInfoDto getHouseInfoDto) {
         getHouseInfoDto.setPageOffset((getHouseInfoDto.getPageNumber()-1)*getHouseInfoDto.getPageSize());
-        Pager<HouseInfoAndFavouriteStatusVO> pages=new Pager<HouseInfoAndFavouriteStatusVO>();
+        Pager<HouseInfoValidAndFavouriteStatusVO> pages=new Pager<HouseInfoValidAndFavouriteStatusVO>();
         int total=0;
-        List<HouseInfoAndFavouriteStatusVO> list = new ArrayList<HouseInfoAndFavouriteStatusVO>();
+        List<HouseInfoValidAndFavouriteStatusVO> list = new ArrayList<HouseInfoValidAndFavouriteStatusVO>();
         //新增逻辑：如果地域有子节点那就模糊查询，否则直接条件查询
         int area_id = getHouseInfoDto.getArea_id();
         List<Area> findChildren = areaService.findChildren(area_id);
@@ -194,7 +178,7 @@ public class HouseInfoService extends BaseServiceImpl<HouseInfo,Integer>
 	            	}
 				}else {
 					//System.out.println("******三级区域有缓存**********");
-					list = (List<HouseInfoAndFavouriteStatusVO> )SerializeUtil.unserialize(listCdtBs);
+					list = (List<HouseInfoValidAndFavouriteStatusVO> )SerializeUtil.unserialize(listCdtBs);
 	            	total=(int) SerializeUtil.unserialize(listCdtCountBs);
 				}
 	        }else{
@@ -215,7 +199,7 @@ public class HouseInfoService extends BaseServiceImpl<HouseInfo,Integer>
 	            	}
 				}else {
 					//System.out.println("******一二级区域有缓存**********");
-					list = (List<HouseInfoAndFavouriteStatusVO> )SerializeUtil.unserialize(listLikeBs);
+					list = (List<HouseInfoValidAndFavouriteStatusVO> )SerializeUtil.unserialize(listLikeBs);
 	            	total=(int) SerializeUtil.unserialize(listLikeCountBs);
 				}
 	        }
@@ -322,44 +306,44 @@ public class HouseInfoService extends BaseServiceImpl<HouseInfo,Integer>
 	}
 
 	@Override
-	public HouseInfo browseHouseInfoByHouseId(long houseInfo_id) {
+	public HouseInfoValid browseHouseInfoByHouseId(long houseInfo_id) {
 		return houseInfoDao.browseHouseInfoByHouseId(houseInfo_id);
 	}
 
 	@Override
-	public Member getHouseInfoMember(HouseInfo houseInfo, boolean isBought) {
+	public Member getHouseInfoMember(HouseInfoValid houseInfoValid, boolean isBought) {
 		//首先检查出售方式
 		Member member = null;
-		HouseInfo tempHouseInfo = new HouseInfo();
-		tempHouseInfo.setId(houseInfo.getId());
-		int readTime = houseInfo.getReadTime();
-		if (houseInfo.getSaleWay().compareTo(HouseInfo_SaleWay.CUSTOMER)==0) {
+		HouseInfoValid tempHouseInfoValid = new HouseInfoValid();
+		tempHouseInfoValid.setId(houseInfoValid.getId());
+		int readTime = houseInfoValid.getReadTime();
+		if (houseInfoValid.getSaleWay().compareTo(HouseInfoValid.HouseInfo_SaleWay.CUSTOMER)==0) {
 			//自定义房源
-			member = houseInfoDao.getHouseMember(houseInfo.getId());
+			member = houseInfoDao.getHouseMember(houseInfoValid.getId());
 			//如果未购买，查看后，房源的readTime+1
 			//readTime+1后如果=3，更改为系统房源
 			//如果已经购买，则readTime不增加
 			if (!isBought) {
 				if (readTime+1 >= 3) {
 					//更改CUSTOMERINFO_SALEWAY方式为SYSTEM
-					tempHouseInfo.setInfoPrice(10f);
-					tempHouseInfo.setSaleWay(HouseInfo_SaleWay.SYSTEM);
-					tempHouseInfo.setReadTime(readTime+1);
+					tempHouseInfoValid.setInfoPrice(10f);
+					tempHouseInfoValid.setSaleWay(HouseInfoValid.HouseInfo_SaleWay.SYSTEM);
+					tempHouseInfoValid.setReadTime(readTime+1);
 				}else {
 					//readTime更新为readTime+1
-					tempHouseInfo.setReadTime(readTime+1);
+					tempHouseInfoValid.setReadTime(readTime+1);
 				}
-				tempHouseInfo.setAvailable(true);
-				houseInfoDao.updateHouseInfoWhenBrowse(tempHouseInfo);
+				tempHouseInfoValid.setAvailable(true);
+				houseInfoDao.updateHouseInfoWhenBrowse(tempHouseInfoValid);
 			}
-		}else if (houseInfo.getSaleWay().compareTo(HouseInfo_SaleWay.SYSTEM)==0) {
+		}else if (houseInfoValid.getSaleWay().compareTo(HouseInfoValid.HouseInfo_SaleWay.SYSTEM)==0) {
 			//系统房源
 			member = memberService.getSystemMember();
 			if (!isBought) {
 				//readTime更新为readTime+1
-				tempHouseInfo.setReadTime(readTime+1);
-				tempHouseInfo.setAvailable(true);
-				houseInfoDao.updateHouseInfoWhenBrowse(tempHouseInfo);
+				tempHouseInfoValid.setReadTime(readTime+1);
+				tempHouseInfoValid.setAvailable(true);
+				houseInfoDao.updateHouseInfoWhenBrowse(tempHouseInfoValid);
 			}
 		}
 		return member;
@@ -374,39 +358,39 @@ public class HouseInfoService extends BaseServiceImpl<HouseInfo,Integer>
 	}
 
 	@Override
-	public void addIncomeExpenseAndBrowseInfo(Member houseInfoMember, Member loginMember, HouseInfo houseInfo) {
+	public void addIncomeExpenseAndBrowseInfo(Member houseInfoMember, Member loginMember, HouseInfoValid houseInfoValid) {
 		
 		if(houseInfoMember.getId()==memberService.getSystemMember().getId()){
 			//系统房源，系统增加一条10元收入记录
 			Income income = new Income();
-			income.setAmount(Float.parseFloat(String.valueOf(houseInfo.getInfoPrice())));
+			income.setAmount(Float.parseFloat(String.valueOf(houseInfoValid.getInfoPrice())));
 			income.setIncomeFrom(loginMember.getId());//收入来源ID为当前登陆账号
 			income.setMember(houseInfoMember);//收入所属为房源信息人
 			income.setIncomeType(INCOME_TYPE.dealIncome);
-			income.setHouseInfo_id(houseInfo.getId());
+			income.setHouseInfo_id(houseInfoValid.getId());
 			incomeService.addIncomeInfo(income);
 		}else{
 			//非系统房源，增加两条收入记录，房源拥有者增加70%，系统增加30%
 			Income income = new Income();
-			income.setAmount(Float.parseFloat(String.valueOf(houseInfo.getInfoPrice()*0.3)));
+			income.setAmount(Float.parseFloat(String.valueOf(houseInfoValid.getInfoPrice()*0.3)));
 			income.setMember(memberService.getSystemMember());//收入所属为系统
 			income.setIncomeFrom(loginMember.getId());//收入来源ID为当前登陆账号
 			income.setIncomeType(INCOME_TYPE.dealIncome);
-			income.setHouseInfo_id(houseInfo.getId());
+			income.setHouseInfo_id(houseInfoValid.getId());
 			incomeService.addIncomeInfo(income);
 			//
-			income.setAmount(Float.parseFloat(String.valueOf(houseInfo.getInfoPrice()*0.7)));
+			income.setAmount(Float.parseFloat(String.valueOf(houseInfoValid.getInfoPrice()*0.7)));
 			income.setMember(houseInfoMember);
 			incomeService.addIncomeInfo(income);
 		}
 		
 		//支出明细
 		Expenses expenses = new Expenses();
-		expenses.setAmount(String.valueOf(houseInfo.getInfoPrice()));
+		expenses.setAmount(String.valueOf(houseInfoValid.getInfoPrice()));
 		expenses.setExpensesTo(houseInfoMember.getId());//支出对象为房源信息人
 		expenses.setMember(loginMember);//支出所属为登陆会员
 		expenses.setExpensesType(EXPENSES_TYPE.dealExpense);
-		expenses.setHouseInfo_id(houseInfo.getId());
+		expenses.setHouseInfo_id(houseInfoValid.getId());
 		expensesService.addExpenseInfo(expenses);
 		
 		//加入查看房源信息
@@ -414,20 +398,20 @@ public class HouseInfoService extends BaseServiceImpl<HouseInfo,Integer>
 		browseFavoriteInfo.setCreateDate(new Date());
 		browseFavoriteInfo.setModifyDate(new Date());
 		browseFavoriteInfo.setMember(loginMember);
-		browseFavoriteInfo.setHouseInfo(houseInfo);
+		browseFavoriteInfo.setHouseInfo(houseInfoValid);
 		browseFavoriteInfo.setCustomerHouseStyle(CustomerHouseStyle.HouseInfo);
 		browseFavoriteInfo.setBrowseFavoriteStyle(BrowseFavoriteStyle.Browse);
 		brosweHouseInfoService.addBrowseHouseInfo(browseFavoriteInfo);
 	}
 
 	@Override
-	public BrowseHouseInfoVO getBrowseHouseInfoVO(long houseInfo_id,HttpServletRequest request) {
+	public BrowseHouseInfoVO getBrowseHouseInfoVO(long houseInfo_id, HttpServletRequest request) {
 		BrowseHouseInfoVO browseHouseInfoVO = new BrowseHouseInfoVO();
 		Member loginMember = memberService.getCurrent(request);//登录账号
 		boolean isMine = false; //是否自己发布的房源
 		boolean isBought = false;//是否购买
 		boolean isBalanceEnough = false;//余额是否充足
-		HouseInfo houseInfo = null;//房源信息
+		HouseInfoValid houseInfoValid = null;//房源信息
 		MyBrowseInfoDto myBrowseInfoDto = new MyBrowseInfoDto();
 		myBrowseInfoDto.setHouseInfo_id(houseInfo_id);
 		myBrowseInfoDto.setMember_id(loginMember.getId());
@@ -437,45 +421,45 @@ public class HouseInfoService extends BaseServiceImpl<HouseInfo,Integer>
 		if (new Long(isMymember.getId()).compareTo(new Long(loginMember.getId()))==0) {
 			//自己发布的房源时，直接反回houseInfo
 			isMine = true;
-			houseInfo = new HouseInfo();
-			houseInfo = browseHouseInfoByHouseId(houseInfo_id);
-			houseInfo.setMember(isMymember);
+			houseInfoValid = new HouseInfoValid();
+			houseInfoValid = browseHouseInfoByHouseId(houseInfo_id);
+			houseInfoValid.setMember(isMymember);
 		}else {
 			isBought = isHouseInfoBought(myBrowseInfoDto);
 			if (isBought) {
 				//已经购买
-				houseInfo = new HouseInfo();
-				houseInfo = browseHouseInfoByHouseId(houseInfo_id);
-				Member houseInfoMember = getHouseInfoMember(houseInfo, isBought);
-				houseInfo.setMember(houseInfoMember);
+				houseInfoValid = new HouseInfoValid();
+				houseInfoValid = browseHouseInfoByHouseId(houseInfo_id);
+				Member houseInfoMember = getHouseInfoMember(houseInfoValid, isBought);
+				houseInfoValid.setMember(houseInfoMember);
 			}else {
 				//未购买时，先检查余额
 				float balance = loginMember.getBalance();//余额信息
 				//2015年11月13日10:24修正【余额应为现有余额减去冻结余额】
 				balance = balance - getFrozenAmount(loginMember);
 				isBalanceEnough = isBalanceEnoughToBrowse(balance, houseInfo_id);
-				HouseInfo tempInfo = new HouseInfo();
+				HouseInfoValid tempInfo = new HouseInfoValid();
 				tempInfo = browseHouseInfoByHouseId(houseInfo_id);
-				houseInfo = new HouseInfo();
-				houseInfo.setId(houseInfo_id);
-				houseInfo.setInfoPrice(tempInfo.getInfoPrice());
+				houseInfoValid = new HouseInfoValid();
+				houseInfoValid.setId(houseInfo_id);
+				houseInfoValid.setInfoPrice(tempInfo.getInfoPrice());
 			}
 		}
 		browseHouseInfoVO.setMine(isMine);
 		browseHouseInfoVO.setBought(isBought);
 		browseHouseInfoVO.setBalanceEnough(isBalanceEnough);
-		browseHouseInfoVO.setHouseInfo(houseInfo);
+		browseHouseInfoVO.setHouseInfoValid(houseInfoValid);
 		return browseHouseInfoVO;
 	}
 	
     @SuppressWarnings("unchecked")
 	@Override
-    public Pager<HouseInfo> getReleaseHouseInfo(GetHouseInfoDto getHouseInfoDto) {
+    public Pager<HouseInfoValid> getReleaseHouseInfo(GetHouseInfoDto getHouseInfoDto) {
         getHouseInfoDto.setPageOffset((getHouseInfoDto.getPageNumber()-1)
                 *getHouseInfoDto.getPageSize());
-        Pager<HouseInfo> pages=new Pager<HouseInfo>();
+        Pager<HouseInfoValid> pages=new Pager<HouseInfoValid>();
 
-        List<HouseInfo> list=houseInfoDao.getReleaseHouseInfo(getHouseInfoDto);
+        List<HouseInfoValid> list=houseInfoDao.getReleaseHouseInfo(getHouseInfoDto);
         int total=houseInfoDao.getReleaseHouseInfoCount(getHouseInfoDto);
         pages.setList(list);
         pages.setTotalCount(total);
@@ -484,41 +468,7 @@ public class HouseInfoService extends BaseServiceImpl<HouseInfo,Integer>
         return pages;
     }
     
-    @Override
-    public UpdateHouseInfoVO getUpdateStatus(long houseInfo_id) {
-    	UpdateHouseInfoVO updateHouseInfoVO = new UpdateHouseInfoVO();
-		HouseInfo houseInfo = new HouseInfo();
-		houseInfo = browseHouseInfoByHouseId(houseInfo_id);
-		if (houseInfo.getStatus() == HouseInfo_STATUS.SUCCESS) {
-			//当前房源信息审核通过--检查是否系统房源
-			if (houseInfo.getSaleWay() == HouseInfo_SaleWay.SYSTEM) {
-				//审核通过的系统房源不能被修改
-				updateHouseInfoVO.setUpdate(false);
-				//不能修改时，onlyPrice默认为false
-				updateHouseInfoVO.setOnlyPrice(false);
-				updateHouseInfoVO.setHouseInfo(null);
-			}else {
-				//审核通过的自定义房源只能修改价格信息
-				updateHouseInfoVO.setUpdate(true);
-				updateHouseInfoVO.setOnlyPrice(true);
-				updateHouseInfoVO.setHouseInfo(houseInfo);
-			}
-		}else {
-			if (houseInfo.getStatus() == HouseInfo_STATUS.FAIL_SOLDOUT
-					||houseInfo.getStatus() == HouseInfo_STATUS.FAIL_UNAVAILABLE||
-					houseInfo.getStatus() == HouseInfo_STATUS.FAIL_DISCON3) {
-				updateHouseInfoVO.setUpdate(false);
-				updateHouseInfoVO.setOnlyPrice(false);
-				updateHouseInfoVO.setHouseInfo(null);
-			}else {
-				//审核中或不通过的系统房源或自定义房源，信息全部可修改！
-				updateHouseInfoVO.setUpdate(false);
-				updateHouseInfoVO.setOnlyPrice(false);
-				updateHouseInfoVO.setHouseInfo(houseInfo);
-			}
-		}
-		return updateHouseInfoVO;
-    }
+
     
     @Override
     public Area getHouseInfoArea(long houseInfo_id) {
@@ -548,14 +498,14 @@ public class HouseInfoService extends BaseServiceImpl<HouseInfo,Integer>
     }
     
     @Override
-    public List<HouseInfo> getLatestHouseInfoVO() {
-    	List<HouseInfo> latestList = new ArrayList<HouseInfo>();
+    public List<HouseInfoValid> getLatestHouseInfoVO() {
+    	List<HouseInfoValid> latestList = new ArrayList<HouseInfoValid>();
     	latestList = houseInfoDao.getLatestHouseInfo();
     	return latestList;
     }
     
     @Override
-    public HouseInfo loadHouseInfo(long id) {
+    public HouseInfoValid loadHouseInfo(long id) {
     	return houseInfoDao.loadHouseInfo(id);
     }
     
@@ -657,7 +607,7 @@ public class HouseInfoService extends BaseServiceImpl<HouseInfo,Integer>
     }
 
 	@Override
-	public HouseInfo loadHouseInfoWithMember(long id) {
+	public HouseInfoValid loadHouseInfoWithMember(long id) {
 		return houseInfoDao.loadHouseInfoWithMember(id);
 	}
 	
@@ -665,7 +615,7 @@ public class HouseInfoService extends BaseServiceImpl<HouseInfo,Integer>
 	public List<AgentDynamicVO> getAgentDynamicList() {
 		List<AgentDynamicVO> agentList = new ArrayList<AgentDynamicVO>();
 		List<WithDraw> wList = withDrawService.getLatesWithDraw();
-		List<HouseInfo> hList = getLatestHouseInfoVO();
+		List<HouseInfoValid> hList = getLatestHouseInfoVO();
 		AgentDynamicVO vo = null;
 		for (WithDraw withDraw : wList) {
 			vo = new AgentDynamicVO();
@@ -673,10 +623,10 @@ public class HouseInfoService extends BaseServiceImpl<HouseInfo,Integer>
 			vo.setWithDraw(withDraw);
 			agentList.add(vo);
 		}
-		for (HouseInfo houseInfo : hList) {
+		for (HouseInfoValid houseInfoValid : hList) {
 			vo = new AgentDynamicVO();
 			vo.setWithdrawOrNot(false);
-			vo.setHouseInfo(houseInfo);
+			vo.setHouseInfoValid(houseInfoValid);
 			agentList.add(vo);
 		}
 		return agentList;
@@ -684,38 +634,11 @@ public class HouseInfoService extends BaseServiceImpl<HouseInfo,Integer>
 	
 	@Override
 	public boolean isMobileOk(String mobile) {
-		return !isAgentMobile(mobile)&&!isLocalMobile(mobile);
+		return !isAgentMobile(mobile);
 	}
 	
 
-	@Override
-	public boolean isLocalMobile(String mobile) {
-		//首先，判断是否存在这个手机号码，如果存在是否是失败的房源，如果是失败的是否仅仅失败一次，那么就不重复
-		//2016年1月6日 修正 当本地存在该号码时，将该号码自动激活为待审核状态，收益人为之前提供房源者
-		List<HouseInfo> localMobile = houseInfoDao.isLocalMobile(mobile);
-		if(localMobile.size()==0){
-			return false;
-		}else {
-			HouseInfo firstHouse = localMobile.get(0);
-			for (HouseInfo houseInfo : localMobile) {
-				HouseInfo_STATUS s = houseInfo.getStatus();
-				if (s==HouseInfo_STATUS.SUCCESS||s==HouseInfo_STATUS.APPLY||s.getOutername().indexOf("未接通")!=-1) {
-					return true;
-				}
-			}
-			HouseInfo applyHouse = new HouseInfo();
-			applyHouse.setId(firstHouse.getId());
-			applyHouse.setStatus(HouseInfo_STATUS.APPLY);
-			try {
-				houseInfoDao.updateHouseToApplyStatus(applyHouse);
-				houseInfoDao.addActiveRecord(applyHouse.getId());
-			} catch (Exception e) {
-				e.printStackTrace();
-				return true;
-			}
-			return true;
-		}
-	}
+
 	@Override
 	public boolean isAgentMobileRemote(String mobile){
 		
@@ -731,18 +654,18 @@ public class HouseInfoService extends BaseServiceImpl<HouseInfo,Integer>
 	}
 	
 	@Override
-	public boolean validateHouseInfo(HouseInfo houseInfo) {
-		if (!isMobileOk(houseInfo.getMobile())) {
+	public boolean validateHouseInfo(HouseInfoValid houseInfoValid) {
+		if (!isMobileOk(houseInfoValid.getMobile())) {
 			return true;//重复了
 		}
 		//2015年11月23日16:47【远程接口访问是否经纪人】
 //		GetAgentByPhoneRequest request = new GetAgentByPhoneRequest();
-//		request.setPhone(houseInfo.getMobile());
+//		request.setPhone(houseInfoValid.getMobile());
 //		AgentResponse response = 
 		
     	//2015年9月19日10:41 【修改房屋信息是否已经存在的判断】
     	HouseInfoExistDto houseInfoExistDto = new HouseInfoExistDto();
-    	houseInfoExistDto.setMobile(houseInfo.getMobile());
+    	houseInfoExistDto.setMobile(houseInfoValid.getMobile());
     	//2015年11月5日10:52【直接手机号判重】
     	boolean isExisted2 = false;
 //    	try {

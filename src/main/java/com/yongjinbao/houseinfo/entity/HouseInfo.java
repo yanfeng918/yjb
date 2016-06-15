@@ -51,7 +51,7 @@ public class HouseInfo extends BaseEntity{
 
     }
 	/*
-	 * 信息的出售方式 
+	 * 信息的出售方式
 	 */
 	public enum HouseInfo_SaleWay{
         SYSTEM("出售系统",1),CUSTOMER("自由出售",2);

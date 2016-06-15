@@ -72,7 +72,7 @@ public class HouseInfoController {
             getHouseInfoDto.setMinSalePrice(Integer.parseInt(getHouseInfoDto.getSalePrice().split(",")[0]));
             getHouseInfoDto.setMaxSalePrice(Integer.parseInt(getHouseInfoDto.getSalePrice().split(",")[1]));
         }
-        getHouseInfoDto.setStatus(HouseInfo_STATUS.SUCCESS.name());
+//        getHouseInfoDto.setStatus(HouseInfo_STATUS.SUCCESS.name());
         getHouseInfoDto.setAvailable(true);
         //【修改 2015年9月18】此member_id用于判断是否属于自己的收藏
         getHouseInfoDto.setMember_id(memberService.getMemberId(request));
@@ -131,10 +131,8 @@ public class HouseInfoController {
 //			}
             String type = request.getParameter("type");
             if("zdy".equals(type)){
-            	houseInfo.setSaleWay(HouseInfo.HouseInfo_SaleWay.CUSTOMER);
             }else{
             	//修正：如果是苏州房源，标价30元。2016年1月7日
-            	houseInfo.setSaleWay(HouseInfo.HouseInfo_SaleWay.SYSTEM);
             	houseInfo.setInfoPrice(10f);
             	Area houseArea = new Area();
             	houseArea = areaService.load(area.getId());

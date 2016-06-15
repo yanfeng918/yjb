@@ -11,15 +11,15 @@ public class BaseDto {
     /**会员id**/
     private long member_id;
     /**分页的页码大小**/
-    private int pageSize;
+    private int pageSize =20;
     /**分页的偏移量 pageSize*(pageNun-1) **/
-    private int pageOffset;
+    private int pageOffset =0;
     /**排序字段**/
     private String sort;
     /**排序升降序**/
     private String order;
     /**页码**/
-    private int pageNumber;
+    private int pageNumber=1;
 
     public int getPageNumber() {
         return pageNumber;

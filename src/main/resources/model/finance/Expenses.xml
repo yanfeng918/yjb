@@ -67,7 +67,7 @@
 			<id column="member_id" property="id" />
 			<result column="username" property="username" />
 		</association>
-		<association property="houseInfo" javaType="com.yongjinbao.houseinfo.entity.HouseInfo">
+		<association property="houseInfoValid" javaType="com.yongjinbao.houseinfo.entity.HouseInfo">
 			<id column="houseInfo_id" property="id" />
 			<result column="community" property="community" />
 			<result column="ban" property="ban" />

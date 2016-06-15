@@ -52,7 +52,7 @@ public class BrowseFavoriteCustomerInfoServiceImpl extends BaseServiceImpl<Brows
 	public Pager<HouseInfo> getBrowseCustomerInfoList(GetBrowseFavoriteInfoListDto getBrowseFavoriteHouseInfoListDto) {
 		getBrowseFavoriteHouseInfoListDto.setBrowseFavoriteStyle(BrowseFavoriteStyle.Browse);
 		getBrowseFavoriteHouseInfoListDto.setCustomerHouseStyle(CustomerHouseStyle.CustomerInfo);
-//		Pager<HouseInfo> browseFavoriteHouseInfoList = browseFavoriteInfoDao.getBrowseFavoriteHouseInfoList(getBrowseFavoriteHouseInfoListDto);
+//		Pager<HouseInfoValid> browseFavoriteHouseInfoList = browseFavoriteInfoDao.getBrowseFavoriteHouseInfoList(getBrowseFavoriteHouseInfoListDto);
 		return null;
 	}
 
@@ -61,7 +61,7 @@ public class BrowseFavoriteCustomerInfoServiceImpl extends BaseServiceImpl<Brows
 		getBrowseFavoriteHouseInfoListDto.setBrowseFavoriteStyle(BrowseFavoriteStyle.Favorites);
 		getBrowseFavoriteHouseInfoListDto.setCustomerHouseStyle(CustomerHouseStyle.CustomerInfo);
 		
-//		Pager<HouseInfo> browseFavoriteHouseInfoList = browseFavoriteInfoDao.getBrowseFavoriteHouseInfoList(getBrowseFavoriteHouseInfoListDto);
+//		Pager<HouseInfoValid> browseFavoriteHouseInfoList = browseFavoriteInfoDao.getBrowseFavoriteHouseInfoList(getBrowseFavoriteHouseInfoListDto);
 		return null;
 	}
     

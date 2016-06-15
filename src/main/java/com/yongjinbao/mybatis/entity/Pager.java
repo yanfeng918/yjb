@@ -119,13 +119,6 @@ public class Pager<T> {
 		this.list = list;
 	}
 	
-	@Override
-	public String toString() {
-		return "Pager [pageNumber=" + pageNumber + ", pageOffset=" + pageOffset
-				+ ", pageSize=" + pageSize + ", totalCount=" + totalCount
-				+ ", pageCount=" + pageCount + ", property=" + property
-				+ ", keyword=" + keyword + ", orderBy=" + orderBy
-				+ ", orderType=" + orderType + ", list=" + list.toString() + "]";
-	}
+
 
 }

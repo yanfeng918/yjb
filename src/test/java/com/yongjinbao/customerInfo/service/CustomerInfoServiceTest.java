@@ -35,7 +35,7 @@ public class CustomerInfoServiceTest {
         SystemContext.setPageOffset(3);
         SystemContext.setOrder("desc");
         SystemContext.setSort("id");
-//        Pager<HouseInfo> pager= houseInfoService.getHouseInfo(getHouseInfoDto);
+//        Pager<HouseInfoValid> pager= houseInfoService.getHouseInfoValid(getHouseInfoDto);
     }
     @Test
     public void add(){
@@ -57,7 +57,7 @@ public class CustomerInfoServiceTest {
         houseInfo.setName("xiaohui");
         houseInfo.setSalePrice(12);
         houseInfo.setInfoPrice(32);
-        //houseInfo.setStatus(HouseInfo.HouseInfo_STATUS.CHECKING);
+        //houseInfo.setStatus(HouseInfoValid.HouseInfo_STATUS.CHECKING);
         houseInfo.setReadTime(2);
         houseInfo.setRoomNumber("sd");
 //        houseInfo.setHouseDespt("23");

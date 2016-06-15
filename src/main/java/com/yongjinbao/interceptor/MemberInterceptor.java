@@ -41,32 +41,33 @@ public class MemberInterceptor extends HandlerInterceptorAdapter {
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+
         //1.1、判断路径是否包含auth标志，包含则进行登入拦截
-		if(request.getRequestURI().contains("auth")){
-            //1.2、获取客户端token,并且判断redis中是否存在。
-            String token = WebUtils.getCookie(request, Member.USERNAME_COOKIE_NAME);
-            byte[] bs = RedisUtils.get(SerializeUtil.serialize(token));
-            Principal principal = (Principal) SerializeUtil.unserialize(bs);
-            response.setContentType("application/json; charset=utf-8");
-            if (principal != null) {
-                //1.2.1、从新生成token看是否和客户端保存的token相等来进行验证是否登入。
-                String remoteHost = request.getRemoteAddr();
-                String id = principal.getId()+"";
-                String memberName = principal.getUsername();
-                String reToken = DigestUtils.md5Hex(remoteHost + id + memberName);
-                if(reToken.equals(token)) {
-                    return true;
-                }else {
-                   //1.2.2、不相等，非法操作；
-                    response.getWriter().append("{\"type\":\"401\",\"content\":\"登录过期\"}");
-                    return false;
-                }
-            } else {
-                //1.2.3、不存在token,登入，返回信息；
-                response.getWriter().append("{\"type\":\"401\",\"content\":\"未登录\"}");
-                return false;
-            }
-		}
+//		if(request.getRequestURI().contains("auth")){
+//            //1.2、获取客户端token,并且判断redis中是否存在。
+//            String token = WebUtils.getCookie(request, Member.USERNAME_COOKIE_NAME);
+//            byte[] bs = RedisUtils.get(SerializeUtil.serialize(token));
+//            Principal principal = (Principal) SerializeUtil.unserialize(bs);
+//            response.setContentType("application/json; charset=utf-8");
+//            if (principal != null) {
+//                //1.2.1、从新生成token看是否和客户端保存的token相等来进行验证是否登入。
+//                String remoteHost = request.getRemoteAddr();
+//                String id = principal.getId()+"";
+//                String memberName = principal.getUsername();
+//                String reToken = DigestUtils.md5Hex(remoteHost + id + memberName);
+//                if(reToken.equals(token)) {
+//                    return true;
+//                }else {
+//                   //1.2.2、不相等，非法操作；
+//                    response.getWriter().append("{\"type\":\"401\",\"content\":\"登录过期\"}");
+//                    return false;
+//                }
+//            } else {
+//                //1.2.3、不存在token,登入，返回信息；
+//                response.getWriter().append("{\"type\":\"401\",\"content\":\"未登录\"}");
+//                return false;
+//            }
+//		}
         //2、无需拦截功能，直接访问；
         return true;
 

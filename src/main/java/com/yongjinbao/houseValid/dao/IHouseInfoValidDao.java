@@ -1,27 +1,27 @@
-package com.yongjinbao.houseinfo.dao;
+package com.yongjinbao.houseValid.dao;
+
+import com.yongjinbao.commons.entity.Area;
+import com.yongjinbao.finance.entity.ExtraAward;
+import com.yongjinbao.houseValid.dto.BonusProcessDto;
+import com.yongjinbao.houseValid.dto.GetCommunityV2Dto;
+import com.yongjinbao.houseValid.dto.GetHouseInfoDto;
+import com.yongjinbao.houseValid.dto.HouseInfoExistDto;
+import com.yongjinbao.houseValid.entity.Community;
+import com.yongjinbao.houseValid.entity.HouseInfoValid;
+import com.yongjinbao.houseValid.entity.State;
+import com.yongjinbao.houseValid.vo.GetAreaHouseCountByCityVO;
+import com.yongjinbao.houseValid.vo.HouseInfoValidAndFavouriteStatusVO;
+import com.yongjinbao.houseValid.vo.LevelDetailVO;
+import com.yongjinbao.member.entity.Member;
+import com.yongjinbao.mybatis.dao.IBaseDao;
 
 import java.util.List;
 import java.util.Map;
 
-import com.yongjinbao.commons.entity.Area;
-import com.yongjinbao.finance.entity.ExtraAward;
-import com.yongjinbao.houseinfo.dto.BonusProcessDto;
-import com.yongjinbao.houseinfo.dto.GetCommunityV2Dto;
-import com.yongjinbao.houseinfo.dto.GetHouseInfoDto;
-import com.yongjinbao.houseinfo.dto.HouseInfoExistDto;
-import com.yongjinbao.houseinfo.entity.Community;
-import com.yongjinbao.houseinfo.entity.HouseInfo;
-import com.yongjinbao.houseinfo.entity.State;
-import com.yongjinbao.houseinfo.vo.GetAreaHouseCountByCityVO;
-import com.yongjinbao.houseinfo.vo.HouseInfoAndFavouriteStatusVO;
-import com.yongjinbao.houseinfo.vo.LevelDetailVO;
-import com.yongjinbao.member.entity.Member;
-import com.yongjinbao.mybatis.dao.IBaseDao;
-
 /**
  * Created by yanfeng on 2015/8/18.
  */
-public interface IHouseInfoDao extends IBaseDao<HouseInfo,Integer> {
+public interface IHouseInfoValidDao extends IBaseDao<HouseInfoValid,Integer> {
 	
 	
 	/**
@@ -37,7 +37,7 @@ public interface IHouseInfoDao extends IBaseDao<HouseInfo,Integer> {
 	/**
 	 * 查询 地区 售价 面积 小区名称等等（这个区域没有子节点的）例如：上海市黄浦区南京西路的房源
 	 */
-	public List<HouseInfoAndFavouriteStatusVO> getHouseInfoCdt(GetHouseInfoDto getHouseInfoDto);
+	public List<HouseInfoValidAndFavouriteStatusVO> getHouseInfoCdt(GetHouseInfoDto getHouseInfoDto);
 	
     /**
      * 查询 地区 售价 面积 小区名称等等条件筛选后总数查询  例如：上海市黄浦区南京西路的房源总数
@@ -47,7 +47,7 @@ public interface IHouseInfoDao extends IBaseDao<HouseInfo,Integer> {
 	/**
 	 * 查询 地区 售价 面积 小区名称等等（这个区域有子节点的  ）例如：上海市的房源
 	 */
-	public List<HouseInfoAndFavouriteStatusVO> getHouseInfoLike(GetHouseInfoDto getHouseInfoDto);
+	public List<HouseInfoValidAndFavouriteStatusVO> getHouseInfoLike(GetHouseInfoDto getHouseInfoDto);
 	
     /**
      * 查询 地区 售价 面积 小区名称等等条件筛选后总数查询  例如：上海市的房源总数
@@ -78,7 +78,7 @@ public interface IHouseInfoDao extends IBaseDao<HouseInfo,Integer> {
     /**
      * 查询用户发布的房源信息
      */
-    public List<HouseInfo> getReleaseHouseInfo(GetHouseInfoDto getHouseInfoDto);  
+    public List<HouseInfoValid> getReleaseHouseInfo(GetHouseInfoDto getHouseInfoDto);
     
     /**
      * 查询用户发布的房源信息
@@ -89,7 +89,7 @@ public interface IHouseInfoDao extends IBaseDao<HouseInfo,Integer> {
      */
     public float getHouseInfoPrice(long houseInfo_id);
     
-    public HouseInfo browseHouseInfoByHouseId(long houseInfo_id);
+    public HouseInfoValid browseHouseInfoByHouseId(long houseInfo_id);
     
     /**
      * 获取房源信息发布会员
@@ -99,7 +99,7 @@ public interface IHouseInfoDao extends IBaseDao<HouseInfo,Integer> {
     /**
      * 查看数据时更新房源信息
      */
-    public boolean updateHouseInfoWhenBrowse(HouseInfo houseInfo);
+    public boolean updateHouseInfoWhenBrowse(HouseInfoValid houseInfoValid);
     
     /**
      * 根据房源id获取关联区域信息
@@ -114,7 +114,7 @@ public interface IHouseInfoDao extends IBaseDao<HouseInfo,Integer> {
 //    /**
 //     * 修改自己发布的房源【只能修改价格或修改全部信息】
 //     */
-//    public boolean updateMyHouseInfo(HouseInfoValid houseInfo);
+//    public boolean updateMyHouseInfo(HouseInfoValid houseInfoValid);
     /**
      * 获取牛人榜会员
      */
@@ -123,10 +123,10 @@ public interface IHouseInfoDao extends IBaseDao<HouseInfo,Integer> {
     /**
      * 获取最新10套房源
      */
-    public List<HouseInfo> getLatestHouseInfo();
+    public List<HouseInfoValid> getLatestHouseInfo();
     
     /** 根据houseInfo_id加载房源**/
-    public HouseInfo loadHouseInfo(long id);
+    public HouseInfoValid loadHouseInfo(long id);
     
     /** 新增房源时是否已经在本地房源库中存在**/
     public boolean isHouseInfoExist(HouseInfoExistDto houseInfoExistDto);
@@ -139,14 +139,14 @@ public interface IHouseInfoDao extends IBaseDao<HouseInfo,Integer> {
      */
     public List<GetAreaHouseCountByCityVO> getAreaHouseCountByCityV2(long area_id);
     
-    public HouseInfo loadHouseInfoWithMember(long id);
+    public HouseInfoValid loadHouseInfoWithMember(long id);
     
     /** 【导入时手机号是否可以】 **/
     public boolean isMobileOk(String mobile);
     /**
      * 查看手机号是否在本地数据库中重复
      */
-    public List<HouseInfo> isLocalMobile(String mobile);
+    public List<HouseInfoValid> isLocalMobile(String mobile);
     /**
      * 查看手机号是否是经纪人手机号
      */
@@ -189,7 +189,7 @@ public interface IHouseInfoDao extends IBaseDao<HouseInfo,Integer> {
     public ExtraAward getCurrentBonusStatus(BonusProcessDto dto);
     
     /** 修改房源状态为待审核**/
-    public boolean updateHouseToApplyStatus(HouseInfo houseInfo);
+    public boolean updateHouseToApplyStatus(HouseInfoValid houseInfoValid);
     
    /**  激活房源时添加一条激活记录 **/
     public boolean addActiveRecord(long houseInfo_id);

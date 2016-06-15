@@ -29,9 +29,9 @@ import com.yongjinbao.mybatis.dao.impl.BaseDaoImpl;
 public class HouseInfoDaoImpl extends BaseDaoImpl<HouseInfo,Integer> implements IHouseInfoDao {
 
 	/*@Override
-	public List<HouseInfo> getHouseInfo(GetHouseInfoDto getHouseInfoDto) {
-        List<HouseInfo> list=getSqlSession().selectList(HouseInfo.class.getName()+".getHouseInfo",getHouseInfoDto);
-        for (HouseInfo houseInfo : list) {
+	public List<HouseInfoValid> getHouseInfoValid(GetHouseInfoDto getHouseInfoDto) {
+        List<HouseInfoValid> list=getSqlSession().selectList(HouseInfoValid.class.getName()+".getHouseInfoValid",getHouseInfoDto);
+        for (HouseInfoValid houseInfo : list) {
 			houseInfo.setArea(getHouseArea(getHouseInfoDto.getArea_id()));
 		}
         return list;
@@ -39,14 +39,14 @@ public class HouseInfoDaoImpl extends BaseDaoImpl<HouseInfo,Integer> implements 
 	
     @Override
     public int getHouseInfoCount(GetHouseInfoDto getHouseInfoDto) {
-        int count=getSqlSession().selectOne(HouseInfo.class.getName()+".getHouseInfoCount",getHouseInfoDto);
+        int count=getSqlSession().selectOne(HouseInfoValid.class.getName()+".getHouseInfoCount",getHouseInfoDto);
         return count;
     }*/
 	
 	@Override
 	public List<HouseInfoAndFavouriteStatusVO> getHouseInfoCdt(GetHouseInfoDto getHouseInfoDto) {
 		List<HouseInfoAndFavouriteStatusVO> list=getSqlSession().selectList(HouseInfo.class.getName()+".getHouseInfoCdt",getHouseInfoDto);
-//		for (HouseInfoAndFavouriteStatusVO houseInfo : list) {
+//		for (HouseInfoValidAndFavouriteStatusVO houseInfo : list) {
 //			houseInfo.setArea(getHouseArea(getHouseInfoDto.getArea_id()));
 //		}
 		return list;
@@ -61,7 +61,7 @@ public class HouseInfoDaoImpl extends BaseDaoImpl<HouseInfo,Integer> implements 
 	@Override
 	public List<HouseInfoAndFavouriteStatusVO> getHouseInfoLike(GetHouseInfoDto getHouseInfoDto) {
 		List<HouseInfoAndFavouriteStatusVO> list=getSqlSession().selectList(HouseInfo.class.getName()+".getHouseInfoLike",getHouseInfoDto);
-//		for (HouseInfoAndFavouriteStatusVO houseInfo : list) {
+//		for (HouseInfoValidAndFavouriteStatusVO houseInfo : list) {
 //			houseInfo.setArea(getHouseArea(getHouseInfoDto.getArea_id()));
 //		}
 		return list;
@@ -157,7 +157,7 @@ public class HouseInfoDaoImpl extends BaseDaoImpl<HouseInfo,Integer> implements 
     }
     
 //    @Override
-//    public boolean updateMyHouseInfo(HouseInfo houseInfo) {
+//    public boolean updateMyHouseInfo(HouseInfoValid houseInfo) {
 //		return updateHouseInfoWhenBrowse(houseInfo);
 //    }
     

@@ -132,8 +132,6 @@
 			<map>
 				<entry key="systemName" value="${system.name}" />
 				<entry key="systemVersion" value="${system.version}" />
-				<entry key="systemDescription" value="${system.description}" />
-				<entry key="systemShowPowered" value="${system.show_powered}" />
 				<entry key="base" value="#{servletContext.contextPath}" />
 				<entry key="locale" value="${locale}" />
 				<entry key="message"><bean class="com.yongjinbao.utils.MessageMethod"></bean></entry>

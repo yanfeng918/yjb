@@ -57,9 +57,9 @@ public class HouseInfoServiceTest {
 	//        getHouseInfoDto.setPageSize(10);
 	//        getHouseInfoDto.setPageNumber(1);
 	//        getHouseInfoDto.setArea_id(792);
-	////        Pager<HouseInfo> pager= houseInfoService.getHouseInfo(getHouseInfoDto);
+	////        Pager<HouseInfoValid> pager= houseInfoService.getHouseInfoValid(getHouseInfoDto);
 	////        System.out.println(pager.getTotalCount());
-	////        for(HouseInfo houseInfo:pager.getList())
+	////        for(HouseInfoValid houseInfo:pager.getList())
 	////            System.out.println(houseInfo.getCommunity());
 	//    }
 	//    
@@ -107,7 +107,7 @@ public class HouseInfoServiceTest {
 	//    
 	//    @Test
 	//    public void browseHouseInfoByHouseId(){
-	////    	HouseInfo h= houseInfoService.browseHouseInfoByHouseId(11l);
+	////    	HouseInfoValid h= houseInfoService.browseHouseInfoByHouseId(11l);
 	//    	int count = houseInfoService.getTodayHouseInfoCount();
 	//    	//System.out.println(count);
 	//  
@@ -128,8 +128,8 @@ public class HouseInfoServiceTest {
 	//    @Test
 	//    public void batchImport(){
 	//    	try {
-	//			List<HouseInfo> list = ExcelParseToList.parseExcel();
-	//			for (HouseInfo houseInfo : list) {
+	//			List<HouseInfoValid> list = ExcelParseToList.parseExcel();
+	//			for (HouseInfoValid houseInfo : list) {
 	//				Member member = new Member();
 	//				member.setId(0l);
 	//				houseInfo.setMember(member);
@@ -162,9 +162,9 @@ public class HouseInfoServiceTest {
 	//      getHouseInfoDto.setPageNumber(1);
 	//      getHouseInfoDto.setArea_id(792);
 	//      try {
-	//    	  Pager<HouseInfoAndFavouriteStatusVO> pager= houseInfoService.getHouseInfo(getHouseInfoDto);
+	//    	  Pager<HouseInfoValidAndFavouriteStatusVO> pager= houseInfoService.getHouseInfoValid(getHouseInfoDto);
 	//    	  System.out.println(pager.getTotalCount());
-	//    	  for(HouseInfo houseInfo:pager.getList())
+	//    	  for(HouseInfoValid houseInfo:pager.getList())
 	//    		  System.out.println(houseInfo.getId());
 	//      } catch (Exception e) {
 	//    	  // TODO: handle exception
