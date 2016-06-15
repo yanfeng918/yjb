@@ -37,11 +37,11 @@ public class ReportServiceTest {
 	public void addReport(){
 		Report report = new Report();
 //		report.setFailReason("");
-//		HouseInfoValid houseInfo = new HouseInfoValid();
+//		HouseInfoNew houseInfo = new HouseInfoNew();
 //		houseInfo.setId(2l);
 //		Member member = new Member();
 //		member.setId(1l);
-//		report.setHouseInfoValid(houseInfo);
+//		report.setHouseInfoNew(houseInfo);
 //		report.setMember(member);
 		try {
 //			report.setHouseInfoService(houseInfoService);

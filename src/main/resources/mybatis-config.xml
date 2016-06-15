@@ -25,6 +25,10 @@
         <mapper resource="model/common/SendSMS.xml"/>
 
 		<mapper resource="model/houseInfoValid/HouseInfoValid.xml"/>
+
+		<mapper resource="model/houseInfoNew/HouseInfoNew.xml"/>
+
+		<mapper resource="model/houseInfoProperty/HouseInfoProperty.xml"/>
         
 	</mappers>
 </configuration>

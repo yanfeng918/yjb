@@ -14,11 +14,11 @@ import com.yongjinbao.finance.service.IWithDrawService;
 import com.yongjinbao.finance.vo.IncomeAmountVO;
 import com.yongjinbao.houseValid.dao.IHouseInfoValidDao;
 import com.yongjinbao.houseValid.dto.*;
-import com.yongjinbao.houseValid.entity.Community;
 import com.yongjinbao.houseValid.entity.HouseInfoValid;
 import com.yongjinbao.houseValid.entity.State;
 import com.yongjinbao.houseValid.service.IHouseInfoValidService;
 import com.yongjinbao.houseValid.vo.*;
+import com.yongjinbao.houseinfo.entity.Community;
 import com.yongjinbao.member.dto.MyBrowseInfoDto;
 import com.yongjinbao.member.dto.UpdateBalanceDto;
 import com.yongjinbao.member.entity.BrowseFavoriteInfo;
@@ -206,7 +206,7 @@ public class HouseInfoValidService extends BaseServiceImpl<HouseInfoValid,Intege
 		}
         //【修改 2015年9月18日】添加是否已经收藏的标记
 //        【修改 2015年9月30日】去除已收藏功能
-//        for (HouseInfoValidAndFavouriteStatusVO vo : list) {
+//        for (HouseInfoNewAndFavouriteStatusVO vo : list) {
 //        	MyBrowseInfoDto myBrowseInfoDto = new MyBrowseInfoDto();
 //        	myBrowseInfoDto.setBrowseFavoriteStyle(MyBrowseInfoDto.Favorites);
 //        	myBrowseInfoDto.setHouseInfo_id(vo.getId());

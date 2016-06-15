@@ -23,7 +23,7 @@ public class MyBrowseInfoDto {
 	
 	public MyBrowseInfoDto(){
 //		this.browseFavoriteStyle = "Browse";
-		this.customerHouseStyle = "HouseInfoValid";
+		this.customerHouseStyle = "HouseInfoNew";
 	}
 	public long getHouseInfo_id() {
 		return houseInfo_id;

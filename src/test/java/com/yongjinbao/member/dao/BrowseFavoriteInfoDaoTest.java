@@ -59,7 +59,7 @@ public class BrowseFavoriteInfoDaoTest {
 		SystemContext.setPageSize(10);
 		SystemContext.setPageNumber(1);
 		SystemContext.setPageOffset(0);
-//		Pager<HouseInfoValid> pager = browseFavoriteInfoDao.getBrowseFavoriteHouseInfoList(a);
+//		Pager<HouseInfoNew> pager = browseFavoriteInfoDao.getBrowseFavoriteHouseInfoList(a);
 //		System.out.println(pager.getList().size());
 	}
 

@@ -222,7 +222,7 @@ public class HouseInfoService extends BaseServiceImpl<HouseInfo,Integer>
 		}
         //【修改 2015年9月18日】添加是否已经收藏的标记
 //        【修改 2015年9月30日】去除已收藏功能
-//        for (HouseInfoValidAndFavouriteStatusVO vo : list) {
+//        for (HouseInfoNewAndFavouriteStatusVO vo : list) {
 //        	MyBrowseInfoDto myBrowseInfoDto = new MyBrowseInfoDto();
 //        	myBrowseInfoDto.setBrowseFavoriteStyle(MyBrowseInfoDto.Favorites);
 //        	myBrowseInfoDto.setHouseInfo_id(vo.getId());

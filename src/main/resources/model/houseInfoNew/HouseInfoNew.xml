@@ -1,0 +1,534 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yongjinbao.houseNew.entity.HouseInfoNew">
+
+	<sql id="selectSql">
+		<where>
+			<if test="houseShape != null and houseShape !='' ">
+				h.houseShape like CONCAT('%',#{houseShape},'%')
+			</if>
+			<if test="community!= null and community!=''">
+				and h.community like CONCAT('%',#{community},'%')
+			</if>
+			<if test="maxAreaSize!= 0">
+				and h.areaSize &lt;=#{maxAreaSize}
+			</if>
+			<if test="minAreaSize!= 0">
+				and h.areaSize &gt;=#{minAreaSize}
+			</if>
+			<if test="maxSalePrice!= 0">
+				and h.salePrice &lt;=#{maxSalePrice}
+			</if>
+			<if test="minSalePrice!= 0">
+				and h.salePrice &gt;=#{minSalePrice}
+			</if>
+
+			<if test="maxInfoPrice!= 0">
+				and h.infoPrice &lt;=#{maxInfoPrice}
+			</if>
+			<if test="minInfoPrice!= 0">
+				and h.infoPrice &gt;=#{minInfoPrice}
+			</if>
+			<if test="saleWay!= null">
+				and h.saleWay=#{saleWay}
+			</if>
+			<if test="status!= null">
+				and h.status IN('SUCCESS','FAIL')
+			</if>
+			<!-- 【修改 2015年9月18】select SQL只有获取数据列表时才会用到，帮注释掉member_id -->
+			<!-- <if test="member_id!= 0"> -->
+			<!-- and h.member_id=#{member_id} -->
+			<!-- </if> -->
+			<if test="beginDate !=null ">
+				and h.date_format(createDate,"%Y-%m-%d %T")
+				&gt;=#{beginDate}
+			</if>
+			<if test="endDate !=null ">
+				and h.date_format(createDate,"%Y-%m-%d
+				%T")&lt;=#{endDate}
+			</if>
+			<if test="available != null">
+				<!-- and h.available = #{available} -->
+			</if>
+			<if test="area_id!= 0">
+				and h.area_id=#{area_id}
+			</if>
+		</where>
+	</sql>
+
+	<sql id="selectSqlLike">
+		<where>
+			<if test="houseShape != null and houseShape !=''">
+				h.houseShape like CONCAT('%',#{houseShape},'%')
+			</if>
+			<if test="community!= null and community!=''">
+				and h.community like CONCAT('%',#{community},'%')
+			</if>
+
+			<if test="maxAreaSize!= 0">
+				and h.areaSize &lt;=#{maxAreaSize}
+			</if>
+			<if test="minAreaSize!= 0">
+				and h.areaSize &gt;=#{minAreaSize}
+			</if>
+			<if test="maxSalePrice!= 0">
+				and h.salePrice &lt;=#{maxSalePrice}
+			</if>
+			<if test="minSalePrice!= 0">
+				and h.salePrice &gt;=#{minSalePrice}
+			</if>
+
+			<if test="maxInfoPrice!= 0">
+				and h.infoPrice &lt;=#{maxInfoPrice}
+			</if>
+			<if test="minInfoPrice!= 0">
+				and h.infoPrice &gt;=#{minInfoPrice}
+			</if>
+			<if test="saleWay!= null">
+				and h.saleWay=#{saleWay}
+			</if>
+			<if test="status!= null">
+				and h.status IN('SUCCESS','FAIL')
+			</if>
+			<!-- 【修改 2015年9月18】selectSqlLike只有获取数据列表时才会用到，帮注释掉member_id -->
+			<!-- <if test="member_id!= 0"> -->
+			<!-- and h.member_id=#{member_id} -->
+			<!-- </if> -->
+			<if test="beginDate !=null ">
+				and h.date_format(createDate,"%Y-%m-%d %T")
+				&gt;=#{beginDate}
+			</if>
+			<if test="endDate !=null ">
+				and h.date_format(createDate,"%Y-%m-%d
+				%T")&lt;=#{endDate}
+			</if>
+			<if test="available != null">
+				<!-- and h.available = #{available} -->
+			</if>
+			<if test="area_id!= 0">
+				and (a.treepath LIKE CONCAT('%,',#{area_id},',%')  OR a.id=#{area_id})
+			</if>
+		</where>
+	</sql>
+
+
+	<select id="loadHouseInfo" parameterType="long" resultMap="houseInfoMap">
+		SELECT *, h.id as 'h_id' from t_house_info_new h left join t_area a on
+		h.area_id = a.id where h.id = #{id}
+	</select>
+	
+	<select id="loadHouseInfoWithMember" parameterType="long" resultMap="houseInfoMemberMap">
+		SELECT *, h.id as 'h_id' from t_house_info_new h left join t_member m on
+		h.member_id = m.id where h.id = #{id}
+	</select>
+
+	<!-- 根据条件查询房源（这个区域没有子节点的 ） -->
+	<select id="getHouseInfoCdt" parameterType="com.yongjinbao.houseinfo.dto.GetHouseInfoDto"
+		resultType="com.yongjinbao.houseinfo.vo.HouseInfoAndFavouriteStatusVO">
+		select
+		h.id,h.createDate,h.infoPrice,h.area_id,h.roomNumber, h.community,h.address,h.description,h.areaSize,h.salePrice,
+		h.ban,h.houseShape,h.name,REPLACE(h.mobile,substring(h.mobile,4,4),'****')
+		mobile,h.status,h.available,  a.fullName area_fullName from t_house_info_new h LEFT JOIN t_area
+		a on h.area_id = a.id
+		<include refid="selectSql" />
+		<if test="sort!=null">
+			order by h.status DESC,h.available DESC ,h.${sort} 
+			<if test="order!=null">
+				${order}
+			</if>
+		</if>
+		<if test="sort==null">
+			order by h.status DESC,h.available DESC , h.createDate DESC
+		</if>
+		<if test="pageOffset >= 0 and pageSize>0">
+			limit #{pageOffset} , #{pageSize}
+		</if>
+	</select>
+
+	<!-- 根据条件查询房源（这个区域有子节点的 ） -->
+	<select id="getHouseInfoLike" parameterType="com.yongjinbao.houseinfo.dto.GetHouseInfoDto"
+		resultType="com.yongjinbao.houseinfo.vo.HouseInfoAndFavouriteStatusVO">
+		select h.id,h.createDate,h.infoPrice,h.area_id,h.community,h.address,h.description,h.areaSize,h.salePrice,h.floor,
+		h.roomNumber,h.ban,h.houseShape,h.name,REPLACE(h.mobile,substring(h.mobile,4,4),'****')
+		mobile,h.status,h.available, a.fullName area_fullName from t_house_info_new h
+		left join t_area a
+		on h.area_id = a.id
+		<include refid="selectSqlLike" />
+		<if test="sort!=null">
+			order by h.status DESC,h.available DESC ,h.${sort} 
+			<if test="order!=null">
+				${order}
+			</if>
+		</if>
+		<if test="sort==null">
+			order by h.status DESC,h.available DESC , h.createDate DESC
+		</if>
+		<if test="pageOffset >= 0 and pageSize>0">
+			limit #{pageOffset} , #{pageSize}
+		</if>
+	</select>
+
+	<!-- 根据条件查询房源数 -->
+	<select id="getHouseInfoCdtCount" parameterType="com.yongjinbao.houseinfo.dto.GetHouseInfoDto"
+		resultType="java.lang.Integer">
+		select count(*) from t_house_info_new h
+		<include refid="selectSql" />
+	</select>
+
+	<!-- 根据条件查询房源数 （这个区域有子节点的 ） -->
+	<select id="getHouseInfoLikeCount" parameterType="com.yongjinbao.houseinfo.dto.GetHouseInfoDto"
+		resultType="java.lang.Integer">
+		select count(*) from t_house_info_new h
+		left join t_area a on h.area_id =
+		a.id
+		<include refid="selectSqlLike" />
+	</select>
+
+	<!-- (模糊查询-根据房源区域的ID查询房源数)这个区域是有子节点的 -->
+	<select id="getHouseInfoCountByArea" parameterType="string"
+		resultType="int">
+		SELECT count(*) FROM t_house_info_new h left join t_area a on
+		h.area_id = a.id
+		where a.treepath LIKE CONCAT('%',#{value},'%') and
+		<!-- h.available = 1 and -->
+		h.status IN ('SUCCESS','FAIL')
+	</select>
+
+	<!-- (精确条件查询-根据房源区域的ID查询房源数)这个区域是没有子节点的 -->
+	<select id="getHouseInfoCountByAreaCdt" parameterType="string"
+		resultType="int">
+		SELECT count(*) FROM t_house_info_new h WHERE area_id =
+		#{value} <!-- and h.available
+		= 1 --> and h.status IN ('SUCCESS','FAIL')
+	</select>
+
+	<!-- 获取个人中心今日房源数 -->
+	<select id="getTodayHouseInfoCount" parameterType="int" resultType="int">
+		SELECT COUNT(*) FROM t_house_info_new h LEFT JOIN t_area a ON h.area_id = a.id
+		 WHERE (a.treePath LIKE CONCAT('%',#{area_id},'%') OR h.area_id=#{area_id})
+		AND DATE_SUB(CURDATE(),
+		INTERVAL 1 DAY) &lt;= date(h.createDate)
+		and h.available = 1
+	</select>
+
+	<!-- 根据房源的ID查询房源的手机号码 -->
+	<select id="getMobileByHouseId" parameterType="long" resultType="String">
+		SELECT mobile FROM t_house_info_new WHERE id =#{id}
+	</select>
+	<!--提交房源信息前查询房源业主手机号是否已经存在 -->
+	<select id="selectHouseInfoByMobile" parameterType="java.lang.String"
+		resultType="int">
+		select count(*) from t_house_info_new where mobile=#{mobile}
+	</select>
+	<!--查询用户发布的房源信息 -->
+	<select id="selectReleaseHouseInfo" parameterType="com.yongjinbao.houseinfo.dto.GetHouseInfoDto"
+		resultMap="houseInfoMap">
+		select *,h.id as 'h_id' from t_house_info_new h left join t_area a on
+		a.id=h.area_id
+		where member_id=#{member_id}
+		<if test="sort!=null">
+			order by ${sort}
+			<if test="order!=null">
+				${order}
+			</if>
+		</if>
+		<if test="sort==null">
+			order by h.createDate desc
+		</if>
+		<if test="pageOffset >= 0 and pageSize>0">
+			limit #{pageOffset} , #{pageSize}
+		</if>
+	</select>
+	<!--查询用户发布的房源信息数量 -->
+	<select id="selectReleaseHouseInfoCount" parameterType="com.yongjinbao.houseinfo.dto.GetHouseInfoDto"
+		resultType="java.lang.Integer">
+		select count(*) from t_house_info_new where
+		member_id=#{member_id}
+	</select>
+
+	<!-- 获取房源信息的关联区域 -->
+	<select id="getHouseInfoAreaByHouseId" parameterType="int"
+		resultType="com.yongjinbao.commons.entity.Area">
+		SELECT * FROM t_area a WHERE a.id =#{area_id}
+	</select>
+
+	<!-- 根据房源ID查询房源价格 -->
+	<select id="getHouseInfoPriceByHouseId" parameterType="long"
+		resultType="float">
+		SELECT infoPrice FROM t_house_info_new WHERE id =#{id}
+	</select>
+
+	<select id="browseHouseInfoByHouseId" parameterType="long"
+		resultType="com.yongjinbao.houseinfo.entity.HouseInfo">
+		SELECT * FROM t_house_info_new WHERE id =#{id}
+	</select>
+
+	<select id="getAreaIdByHouseInfoId" parameterType="long"
+		resultType="int">
+		SELECT area_id FROM t_house_info_new WHERE id = #{id}
+	</select>
+	<select id="getHouseInfoMember" parameterType="long"
+		resultType="com.yongjinbao.member.entity.Member">
+		SELECT * FROM t_member m LEFT JOIN t_house_info_new h ON m.id =
+		h.member_id
+		where h.id=#{id}
+	</select>
+
+	<update id="update" parameterType="com.yongjinbao.houseinfo.entity.HouseInfo">
+		UPDATE t_house_info_new
+		<set>
+			modifyDate= now(),
+			<if test="name!= null">
+				name=#{name},
+			</if>
+			<if test="phone!= null">
+				phone=#{phone},
+			</if>
+			<if test="mobile!= null">
+				mobile=#{mobile},
+			</if>
+			<if test="community!= null">
+				community=#{community},
+			</if>
+			<if test="areaSize!= 0">
+				areaSize=#{areaSize},
+			</if>
+			<if test="ban!= null">
+				ban=#{ban},
+			</if>
+			<if test="floor!= null">
+				floor=#{floor},
+			</if>
+			<if test="roomNumber!= null">
+				roomNumber=#{roomNumber},
+			</if>
+			<if test="description!= null">
+				description=#{description},
+			</if>
+			<if test="salePrice!= null and salePrice!=0">
+				salePrice=#{salePrice},
+			</if>
+			<if test="infoPrice!= 0">
+				infoPrice=#{infoPrice},
+			</if>
+			<if test="saleWay!= null">
+				saleWay=#{saleWay},
+			</if>
+			<if test="area!=null and area.id!= null">
+				area_id=#{area.id},
+			</if>
+			<if test="member!=null and member.id!= null">
+				member_id=#{member.id},
+			</if>
+			<if test="available!= null">
+				available=#{available},
+			</if>
+			<if test="status!= null">
+				status=#{status},
+			</if>
+			<if test="readTime!= 0">
+				readTime=#{readTime},
+			</if>
+			<if test="houseShape!= null">
+				houseShape=#{houseShape},
+			</if>
+			<if test="address!= null">
+				address=#{address}
+			</if>
+		</set>
+		WHERE
+		id=#{id}
+	</update>
+
+	<!-- 获取当月牛人榜排名【前十】的memberId -->
+	<select id="getTop10Ranking" resultType="map">
+		SELECT COUNT(*) count,
+		member_id FROM t_house_info_new h LEFT JOIN t_member m ON
+		h.member_id =
+		m.id where DATE_FORMAT( checkDate, '%Y%m' ) =
+		DATE_FORMAT( CURDATE( ) ,
+		'%Y%m' )
+		and h.available = 1 and h.status = 'SUCCESS' GROUP BY
+		member_id ORDER BY
+		count DESC
+	</select>
+
+	<!-- 获取最新10条房源数据 -->
+	<select id="getLatestHouseInfo" resultMap="houseInfoMap">
+		SELECT *,h.id as
+		'h_id' FROM t_house_info_new h LEFT JOIN t_area a ON h.area_id
+		= a.id left join t_member m ON h.member_id = m.id WHERE
+		available = 1 AND status = 'SUCCESS' ORDER BY
+		h.checkDate DESC LIMIT
+		0,5;
+	</select>
+
+	<resultMap id="houseInfoMap" type="com.yongjinbao.houseinfo.entity.HouseInfo"
+		autoMapping="true">
+		<id column="h_id" property="id" />
+		<association property="area" javaType="com.yongjinbao.commons.entity.Area">
+			<id column="area_id" property="id" />
+			<result column="fullName" property="fullName" />
+		</association>
+		<association property="member" javaType="com.yongjinbao.member.entity.Member">
+			<id column="member_id" property="id" />
+			<result column="username" property="username" />
+		</association>
+	</resultMap>
+	
+	<resultMap id="houseInfoMemberMap" type="com.yongjinbao.houseinfo.entity.HouseInfo"
+		autoMapping="true">
+		<id column="h_id" property="id" />
+		<association property="member" javaType="com.yongjinbao.member.entity.Member">
+			<id column="member_id" property="id" />
+			<result column="username" property="username" />
+		</association>
+	</resultMap>
+
+	<select id="isHouseInfoExist" parameterType="com.yongjinbao.houseinfo.dto.HouseInfoExistDto"
+		resultType="com.yongjinbao.houseinfo.entity.HouseInfo">
+		SELECT * FROM t_house_info_new
+		<where>
+			<if test="ban!= null">
+				ban=#{ban}
+			</if>
+			<if test="mobile!= null">
+				and mobile=#{mobile}
+			</if>
+			<if test="roomNumber!= null">
+				and roomNumber=#{roomNumber}
+			</if>
+		</where>
+	</select>
+
+	<select id="selectAreaByName" parameterType="String" resultType="String">
+		SELECT area FROM lianjia where name LIKE CONCAT('%',#{name},'%')
+	</select>
+	
+	<select id="getAreaHouseCountByCityV2" parameterType="Long"  resultType="com.yongjinbao.houseinfo.vo.GetAreaHouseCountByCityVO">
+		SELECT areaMain.name AS areaName, temp.number AS houseInfoCount,areaMain.id AS areaId  FROM t_area areaMain LEFT JOIN
+		(SELECT count(*)
+		number,area.parent area_id from t_house_info_new c LEFT JOIN
+		t_area area ON c.area_id = area.id where area.parent IN(SELECT id FROM
+		t_area where parent=#{area_id}) GROUP BY area.parent) temp
+		on areaMain.id = temp.area_id where areaMain.parent=#{area_id} ORDER BY
+		temp.number DESC;
+	</select>
+	
+	<select id="isMobileExisted" parameterType="String" resultType="com.yongjinbao.houseinfo.entity.HouseInfo">
+		SELECT * from t_house_info_new where mobile=#{mobile}
+	</select>
+	
+	<select id="isAgentMobile" parameterType="String" resultType="String">
+		SELECT mobile from t_agent where  mobile=#{mobile}
+	</select>
+	
+<!-- 	2015年11月6日14:52 是否已经申诉 -->
+	<select id="isStated" parameterType="long" resultType="com.yongjinbao.houseinfo.entity.State">
+		select * from t_state where houseInfo_id=#{houseInfo_id}
+	</select>
+<!-- 	是否在申诉期内【三天】 -->
+	<select id="isStatedExpired" parameterType="long" resultType="java.lang.Long">
+		SELECT id FROM t_house_info_new where DATE_SUB(CURDATE(), INTERVAL 3 DAY) &lt;= date(checkDate) AND id=#{houseInfo_id};
+	</select>
+	
+	<!--获取用户当天申诉量 【一天不超过5条】 -->
+	<select id="getTodayStatedCount" parameterType="long" resultType="int">
+		select count(*) from t_state where to_days(createDate) = to_days(now()) 
+		and member_id=#{member_id};
+	</select>
+	
+	<!--添加申诉信息 -->
+	<insert id="addState" parameterType="com.yongjinbao.houseinfo.entity.State">
+		INSERT INTO t_state (createDate, modifyDate, member_id, houseInfo_id,stateReason, stateStatus)
+		 VALUES (now(), now(),#{member_id}, #{houseInfo_id}, #{stateReason}, #{stateStatus})
+	</insert>
+	
+	<!--楼盘字典/小区信息 -->
+	<select id="getTopTenCommunity" parameterType="String" resultMap="communityMap">
+		select *,c.id as
+		'c_id' from t_community c left join t_area a on c.area_id = a.id where c.name like CONCAT('%',#{name},'%') limit 0,10
+	</select>
+	
+	<!--楼盘字典/小区信息 -->
+	<select id="getTopTenCommunityV2" parameterType="com.yongjinbao.houseinfo.dto.GetCommunityV2Dto" resultMap="communityMap">
+		select *,c.id as
+		'c_id' from t_community c left join t_area a on c.area_id = a.id 
+		where c.name like CONCAT('%',#{communityKeyWords},'%') 
+		and a.treepath LIKE CONCAT('%,',#{cityId},',%')
+		limit 0,10
+	</select>
+	
+	<resultMap id="communityMap" type="com.yongjinbao.houseinfo.entity.Community"
+		autoMapping="true">
+		<id column="c_id" property="id" />
+		<association property="area" javaType="com.yongjinbao.commons.entity.Area">
+			<id column="area_id" property="id" />
+			<result column="fullName" property="fullName" />
+		</association>
+	</resultMap>
+
+	<!-- 获取房源自发成功数 -->
+	<select id = "getselfHouseCount" parameterType="com.yongjinbao.houseinfo.dto.BonusProcessDto" resultType="int">
+		SELECT COUNT(*) FROM t_house_info_new h WHERE `status`='SUCCESS' AND member_id=#{member_id} AND
+		date_format(h.createDate,'%Y%m')=#{yearMonth}
+	</select>
+	
+	<!-- 获取1级成功数 -->
+	<select id = "getLevelOneHouseCount" parameterType="com.yongjinbao.houseinfo.dto.BonusProcessDto" resultType="int">
+		SELECT COUNT(*) totalLevel1Success FROM t_house_info_new h LEFT JOIN t_member m
+		 ON h.member_id = m.id WHERE `status`='SUCCESS' AND m.promoterId=#{member_id} AND 
+		date_format(h.createDate,'%Y%m')=#{yearMonth}
+	</select>
+	
+	<!--   2级成功数-->
+	<select id = "getLevelTwoHouseCount" parameterType="com.yongjinbao.houseinfo.dto.BonusProcessDto" resultType="int">
+		SELECT COUNT(*) totalLevel2Success FROM t_house_info_new h LEFT JOIN t_member m ON h.member_id=m.id
+		WHERE h.status='SUCCESS' AND m.promoterId in (SELECT id FROM t_member b WHERE b.promoterId=#{member_id} )
+		and date_format(h.createDate,'%Y%m')=#{yearMonth}
+	</select>
+	
+	<select id="getLevelOneDetail" parameterType="com.yongjinbao.houseinfo.dto.BonusProcessDto"
+	 resultType="com.yongjinbao.houseinfo.vo.LevelDetailVO">
+		SELECT  m.username,COUNT(*) count FROM t_house_info_new h LEFT JOIN t_member m
+		 ON h.member_id = m.id WHERE h.status='SUCCESS' AND m.promoterId=#{member_id} AND 
+		date_format(h.createDate,'%Y%m')=#{yearMonth} GROUP BY h.member_id ORDER BY count DESC;
+	</select>
+	
+	<select id="getLevelOneDetailCondition" parameterType="com.yongjinbao.houseinfo.dto.BonusProcessDto"
+	 resultType="com.yongjinbao.houseinfo.vo.LevelDetailVO">
+		SELECT  m.username,COUNT(*) count FROM t_house_info_new h LEFT JOIN t_member m
+		 ON h.member_id = m.id WHERE h.status='SUCCESS' AND m.promoterId=#{member_id} AND 
+		date_format(h.createDate,'%Y%m%d')=#{yearMonth} GROUP BY h.member_id ORDER BY count DESC;
+	</select>
+	
+	<select id="getLevelTwoDetail" parameterType="com.yongjinbao.houseinfo.dto.BonusProcessDto" 
+	resultType="com.yongjinbao.houseinfo.vo.LevelDetailVO">
+		 SELECT  m.username,COUNT(*) count FROM t_house_info_new h LEFT JOIN t_member m ON h.member_id=m.id
+ 		WHERE h.status='SUCCESS' AND m.promoterId in (SELECT id FROM t_member b WHERE b.promoterId=#{member_id}) AND 
+		date_format(h.createDate,'%Y%m')=#{yearMonth} GROUP BY h.member_id ORDER BY count DESC;
+	</select>
+	
+	<select id="getLevelTwoDetailCondition" parameterType="com.yongjinbao.houseinfo.dto.BonusProcessDto" 
+	resultType="com.yongjinbao.houseinfo.vo.LevelDetailVO">
+		 SELECT  m.username,COUNT(*) count FROM t_house_info_new h LEFT JOIN t_member m ON h.member_id=m.id
+ 		WHERE h.status='SUCCESS' AND m.promoterId in (SELECT id FROM t_member b WHERE b.promoterId=#{member_id}) AND 
+		date_format(h.createDate,'%Y%m%d')=#{yearMonth} GROUP BY h.member_id ORDER BY count DESC;
+	</select>
+	
+	<select id="getBonusAchieveState" parameterType="com.yongjinbao.houseinfo.dto.BonusProcessDto"
+	 resultType="com.yongjinbao.finance.entity.ExtraAward">
+		SELECT * from t_extra_award where month = #{year_month} and member_id = #{member_id}
+	</select>
+	
+	<update id="updateHouseToApplyStatus" parameterType="com.yongjinbao.houseinfo.entity.HouseInfo">
+		UPDATE t_house_info_new SET status = #{status}, checkContent = null WHERE id=#{id}
+	</update>
+	
+	<insert id="addActiveRecord" parameterType="long">
+		INSERT INTO t_house_active_record (createDate, modifyDate, houseInfo_id) 
+		VALUES(now(), now(), #{houseInfo_id})
+	</insert>
+	
+</mapper>

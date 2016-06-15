@@ -57,9 +57,9 @@ public class HouseInfoServiceTest {
 	//        getHouseInfoDto.setPageSize(10);
 	//        getHouseInfoDto.setPageNumber(1);
 	//        getHouseInfoDto.setArea_id(792);
-	////        Pager<HouseInfoValid> pager= houseInfoService.getHouseInfoValid(getHouseInfoDto);
+	////        Pager<HouseInfoNew> pager= houseInfoService.getHouseInfoNew(getHouseInfoDto);
 	////        System.out.println(pager.getTotalCount());
-	////        for(HouseInfoValid houseInfo:pager.getList())
+	////        for(HouseInfoNew houseInfo:pager.getList())
 	////            System.out.println(houseInfo.getCommunity());
 	//    }
 	//    
@@ -107,7 +107,7 @@ public class HouseInfoServiceTest {
 	//    
 	//    @Test
 	//    public void browseHouseInfoByHouseId(){
-	////    	HouseInfoValid h= houseInfoService.browseHouseInfoByHouseId(11l);
+	////    	HouseInfoNew h= houseInfoService.browseHouseInfoByHouseId(11l);
 	//    	int count = houseInfoService.getTodayHouseInfoCount();
 	//    	//System.out.println(count);
 	//  
@@ -128,8 +128,8 @@ public class HouseInfoServiceTest {
 	//    @Test
 	//    public void batchImport(){
 	//    	try {
-	//			List<HouseInfoValid> list = ExcelParseToList.parseExcel();
-	//			for (HouseInfoValid houseInfo : list) {
+	//			List<HouseInfoNew> list = ExcelParseToList.parseExcel();
+	//			for (HouseInfoNew houseInfo : list) {
 	//				Member member = new Member();
 	//				member.setId(0l);
 	//				houseInfo.setMember(member);
@@ -162,9 +162,9 @@ public class HouseInfoServiceTest {
 	//      getHouseInfoDto.setPageNumber(1);
 	//      getHouseInfoDto.setArea_id(792);
 	//      try {
-	//    	  Pager<HouseInfoValidAndFavouriteStatusVO> pager= houseInfoService.getHouseInfoValid(getHouseInfoDto);
+	//    	  Pager<HouseInfoNewAndFavouriteStatusVO> pager= houseInfoService.getHouseInfoNew(getHouseInfoDto);
 	//    	  System.out.println(pager.getTotalCount());
-	//    	  for(HouseInfoValid houseInfo:pager.getList())
+	//    	  for(HouseInfoNew houseInfo:pager.getList())
 	//    		  System.out.println(houseInfo.getId());
 	//      } catch (Exception e) {
 	//    	  // TODO: handle exception

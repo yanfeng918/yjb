@@ -121,7 +121,7 @@ public interface IHouseInfoService extends IBaseService<HouseInfo,Integer>{
 //    /**
 //     * 修改我发布的房源
 //     */
-//    public boolean updateMyReleaseInfo(HouseInfoValid houseInfo);
+//    public boolean updateMyReleaseInfo(HouseInfoNew houseInfo);
     
     /** 获取牛人榜【前10】 **/
     public List<TopTenRankingVO> getTop10Ranking();

@@ -6,12 +6,12 @@ import com.yongjinbao.houseValid.dto.BonusProcessDto;
 import com.yongjinbao.houseValid.dto.GetCommunityV2Dto;
 import com.yongjinbao.houseValid.dto.GetHouseInfoDto;
 import com.yongjinbao.houseValid.dto.HouseInfoExistDto;
-import com.yongjinbao.houseValid.entity.Community;
 import com.yongjinbao.houseValid.entity.HouseInfoValid;
 import com.yongjinbao.houseValid.entity.State;
 import com.yongjinbao.houseValid.vo.GetAreaHouseCountByCityVO;
 import com.yongjinbao.houseValid.vo.HouseInfoValidAndFavouriteStatusVO;
 import com.yongjinbao.houseValid.vo.LevelDetailVO;
+import com.yongjinbao.houseinfo.entity.Community;
 import com.yongjinbao.member.entity.Member;
 import com.yongjinbao.mybatis.dao.IBaseDao;
 
@@ -27,7 +27,7 @@ public interface IHouseInfoValidDao extends IBaseDao<HouseInfoValid,Integer> {
 	/**
 	 * 查询 地区 售价 面积 小区名称等等
 	 */
-	//public List<HouseInfoValid> getHouseInfoValid(GetHouseInfoDto getHouseInfoDto);
+	//public List<HouseInfoNew> getHouseInfoNew(GetHouseInfoDto getHouseInfoDto);
 	
     /**
      * 查询 地区 售价 面积 小区名称等等条件筛选后总数查询
@@ -114,7 +114,7 @@ public interface IHouseInfoValidDao extends IBaseDao<HouseInfoValid,Integer> {
 //    /**
 //     * 修改自己发布的房源【只能修改价格或修改全部信息】
 //     */
-//    public boolean updateMyHouseInfo(HouseInfoValid houseInfoValid);
+//    public boolean updateMyHouseInfo(HouseInfoNew houseInfoValid);
     /**
      * 获取牛人榜会员
      */

@@ -33,7 +33,7 @@ public class Report extends BaseEntity {
 	private String reportReason;
 	
 //	/** 举报的房源信息**/
-//	private HouseInfoValid houseInfo;
+//	private HouseInfoNew houseInfo;
 	
 	/** 举报的房源信息id**/
 	private long houseInfo_id;

@@ -34,7 +34,7 @@ public class HouseInfoTest {
         SystemContext.setPageOffset(3);
         SystemContext.setOrder("desc");
         SystemContext.setSort("id");
-//        Pager<HouseInfoValid> pager= houseInfoService.getHouseInfoValid(getHouseInfoDto);
+//        Pager<HouseInfoNew> pager= houseInfoService.getHouseInfoNew(getHouseInfoDto);
     }
     @Test
     public void add(){
@@ -55,7 +55,7 @@ public class HouseInfoTest {
         houseInfo.setName("xiaohui");
         houseInfo.setSalePrice(12);
         houseInfo.setInfoPrice(32);
-        //houseInfo.setStatus(HouseInfoValid.HouseInfo_STATUS.CHECKING);
+        //houseInfo.setStatus(HouseInfoNew.HouseInfo_STATUS.CHECKING);
         houseInfo.setReadTime(2);
         houseInfo.setRoomNumber("sd");
 //        houseInfo.setHouseDespt("23");
@@ -79,9 +79,9 @@ public class HouseInfoTest {
     public void rr(){
 //    	GetHouseInfoDto getHouseInfoDto=new GetHouseInfoDto();
 //    	getHouseInfoDto.setArea_id(792);
-//        List<HouseInfoValid> list=houseInfoDao.getHouseInfoLike(getHouseInfoDto);
+//        List<HouseInfoNew> list=houseInfoDao.getHouseInfoLike(getHouseInfoDto);
 //        int count =houseInfoDao.getHouseInfoLikeCount(getHouseInfoDto);
-//        for(HouseInfoValid houseInfo:list)
+//        for(HouseInfoNew houseInfo:list)
 //            System.out.println(houseInfo.getCommunity());
 //        System.out.println(count);
     }
@@ -91,10 +91,10 @@ public class HouseInfoTest {
     	GetHouseInfoDto getHouseInfoDto=new GetHouseInfoDto();
     	getHouseInfoDto.setArea_id(793);
     	getHouseInfoDto.setMaxSalePrice(100);
-//        List<HouseInfoValid> list=houseInfoDao.getHouseInfoCdt(getHouseInfoDto);
+//        List<HouseInfoNew> list=houseInfoDao.getHouseInfoCdt(getHouseInfoDto);
 //        
 //        int count =houseInfoDao.getHouseInfoCdtCount(getHouseInfoDto);
-//        for(HouseInfoValid houseInfo:list){
+//        for(HouseInfoNew houseInfo:list){
 ////            System.out.println(houseInfo.getCommunity());
 //            System.out.println(houseInfo.getArea().getFullName());
 //        }

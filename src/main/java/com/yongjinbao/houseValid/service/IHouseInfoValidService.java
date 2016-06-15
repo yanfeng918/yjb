@@ -2,10 +2,10 @@ package com.yongjinbao.houseValid.service;
 
 import com.yongjinbao.commons.entity.Area;
 import com.yongjinbao.houseValid.dto.*;
-import com.yongjinbao.houseValid.entity.Community;
 import com.yongjinbao.houseValid.entity.HouseInfoValid;
 import com.yongjinbao.houseValid.entity.State;
 import com.yongjinbao.houseValid.vo.*;
+import com.yongjinbao.houseinfo.entity.Community;
 import com.yongjinbao.member.dto.MyBrowseInfoDto;
 import com.yongjinbao.member.entity.Member;
 import com.yongjinbao.mybatis.entity.Pager;
@@ -104,7 +104,7 @@ public interface IHouseInfoValidService extends IBaseService<HouseInfoValid,Inte
 //    /**
 //     * 修改我发布的房源
 //     */
-//    public boolean updateMyReleaseInfo(HouseInfoValid houseInfoValid);
+//    public boolean updateMyReleaseInfo(HouseInfoNew houseInfoValid);
     
     /** 获取牛人榜【前10】 **/
     public List<TopTenRankingVO> getTop10Ranking();

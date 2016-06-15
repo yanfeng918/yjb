@@ -27,7 +27,7 @@ public interface IHouseInfoDao extends IBaseDao<HouseInfo,Integer> {
 	/**
 	 * 查询 地区 售价 面积 小区名称等等
 	 */
-	//public List<HouseInfoValid> getHouseInfoValid(GetHouseInfoDto getHouseInfoDto);
+	//public List<HouseInfoNew> getHouseInfoNew(GetHouseInfoDto getHouseInfoDto);
 	
     /**
      * 查询 地区 售价 面积 小区名称等等条件筛选后总数查询
@@ -114,7 +114,7 @@ public interface IHouseInfoDao extends IBaseDao<HouseInfo,Integer> {
 //    /**
 //     * 修改自己发布的房源【只能修改价格或修改全部信息】
 //     */
-//    public boolean updateMyHouseInfo(HouseInfoValid houseInfo);
+//    public boolean updateMyHouseInfo(HouseInfoNew houseInfo);
     /**
      * 获取牛人榜会员
      */
