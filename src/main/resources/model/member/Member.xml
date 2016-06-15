@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yongjinbao.member.entity.Member">
+    
+    <select id="load" parameterType="long" resultType="com.yongjinbao.member.entity.Member">  
+	    SELECT * FROM t_member where id=#{id} 
+	</select>  
+	<insert id="add" parameterType="com.yongjinbao.member.entity.Member" flushCache="true">
+	   INSERT INTO t_member (createDate,modifyDate,address,balance,birth,email,isEnabled,isLocked,lockedDate,
+	   loginDate,loginFailureCount,loginIp,mobile,name,password,phone,point,registerIp,username,safeKeyExpire,
+	   safeKeyValue,area_id,isActivateEmail,promoterId,isActivateMobile) VALUES
+	   (now(),now(),#{address},#{balance},#{birth},#{email},#{isEnabled},#{isLocked},#{lockedDate},#{loginDate}
+	   ,#{loginFailureCount},#{loginIp},#{mobile},#{name},#{password},#{phone},#{point},#{registerIp},#{username},
+	   #{safeKeyExpire},#{safeKeyValue},#{area.id},#{isActivateEmail},#{promoterId},#{isActivateMobile})
+	</insert>
+	
+
+	<update id="update" parameterType="com.yongjinbao.member.entity.Member">
+	    UPDATE t_member
+        <set>
+            modifyDate= now(),
+            <if test="address!= null">
+                address=#{address},
+            </if>
+            <if test="balance!= null">
+                balance=#{balance},
+            </if>
+            <if test="birth!= null">
+                birth=#{birth},
+            </if>
+            <if test="email!= null">
+                email=#{email},
+            </if>
+
+            <if test="isEnabled!= null">
+                isEnabled=#{isEnabled},
+            </if>
+            <if test="isLocked!= null">
+                isLocked=#{isLocked},
+            </if>
+            <if test="lockedDate!= null">
+                lockedDate=#{lockedDate},
+            </if>
+            <if test="loginDate!= null">
+                loginDate=#{loginDate},
+            </if>
+            <if test="loginFailureCount!= null">
+                loginFailureCount=#{loginFailureCount},
+            </if>
+            <if test="loginIp!= null">
+                loginIp=#{loginIp},
+            </if>
+            <if test="mobile!= null">
+                mobile=#{mobile},
+            </if>
+            <if test="name!= null">
+                name=#{name},
+            </if>
+            <if test="password!= null">
+                password=#{password},
+            </if>
+            <if test="phone!= null">
+                phone=#{phone},
+            </if>
+            <if test="point!= null">
+                point=#{point},
+            </if>
+            <if test="registerIp!= null">
+                registerIp=#{registerIp},
+            </if>
+            <if test="safeKeyExpire!= null">
+                safeKeyExpire=#{safeKeyExpire},
+            </if>
+            <if test="safeKeyValue!= null">
+                safeKeyValue=#{safeKeyValue},
+            </if>
+            
+             <if test="area!= null and area.id!= null">
+                area_id=#{area.id},
+            </if> 
+           <if test="isActivateEmail!= null">
+                isActivateEmail=#{isActivateEmail},
+            </if>
+            <if test="isActivateMobile!= null">
+                isActivateMobile=#{isActivateMobile}
+            </if>
+        </set>
+        WHERE
+        id=#{id}
+	</update>
+    
+    
+    <select id="usernameExists" parameterType="string" resultType="int">
+        select count(*) from t_member members where lower(members.username) = lower(#{value})
+    </select>
+    
+    <select id="emailExists" parameterType="string" resultType="int">
+        select count(*) from t_member members where lower(members.email) = lower(#{value})
+    </select>
+    
+    <select id="mobileExists" parameterType="string" resultType="int">
+        select count(*) from t_member members where lower(members.mobile) = lower(#{value})
+    </select>
+    
+    <select id="findByUsername" parameterType="string" resultType="com.yongjinbao.member.entity.Member">
+        select * from t_member members where lower(members.username) = lower(#{value})
+    </select>
+    
+    
+    
+    <select id="findByMobile" parameterType="map" resultType="com.yongjinbao.member.entity.Member">
+--         select * from t_member members where lower(members.mobile) = lower(#{value}) and isActivateMobile=true
+select * from t_member members where lower(members.mobile) = #{mobile}
+    </select>
+    
+    <select id="findListByMobile" parameterType="string" resultType="com.yongjinbao.member.entity.Member">
+        select * from t_member members where lower(members.mobile) = #{mobile}
+    </select>
+    
+    <select id="getMemberByCondtion" parameterType="string" resultType="com.yongjinbao.member.entity.Member">
+        select * from t_member where username=#{value} or (mobile=#{value} AND isActivateMobile=TRUE ) or email=#{value}
+    </select>
+    
+    <!-- 获取用户余额 -->
+    <select id="getMemberBalance" parameterType="String" resultType="int">
+    	select balance from t_member where lower(members.username) = lower(#{value})
+    </select>
+    
+    <update id="updateBalance" parameterType="com.yongjinbao.member.dto.UpdateBalanceDto">
+    	UPDATE t_member
+    	<set>
+    		modifyDate= now(),
+            <if test="laterBalance!= null">
+                balance=#{laterBalance}
+            </if>
+    	</set>
+    	 WHERE
+        id=#{member.id}
+    </update>
+    
+    <select id="getSystemMember" resultType="com.yongjinbao.member.entity.Member">
+    	SELECT * FROM t_member m  where m.id=0
+    </select>
+
+	<!-- 邀请码是否存在 -->
+    <select id="isInviteCodeExisted" parameterType="string" resultType="int">
+    	SELECT COUNT(*) FROM t_member where inviteCode=#{inviteCode}
+    </select>
+    
+    <select id="getMemberList" resultType="com.yongjinbao.member.entity.Member">
+    	SELECT * from t_member
+    </select>
+   
+    <update id="addInviteCode" parameterType="com.yongjinbao.member.entity.Member">
+    	update t_member set inviteCode = #{inviteCode} where id=#{id}
+    </update>
+    
+    <select id="getIdByInviteCode" parameterType="string" resultType="java.lang.Long">
+    	SELECT id from t_member where inviteCode=#{inviteCode}
+    </select>
+    
+    <select id="getMyInviterFriends" parameterType="long"  resultType="com.yongjinbao.member.entity.Member">
+    	SELECT * FROM t_member m  where m.promoterId=#{id}
+    	<if test="pageOffset >= 0 and pageSize>0">
+			limit #{pageOffset} , #{pageSize}
+		</if>
+    </select>
+    
+    <select id="getMyInviterFriendsCount" parameterType="long"  resultType="int">
+    	SELECT count(*) FROM t_member m  where m.promoterId=#{id}
+    </select>
+    
+    <select id="findListByEmail" parameterType="string" resultType="com.yongjinbao.member.entity.Member" >
+    	SELECT * FROM t_member m  where m.email=#{email}
+    </select>
+    
+</mapper>

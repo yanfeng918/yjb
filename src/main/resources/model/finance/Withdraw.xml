@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yongjinbao.finance.entity.WithDraw">
+
+
+
+	<insert id="add" parameterType="com.yongjinbao.finance.entity.WithDraw">
+		INSERT INTO t_withdraw
+		(createDate,modifyDate,member_id,amount,bankAccount_id,status)
+		VALUES (now(),now(),#{member.id},#{amount},#{bankAccount.id},#{status})
+	</insert>
+
+	<update id="update" parameterType="com.yongjinbao.finance.entity.WithDraw">
+		UPDATE t_withdraw SET status=#{status} WHERE
+		id=#{id}
+	</update>
+	<select id="getWithDrawList" parameterType="com.yongjinbao.finance.dto.GetWithDrawDto"
+		resultType="com.yongjinbao.finance.vo.WithDrawVO">
+		select w.*,b.accountNum from t_withdraw w
+		left join t_bank_account b on w.bankAccount_id=b.id
+		<where>
+			<if test="beginDate !=null and beginDate !='' ">
+				date_format(w.createDate,"%Y-%m-%d %T") &gt;=#{beginDate}
+			</if>
+			<if test="endDate !=null and endDate !=''">
+				and date_format(w.createDate,"%Y-%m-%d %T")&lt;=#{endDate}
+			</if>
+			<if test="member_id !=0">
+				and w.member_id=#{member_id}
+			</if>
+		</where>
+		<if test="sort!=null">
+			order by ${sort}
+			<if test="order!=null">
+				${order}
+			</if>
+		</if>
+		<if test="sort==null">
+			order by w.createDate desc
+		</if>
+		<if test="pageOffset >= 0 and pageSize>0">
+			limit #{pageOffset} , #{pageSize}
+		</if>
+	</select>
+	<select id="getWithDrawListCount" parameterType="com.yongjinbao.finance.dto.GetRechargeDto"
+		resultType="java.lang.Integer">
+		select count(*) from t_withdraw
+		<where>
+			<if test="beginDate !=null and beginDate !='' ">
+				date_format(createDate,"%Y-%m-%d %T") &gt;=#{beginDate}
+			</if>
+			<if test="endDate !=null and endDate !=''">
+				and date_format(createDate,"%Y-%m-%d %T")&lt;=#{endDate}
+			</if>
+			<if test="member_id !=0">
+				and member_id=#{member_id}
+			</if>
+		</where>
+	</select>
+	<select id="getFrozenWithDrawList" parameterType="com.yongjinbao.finance.dto.GetFrozenWithDrawListDto"
+		resultType="com.yongjinbao.finance.entity.WithDraw">
+		select * from t_withdraw
+		<where>
+			status in ('APPLY','CHECKING')
+			<if test="beginDate !=null and beginDate !='' ">
+				and date_format(createDate,"%Y-%m-%d %T") &gt;=#{beginDate}
+			</if>
+			<if test="endDate !=null and endDate !=''">
+				and date_format(createDate,"%Y-%m-%d %T")&lt;=#{endDate}
+			</if>
+			<if test="member_id != 0">
+				and member_id=#{member_id}
+			</if>
+		</where>
+		<if test="sort!=null">
+			order by ${sort}
+			<if test="order!=null">
+				${order}
+			</if>
+		</if>
+		<if test="sort==null">
+			order by createDate desc
+		</if>
+		<if test="pageOffset >= 0 and pageSize>0">
+			limit #{pageOffset} , #{pageSize}
+		</if>
+	</select>
+	<select id="getFrozenWithDrawListCount" parameterType="com.yongjinbao.finance.dto.GetFrozenWithDrawListDto"
+		resultType="java.lang.Integer">
+		select count(*) from t_withdraw
+		<where>
+			status in ('APPLY','CHECKING')
+			<if test="beginDate !=null and beginDate !='' ">
+				and date_format(createDate,"%Y-%m-%d %T") &gt;=#{beginDate}
+			</if>
+			<if test="endDate !=null and endDate !=''">
+				and date_format(createDate,"%Y-%m-%d %T")&lt;=#{endDate}
+			</if>
+			<if test="member_id != 0">
+				and member_id=#{member_id}
+			</if>
+		</where>
+	</select>
+
+	<select id="getFrozenDetailList" parameterType="com.yongjinbao.finance.dto.GetFrozenDetailListDto"
+		resultType="com.yongjinbao.finance.vo.FrozenDetailVO">
+		SELECT * FROM (
+		SELECT id, createDate, member_id, amount frozenCount,
+		'提现申请' frozenType FROM t_withdraw WHERE member_id=#{member_id} AND status = 'APPLY'
+		union all SELECT id, createDate, member_id, collectPrice frozenCount, '征集房源' frozenType
+		from t_collection where member_id=#{member_id} AND `status`='COLLECTING'
+		) temp
+		<where>
+			<if test="beginDate !=null and beginDate !=''">
+				date_format(createDate,"%Y-%m-%d %T") &gt;=#{beginDate}
+			</if>
+			<if test="endDate !=null and endDate !=''">
+				and date_format(createDate,"%Y-%m-%d %T") &lt;=#{endDate}
+			</if>
+		</where>
+		<if test="sort!=null">
+			order by ${sort}
+			<if test="order!=null">
+				${order}
+			</if>
+		</if>
+		<if test="sort==null">
+			order by createDate desc
+		</if>
+		<if test="pageOffset >= 0 and pageSize>0">
+			limit #{pageOffset} , #{pageSize}
+		</if>
+	</select>
+
+	<select id="getFrozenDetailListCount" parameterType="com.yongjinbao.finance.dto.GetFrozenDetailListDto"
+		resultType="int">
+		SELECT count(*) FROM (
+		SELECT id, createDate FROM t_withdraw WHERE member_id=#{member_id} AND status = 'APPLY'
+		union all SELECT id, createDate
+		from t_collection where member_id=#{member_id} AND `status`='COLLECTING'
+		) temp
+		<where>
+			<if test="beginDate !=null and beginDate !=''">
+				date_format(createDate,"%Y-%m-%d %T") &gt;=#{beginDate}
+			</if>
+			<if test="endDate !=null and endDate !=''">
+				and date_format(createDate,"%Y-%m-%d %T") &lt;=#{endDate}
+			</if>
+		</where>
+	</select>
+	
+	<select id = "getLatestWithDrawInfo" resultMap="withdrawInfoMap">
+		SELECT *,w.id as 'w_id' FROM t_withdraw w LEFT JOIN t_member m ON w.member_id
+		= m.id WHERE w.status='SUCCESS'  ORDER BY
+		w.checkDate DESC LIMIT 0,5;
+	</select>
+	
+	<resultMap id="withdrawInfoMap" type="com.yongjinbao.finance.entity.WithDraw"
+		autoMapping="true">
+		<id column="w_id" property="id" />
+		<association property="member" javaType="com.yongjinbao.member.entity.Member">
+			<id column="member_id" property="id" />
+			<result column="username" property="username" />
+		</association>
+	</resultMap>
+	
+	<select id = "getTotalWithdrawAmount" resultType="java.lang.Float" parameterType="long">
+		select sum(amount) from t_withdraw where status='SUCCESS' AND member_id=#{member_id}
+	</select>
+
+</mapper>

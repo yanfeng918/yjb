@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yongjinbao.collection.entity.Collection">
+
+	<sql id="selectSql">
+		<where>
+			<if test="beginDate !=null and beginDate !=''">
+				date_format(c.createDate,"%Y-%m-%d %T") &gt;=#{beginDate}
+			</if>
+			<if test="endDate !=null and endDate !=''">
+				and date_format(c.createDate,"%Y-%m-%d %T") &lt;=#{endDate}
+			</if>
+			<if test="member_id !=null and member_id!=0">
+				and member_id=#{member_id}
+			</if>
+			<if test="area_id!= null and area_id!= 0">
+				and c.area_id = #{area_id}
+			</if>
+			<if test="status!= null">
+				and c.status = #{status}
+			</if>
+			<if test="community!= null and community!=''">
+				and c.community like CONCAT('%',#{community},'%')
+			</if>
+		</where>
+		<if test="sort!=null">
+			order by c.collectPrice desc,c.${sort}
+			<if test="order!=null">
+				${order}
+			</if>
+		</if>
+		<if test="sort==null">
+			order by c.collectPrice desc, c.createDate desc
+		</if>
+		<if test="pageOffset >= 0 and pageSize>0">
+			limit #{pageOffset} , #{pageSize}
+		</if>
+	</sql>
+
+	<sql id="selectSqlLike">
+		<where>
+			<if test="beginDate !=null and beginDate !=''">
+				and c.date_format(createDate,"%Y-%m-%d %T") &gt;=#{beginDate}
+			</if>
+			<if test="endDate !=null and beginDate !=''">
+				and c.date_format(createDate,"%Y-%m-%d %T")&lt;=#{endDate}
+			</if>
+			<if test="member_id !=null and member_id!=0">
+				and member_id=#{member_id}
+			</if>
+			<if test="area_id!= null and area_id!= 0">
+				and (a.treepath LIKE CONCAT('%',CONCAT(',',#{area_id},','),'%') OR a.id=#{area_id})
+			</if>
+			<if test="status!= null">
+				and c.status = #{status}
+			</if>
+			<if test="community!= null and community!=''">
+				and c.community like CONCAT('%',#{community},'%')
+			</if>
+		</where>
+		<if test="sort!=null">
+			order by c.collectPrice desc,c.${sort}
+			<if test="order!=null">
+				${order}
+			</if>
+		</if>
+		<if test="sort==null">
+			order by c.collectPrice desc,c.createDate desc
+		</if>
+		<if test="pageOffset >= 0 and pageSize>0">
+			limit #{pageOffset} , #{pageSize}
+		</if>
+	</sql>
+
+	<!-- 添加征集需求 -->
+	<insert id="addCollection" parameterType="com.yongjinbao.collection.entity.Collection"
+		flushCache="true">
+		INSERT INTO t_collection
+		(createDate,modifyDate,collectPrice,area_id,address,community,ban,floor
+		,roomNumber, houseShape, areaSize, salePrice, member_id, description,status)
+		VALUES
+		(now(),now(),#{collectPrice},#{area_id},#{address},#{community},#{ban},#{floor},#{roomNumber},
+		#{houseShape},#{areaSize},#{salePrice},#{member_id},#{description},#{status})
+	</insert>
+
+	<!-- 获取单条记录 -->
+	<select id="load" parameterType="long" resultMap="collectionMap">
+		SELECT * FROM t_collection t left join t_area a on t.area_id = a.id where
+		t.id=#{id}
+	</select>
+
+	<resultMap id="collectionMap" type="com.yongjinbao.collection.entity.Collection"
+		autoMapping="true">
+		<id column="c_id" property="id" />
+		<association property="area" javaType="com.yongjinbao.commons.entity.Area">
+			<id column="area_id" property="id" />
+			<result column="fullName" property="fullName" />
+		</association>
+	</resultMap>
+
+	<!-- 根据版块精确查询征集数据列表 -->
+	<select id="getCollectionCdtList" parameterType="com.yongjinbao.collection.dto.GetCollectionDto"
+		resultMap="collectionMap">
+		SELECT *,c.id as 'c_id' FROM t_collection c left join t_area a on
+		c.area_id = a.id
+		<include refid="selectSql" />
+	</select>
+
+	<!-- 模糊查询征集数据列表 -->
+	<select id="getCollectionLikeList" parameterType="com.yongjinbao.collection.dto.GetCollectionDto"
+		resultMap="collectionMap">
+		SELECT *,c.id as 'c_id' FROM t_collection c left join t_area a on
+		c.area_id = a.id
+		
+		<include refid="selectSqlLike" />
+	</select>
+
+	<!-- 根据版块精确查询征集数据列表总数 -->
+	<select id="getCollectionCdtListCount" parameterType="com.yongjinbao.collection.dto.GetCollectionDto"
+		resultType="int">
+		SELECT count(*) FROM t_collection c left join t_area a on c.area_id =
+		a.id
+		
+<!-- 		<include refid="selectSql" /> -->
+<!-- 		<where> -->
+<!-- 			<if test="beginDate !=null and beginDate !=''"> -->
+<!-- 				date_format(c.createDate,"%Y-%m-%d %T") &gt;=#{beginDate} -->
+<!-- 			</if> -->
+<!-- 			<if test="endDate !=null and endDate !=''"> -->
+<!-- 				and date_format(c.createDate,"%Y-%m-%d %T") &lt;=#{endDate} -->
+<!-- 			</if> -->
+<!-- 			<if test="area_id!= null and area_id!= 0"> -->
+<!-- 				and c.area_id = #{area_id} -->
+<!-- 			</if> -->
+<!-- 			<if test="community!= null and community!=''"> -->
+<!-- 				and c.community like CONCAT('%',#{community},'%') -->
+<!-- 			</if> -->
+<!-- 		</where> -->
+
+<where>
+			<if test="beginDate !=null and beginDate !=''">
+				date_format(c.createDate,"%Y-%m-%d %T") &gt;=#{beginDate}
+			</if>
+			<if test="endDate !=null and endDate !=''">
+				and date_format(c.createDate,"%Y-%m-%d %T") &lt;=#{endDate}
+			</if>
+			<if test="member_id !=null and member_id!=0">
+				and member_id=#{member_id}
+			</if>
+			<if test="area_id!= null and area_id!= 0">
+				and c.area_id = #{area_id}
+			</if>
+			<if test="status!= null">
+				and c.status = #{status}
+			</if>
+			<if test="community!= null and community!=''">
+				and c.community like CONCAT('%',#{community},'%')
+			</if>
+		</where>
+	</select>
+
+	<!-- 模糊查询征集数据列表总数 -->
+	<select id="getCollectionLikeListCount" parameterType="com.yongjinbao.collection.dto.GetCollectionDto"
+		resultType="int">
+		SELECT count(*) FROM t_collection c left join t_area a on c.area_id =
+		a.id
+<!-- 		<include refid="selectSqlLike" /> -->
+<!-- 		<where> -->
+<!-- 			 <if test="beginDate !=null and beginDate !=''"> -->
+<!-- 				and c.date_format(createDate,"%Y-%m-%d %T") &gt;=#{beginDate} -->
+<!-- 			</if> -->
+<!-- 			<if test="endDate !=null and beginDate !=''"> -->
+<!-- 				and c.date_format(createDate,"%Y-%m-%d %T")&lt;=#{endDate} -->
+<!-- 			</if>  -->
+<!-- 			<if test="area_id!= null and area_id!= 0"> -->
+<!-- 				and a.treepath LIKE CONCAT('%',CONCAT(',',#{area_id},','),'%') -->
+<!-- 				and a.treepath LIKE CONCAT('%',#{area_id},'%') OR a.id=#{area_id} -->
+<!-- 			</if> -->
+<!-- 			<if test="community!= null and community!=''"> -->
+<!-- 				and c.community like CONCAT('%',#{community},'%') -->
+<!-- 			</if> -->
+<!-- 		</where> -->
+<where>
+			<if test="beginDate !=null and beginDate !=''">
+				and c.date_format(createDate,"%Y-%m-%d %T") &gt;=#{beginDate}
+			</if>
+			<if test="endDate !=null and beginDate !=''">
+				and c.date_format(createDate,"%Y-%m-%d %T")&lt;=#{endDate}
+			</if>
+			<if test="member_id !=null and member_id!=0">
+				and member_id=#{member_id}
+			</if>
+			<if test="area_id!= null and area_id!= 0">
+				and (a.treepath LIKE CONCAT('%',CONCAT(',',#{area_id},','),'%') OR a.id=#{area_id})
+			</if>
+			<if test="status!= null">
+				and c.status = #{status}
+			</if>
+			<if test="community!= null and community!=''">
+				and c.community like CONCAT('%',#{community},'%')
+			</if>
+		</where>
+	</select>
+
+	<!-- 获取我的征集列表 -->
+	<select id="getMyCollectionList" parameterType="com.yongjinbao.collection.dto.GetCollectionDto"
+		resultMap="collectionMap">
+		SELECT *, c.id as c_id FROM t_collection c left join t_area a on
+		c.area_id = a.id
+		<include refid="selectSql" />
+	</select>
+
+	<!-- 获取我的征集列表数 -->
+	<select id="getMyCollectionListCount" parameterType="com.yongjinbao.collection.dto.GetCollectionDto"
+		resultType="int">
+		SELECT count(*) FROM t_collection c WHERE member_id =
+		#{member_id}
+	</select>
+
+	<!-- 根据collectionId获取回答数【已审核通过的可用房源】 -->
+	<select id="getResponseCountByCollectId" parameterType="com.yongjinbao.collection.dto.GetMyResponseDto"
+		resultType="int">
+		SELECT COUNT(*) FROM t_house_info h where h.available = 1
+		and h.status = "SUCCESS"
+		and h.id IN (SELECT c.houseInfo_id from
+		t_collection_houseinfo c WHERE
+		c.collection_id = #{collection_id})
+	</select>
+
+	<!-- 根据collectionId获取回答内容【已审核通过的可用房源】 -->
+	<select id="getResponseHouseInfoByCollectId" parameterType="com.yongjinbao.collection.dto.GetMyResponseDto"
+		resultMap="HouseInfoMap">
+		SELECT *,h.id as h_id FROM t_house_info h left join t_area a on
+		a.id=h.area_id
+		where h.available = 1 and h.status = "SUCCESS"
+		and h.id IN (SELECT
+		c.houseInfo_id from t_collection_houseinfo c WHERE
+		c.collection_id =
+		#{collection_id})
+		order by h.createDate desc
+		<if test="pageOffset >= 0 and pageSize>0">
+			limit #{pageOffset} , #{pageSize}
+		</if>
+	</select>
+
+	<resultMap id="HouseInfoMap" type="com.yongjinbao.houseinfo.entity.HouseInfo"
+		autoMapping="true">
+		<id column="h_id" property="id" />
+		<association property="area" javaType="com.yongjinbao.commons.entity.Area">
+			<id column="area_id" property="id" />
+			<result column="fullName" property="fullName" />
+		</association>
+	</resultMap>
+
+	<!-- 获取我的提交数据列表 -->
+	<select id="getMyResponsedHouseInfoList" parameterType="com.yongjinbao.collection.dto.GetMyResponseDto"
+		resultType="com.yongjinbao.collection.vo.MyResponseHouseInfoVO">
+		SELECT *, c.readTime response_readTime, c.readStatus
+		response_readStatus , h.id h_id FROM t_house_info h
+		LEFT JOIN t_collection_houseinfo c ON h.id = c.houseInfo_id
+		LEFT JOIN t_area a ON a.id = h.area_id
+		WHERE
+		c.response_member_id=#{response_member_id}
+		<where>
+			<if test="beginDate !=null and beginDate !=''">
+				date_format(c.createDate,"%Y-%m-%d %T") &gt;=#{beginDate}
+			</if>
+			<if test="endDate !=null and endDate !=''">
+				and date_format(c.createDate,"%Y-%m-%d %T") &lt;=#{endDate}
+			</if>
+			<if test="member_id !=0">
+				and member_id=#{member_id}
+			</if>
+		</where>
+		<if test="sort!=null">
+			order by ${sort}
+			<if test="order!=null">
+				${order}
+			</if>
+		</if>
+		<if test="sort==null">
+			order by c.createDate desc
+		</if>
+		<if test="pageOffset >= 0 and pageSize>0">
+			limit #{pageOffset} , #{pageSize}
+		</if>
+	</select>
+
+
+
+	<!-- 获取我的提交数据的数量 -->
+	<select id="getMyResponsedHouseInfoListCount" parameterType="long"
+		resultType="int">
+		SELECT count(*) FROM t_house_info h
+		LEFT JOIN t_collection_houseinfo c ON h.id = c.houseInfo_id WHERE
+		c.response_member_id=#{response_member_id}
+	</select>
+
+
+	<!-- 城市区域包含的征集数 -->
+	<select id="getCollectionCountByAreaId" parameterType="string"
+		resultType="int">
+		SELECT count(*) FROM t_collection c left join t_area a on c.area_id = a.id
+		where a.treepath LIKE CONCAT('%',#{value},'%')
+	</select>
+
+	<select id="getCollectionCountByAreaIdV2" parameterType="Long" resultType="com.yongjinbao.collection.vo.CollectionCountByAreaVO">
+
+		SELECT areaMain.name AS areaName, temp.number AS collectionCount,areaMain.id AS areaId  FROM t_area areaMain LEFT JOIN
+		(SELECT count(*)
+		number,area.parent area_id from t_collection c LEFT JOIN
+		t_area area ON c.area_id = area.id where area.parent IN(SELECT id FROM
+		t_area where parent=#{area_id}) GROUP BY area.parent) temp
+		on areaMain.id = temp.area_id where areaMain.parent=#{area_id} ORDER BY
+		temp.number DESC;
+	</select>
+	
+	 
+	
+	
+	
+
+	<!-- 添加我的提交房源 -->
+	<insert id="addResponseToCollection" parameterType="com.yongjinbao.collection.dto.ResponseCollectionGto"
+		flushCache="true">
+		INSERT INTO t_collection_houseInfo (createDate,
+		modifyDate,collection_id, houseInfo_id,
+		response_member_id, readTime,
+		readStatus) VALUES
+		(now(), now(), #{collection_id}, #{houseInfo_id},
+		#{response_member_id},#{readTime},#{readStatus})
+	</insert>
+
+	<!-- 【从房源供求中进入查看房源时】更新提交的房源回答次数 -->
+	<update id="updateReadTime" parameterType="com.yongjinbao.collection.dto.ResponseCollectionGto">
+		UPDATE t_collection_houseInfo SET modifyDate= now(), readTime =
+		(readTime+1)
+		<where>
+			<if test="collection_id !=null ">
+				collection_id = #{collection_id}
+			</if>
+			<if test="houseInfo_id !=null ">
+				and houseInfo_id = #{houseInfo_id}
+			</if>
+		</where>
+	</update>
+
+	<!-- 获取当前提交的房源数据id -->
+	<select id="getCurrentResponseHouseInfoId" parameterType="long"
+		resultType="long">
+		Select max(id) from t_house_info where member_id =
+		#{member_id}
+	</select>
+
+	<!-- 获取最新10条征集数据 -->
+	<select id="getLatestCollection" resultMap="collectionMap">
+		SELECT *,c.id as 'c_id' FROM t_collection c LEFT JOIN t_area a ON c.area_id
+		= a.id ORDER BY c.collectPrice DESC LIMIT 0,4;
+	</select>
+
+	<!-- 获取个人中心今日征集数【加上一个随机数】 -->
+	<select id="getTodayCollectionCount" parameterType="int" resultType="int">
+		SELECT COUNT(*) FROM t_collection c LEFT JOIN t_area a ON c.area_id = a.id
+		 WHERE c.status='COLLECTING' AND ( a.treePath LIKE CONCAT('%',#{area_id},'%') OR c.area_id=#{area_id});
+	</select>
+
+	<select id="getMyReleaseCount" parameterType="long" resultType="int">
+		SELECT count(*) from t_collection c where DATE_SUB(CURDATE(), INTERVAL
+		1 DAY) &lt;= date(c.createDate) and member_id=#{member_id}
+	</select>
+
+	<!-- 2015年10月1日 添加删除已发布征集 -->
+	<select id="deleteMyCollectionById" parameterType="long">
+		DELETE FROM t_collection where id=#{id}
+	</select>
+	
+	<!-- 2015年10月1日 添加删除已发布征集的关联表信息 -->
+	<select id="deleteMyCollectionResponseById" parameterType="long">
+		DELETE FROM t_collection_houseinfo where collection_id = #{id}
+	</select>
+
+	<!-- 2015年10月7日 删除征集变为结束征集 -->
+	<select id="closeMyCollectionById" parameterType="long">
+		UPDATE t_collection SET status = 'CUSTOMERCLOSE', modifyDate=now(),endDate=now() WHERE id=#{id}
+	</select>
+
+</mapper>

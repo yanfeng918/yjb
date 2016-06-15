@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yongjinbao.commons.entity.Area">
+
+	<select id="load" parameterType="long" resultType="com.yongjinbao.commons.entity.Area">  
+	    SELECT * FROM t_area where id=#{id} 
+	</select>
+	
+    <insert id="add" parameterType="com.yongjinbao.commons.entity.Area"
+            flushCache="true">
+        INSERT INTO t_area (createDate,modifyDate,orders,fullName,name,treePath,parent)
+         VALUES (now(),now(),#{orders},#{fullName},#{name},#{treePath},#{parent})
+    </insert>
+    
+    <update id="update" parameterType="com.yongjinbao.commons.entity.Area">
+        UPDATE t_area
+        <set>
+            modifyDate= now(),
+            <if test="name!= null">
+                name=#{name},
+            </if>
+            <if test="fullName!= null">
+                fullName=#{fullName},
+            </if>
+            <if test="treePath!= null">
+                treePath=#{treePath},
+            </if>
+            <if test="parent!= 0">
+                parent=#{parent}
+            </if>
+        </set>
+        WHERE
+        id=#{id}
+    </update>
+    
+    <delete id="delete" parameterType="long">  
+	    DELETE FROM t_area WHERE id=#{id}  
+	</delete>  
+    
+    
+    
+    <select id="findRoots" parameterType="long" resultType="com.yongjinbao.commons.entity.Area">
+        select * from t_area area where area.parent is null order by area.orders asc
+    </select>
+    
+    <select id="findChildren" parameterType="long" resultType="com.yongjinbao.commons.entity.Area">
+        select * from t_area area where area.parent =#{id} order by area.orders asc
+    </select>
+    
+    <select id = "getAreaIdByName" parameterType="String" resultType="java.lang.Long">
+    	SELECT id FROM t_area where fullName like CONCAT('%',#{name},'%')
+    </select>
+    
+    <select id = "findByAreaName" parameterType="String" resultType="com.yongjinbao.commons.entity.Area">
+    	SELECT * FROM t_area where name = #{name}
+    </select>
+    
+</mapper>

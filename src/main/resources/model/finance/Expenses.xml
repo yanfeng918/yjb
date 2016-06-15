@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yongjinbao.finance.entity.Expenses">
+
+    <resultMap id="member" type="com.yongjinbao.member.entity.Member">
+        <result property="username" column="username"/>
+    </resultMap>
+
+    <resultMap id="expenses" type="com.yongjinbao.finance.entity.Expenses">
+        <id property="id" column="id"/>
+        <result property="amount" column="amount"/>
+        <association property="member" javaType="com.yongjinbao.member.entity.Member" resultMap="member"/>
+    </resultMap>
+
+    <insert id="add" parameterType="com.yongjinbao.finance.entity.Expenses"
+            flushCache="true">
+        INSERT INTO t_expenses (createDate,modifyDate,member_id,amount,expensesType,expensesTo,houseInfo_id)
+               VALUES (now(),now(),#{member.id},#{amount},#{expensesType},#{expensesTo},#{houseInfo_id})
+    </insert>
+    <select id="getExpensesList" parameterType="com.yongjinbao.finance.dto.GetExpensesDto" resultMap="expenseInfoMap">
+       SELECT *,e.id as 'e_id'  from t_expenses e left join t_member m on e.expensesTo=m.id left join t_house_info h
+        on e.houseInfo_id = h.id 
+        <where>
+            <if test="beginDate !=null and beginDate !=''">
+                date_format(e.createDate,"%Y-%m-%d %T") &gt;=#{beginDate}
+            </if>
+            <if test="endDate !=null and endDate !=''">
+                and date_format(e.createDate,"%Y-%m-%d %T")&lt;=#{endDate}
+            </if>
+            <if test="member_id !=0">
+                and e.member_id=#{member_id}
+            </if>
+        </where>
+        <if test="sort!=null">
+            order by ${sort}
+            <if test="order!=null">
+                ${order}
+            </if>
+        </if>
+        <if test="sort==null">
+            order by e.createDate desc
+        </if>
+        <if test="pageOffset >= 0 and pageSize>0" >
+            limit #{pageOffset} , #{pageSize}
+        </if>
+    </select>
+    <select id="getExpensesListCount" parameterType="com.yongjinbao.finance.dto.GetExpensesDto" resultType="java.lang.Integer">
+        select count(*) from t_expenses e
+        <where>
+            <if test="beginDate !=null  and beginDate !=''">
+                date_format(e.createDate,"%Y-%m-%d %T") &gt;=#{beginDate}
+            </if>
+            <if test="endDate !=null and endDate !=''">
+                and date_format(e.createDate,"%Y-%m-%d %T")&lt;=#{endDate}
+            </if>
+            <if test="member_id !=null">
+                and e.member_id=#{member_id}
+            </if>
+        </where>
+    </select>
+    
+    <resultMap id="expenseInfoMap" type="com.yongjinbao.finance.entity.Expenses"
+		autoMapping="true">
+		<id column="e_id" property="id" />
+		<association property="member" javaType="com.yongjinbao.member.entity.Member">
+			<id column="member_id" property="id" />
+			<result column="username" property="username" />
+		</association>
+		<association property="houseInfo" javaType="com.yongjinbao.houseinfo.entity.HouseInfo">
+			<id column="houseInfo_id" property="id" />
+			<result column="community" property="community" />
+			<result column="ban" property="ban" />
+			<result column="roomNumber" property="roomNumber" />
+		</association>
+	</resultMap>
+    
+</mapper>

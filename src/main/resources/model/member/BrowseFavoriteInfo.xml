@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yongjinbao.member.entity.BrowseFavoriteInfo">
+    
+    <select id="load" parameterType="int" resultType="com.yongjinbao.member.entity.BrowseFavoriteInfo">  
+	    SELECT * FROM t_browse_favorite_info where id=#{id} 
+	</select>
+	  
+	 <insert id="add" parameterType="com.yongjinbao.member.entity.BrowseFavoriteInfo" flushCache="true">  
+	   INSERT INTO t_browse_favorite_info (createDate,member_id,houseInfo_id,customerHouseStyle,browseFavoriteStyle) 
+	   VALUES (now(),#{member.id},#{houseInfo.id},#{customerHouseStyle},#{browseFavoriteStyle})
+	</insert>  
+	
+	<update id="update" parameterType="com.yongjinbao.member.entity.BrowseFavoriteInfo">  
+	    UPDATE t_browse_favorite_info SET username=#{username},password=#{password} WHERE id=#{id	}  
+	</update>  
+	
+	<delete id="delete" parameterType="int">  
+	    DELETE FROM t_browse_favorite_info WHERE id=#{id}  
+	</delete>
+    
+    <select id="getBrowseFavoriteHouseInfoList" parameterType="map" resultType="com.yongjinbao.member.vo.GetMyBrowseVO">
+         SELECT h.* FROM t_house_info h  LEFT JOIN t_browse_favorite_info b ON h.id = b.houseInfo_id 
+        <where>
+			<if test="browseFavoriteStyle!=null">
+                (b.browseFavoriteStyle = #{browseFavoriteStyle})
+            </if>
+			<if test="customerHouseStyle!=null">
+                and b.customerHouseStyle=#{customerHouseStyle}
+            </if>
+			<if test="member_id!=null">
+			  and b.member_id=#{member_id}
+            </if>
+		</where>
+		
+		<if test="sort!=null">
+			order by ${sort}
+			<if test="order!=null">
+				${order}
+			</if>
+		</if>
+		<if test="sort==null">
+			order by b.createDate desc
+		</if>
+		limit #{pageOffset},#{pageSize}
+		
+    </select>
+    
+    <select id="getBrowseFavoriteHouseInfoList_count" parameterType="map" resultType="int">
+    
+		select count(*) from t_browse_favorite_info b left join t_house_info h on b.houseInfo_id = h.id
+		<where>
+			<if test="browseFavoriteStyle!=null">
+			  (b.browseFavoriteStyle = #{browseFavoriteStyle})
+            </if>
+			<if test="customerHouseStyle!=null">
+                and b.customerHouseStyle=#{customerHouseStyle}
+            </if>
+            <if test="member_id!=null">
+			  and b.member_id=#{member_id}
+            </if>
+		</where>  
+		
+	</select>
+    
+    <!--根据房源ID获取我查看的房源信息  -->
+	<select id="getBrowseHouseByHouseId" parameterType="com.yongjinbao.member.dto.MyBrowseInfoDto" resultType="com.yongjinbao.member.entity.BrowseFavoriteInfo">
+		select * from t_browse_favorite_info b
+		 <where>
+			<if test="browseFavoriteStyle!=null"> (b.browseFavoriteStyle = #{browseFavoriteStyle})</if>
+			<if test="customerHouseStyle!=null"> and b.customerHouseStyle=#{customerHouseStyle}</if>
+			<if test="member_id!=null"> and b.member_id=#{member_id}</if>
+			<if test="houseInfo_id!=null"> and b.houseInfo_id=#{houseInfo_id}</if>
+		</where>
+		
+		
+	</select>
+	<!-- 获取查看房源关联会员 -->
+    <select id="getMemberInMyBrowse" parameterType="long" resultType="com.yongjinbao.member.entity.Member">
+    	SELECT * FROM t_member m LEFT JOIN t_browse_favorite_info h ON m.id = h.member_id where h.houseInfo_id=#{id}
+    </select>
+
+	<!-- 查询房源信息的购买时间是否过了24小时，供举报使用 -->
+	<select id="getBrowseMinutesByNow" parameterType="com.yongjinbao.member.dto.MyBrowseInfoDto"
+		resultType="int">
+		SELECT TIMESTAMPDIFF(MINUTE, b.createDate, now()) Minutes FROM
+		t_browse_favorite_info b 
+<!-- 		WHERE b.browseFavoriteStyle= 'Browse' AND b.member_id=#{member_id} -->
+<!-- 		and b.member_id=#{member_id} and b.customerHouseStyle='HouseInfo' -->
+		<where>
+			<if test="browseFavoriteStyle!=null"> b.browseFavoriteStyle = #{browseFavoriteStyle}</if>
+			<if test="customerHouseStyle!=null"> and b.customerHouseStyle=#{customerHouseStyle}</if>
+			<if test="member_id!=null"> and b.member_id=#{member_id}</if>
+			<if test="houseInfo_id!=null"> and b.houseInfo_id=#{houseInfo_id}</if>
+		</where>
+	</select>
+    
+</mapper>

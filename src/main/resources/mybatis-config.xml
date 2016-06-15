@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	   <settings>  
+        <setting name="logImpl" value="LOG4J"/>  
+    </settings>  
+	<mappers>
+	
+	    <mapper resource="model/member/Member.xml"/>
+	    <mapper resource="model/member/BrowseFavoriteInfo.xml"/>
+	    
+	    <mapper resource="model/finance/BankAccount.xml"/>
+	    <mapper resource="model/finance/Expenses.xml"/>
+	    <mapper resource="model/finance/Income.xml"/>
+	    <mapper resource="model/finance/Recharge.xml"/>
+	    <mapper resource="model/finance/Withdraw.xml"/>
+
+        <mapper resource="model/houseInfo/HouseInfo.xml"/>
+        <mapper resource="model/houseInfo/Report.xml"/>
+        <mapper resource="model/customerInfo/CustomerInfo.xml"/>
+        
+        <mapper resource="model/common/Area.xml"/>
+        <mapper resource="model/common/SendSMS.xml"/>
+        <mapper resource="model/collection/Collection.xml"/>
+        
+	</mappers>
+</configuration>

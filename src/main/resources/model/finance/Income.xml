@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yongjinbao.finance.entity.Income">
+
+
+	<insert id="add" parameterType="com.yongjinbao.finance.entity.Income"
+		flushCache="true">
+		INSERT INTO t_income
+		(createDate,modifyDate,member_id,amount,incomeType,incomeFrom,houseInfo_id)
+		VALUES
+		(now(),now(),#{member.id},#{amount},#{incomeType},#{incomeFrom},#{houseInfo_id})
+	</insert>
+	<select id="getIncomeList" parameterType="com.yongjinbao.finance.dto.GetIncomeDto"
+		resultType="com.yongjinbao.finance.entity.Income">
+		select * from t_income
+		<where>
+			<if test="beginDate !=null and beginDate !=''">
+				date_format(createDate,"%Y-%m-%d %T") &gt;=#{beginDate}
+			</if>
+			<if test="endDate !=null and endDate !=''">
+				and date_format(createDate,"%Y-%m-%d %T") &lt;=#{endDate}
+			</if>
+			<if test="member_id !=0">
+				and member_id=#{member_id}
+			</if>
+
+		</where>
+		<if test="sort!=null">
+			order by ${sort}
+			<if test="order!=null">
+				${order}
+			</if>
+		</if>
+		<if test="sort==null">
+			order by createDate desc
+		</if>
+		<if test="pageOffset >= 0 and pageSize>0">
+			limit #{pageOffset} , #{pageSize}
+		</if>
+	</select>
+	<select id="getIncomeListCount" parameterType="com.yongjinbao.finance.dto.GetIncomeDto"
+		resultType="java.lang.Integer">
+		select count(*) from t_income
+		<where>
+			<if test="beginDate !=null and beginDate !=''">
+				date_format(createDate,"%Y-%m-%d %T") &gt;=#{beginDate}
+			</if>
+			<if test="endDate !=null and endDate !=''">
+				and date_format(createDate,"%Y-%m-%d %T") &lt;=#{endDate}
+			</if>
+			<if test="member_id !=0">
+				and member_id=#{member_id}
+			</if>
+		</where>
+	</select>
+	<!-- 获取收支明细表 2015年9月18日 -->
+	<select id="getIncomeExpenseList" parameterType="com.yongjinbao.finance.dto.GetIncomeExpenseDto"
+		resultType="com.yongjinbao.finance.vo.IncomeExpenseVO">
+		SELECT * FROM (
+		SELECT id,createDate, member_id, amount, '支出' mtype
+		,e.expensesType
+		detail, houseInfo_id FROM t_expenses
+		e
+		WHERE member_id=#{member_id}
+		union all SELECT id,createDate,
+		member_id, amount, '收入' mtype
+		,i.incomeType detail , houseInfo_id
+		FROM t_income i
+		WHERE
+		member_id=#{member_id} UNION ALL SELECT id, createDate, member_id,
+		amount, '充值' mtype, status detail, '' houseInfo_id from t_recharge r
+		WHERE
+		member_id = #{member_id}
+
+		union ALL SELECT id, createDate, member_id,
+		amount, '提现' mtype, status detail ,
+		'' houseInfo_id from t_withdraw w WHERE
+		member_id = #{member_id}
+		) temp
+		<where>
+			<if test="beginDate !=null and beginDate !=''">
+			 date_format(createDate,"%Y-%m-%d %T") &gt;=#{beginDate}
+			</if>
+			<if test="endDate !=null and endDate !=''">
+				and date_format(createDate,"%Y-%m-%d %T") &lt;=#{endDate}
+			</if>
+		</where>
+		<if test="sort!=null">
+			order by ${sort}
+			<if test="order!=null">
+				${order}
+			</if>
+		</if>
+		<if test="sort==null">
+			order by createDate desc
+		</if>
+		<if test="pageOffset >= 0 and pageSize>0">
+			limit #{pageOffset} , #{pageSize}
+		</if>
+	</select>
+
+	<select id="getIncomeExpenseCount" parameterType="com.yongjinbao.finance.dto.GetIncomeExpenseDto"
+		resultType="int">
+		SELECT COUNT(*) FROM ( SELECT id,createDate FROM
+		t_expenses e
+		WHERE
+		member_id =
+		#{member_id}
+		UNION ALL
+		SELECT
+		id,createDate
+		FROM
+		t_income i
+		WHERE
+		member_id =
+		#{member_id}
+		UNION ALL
+		SELECT
+		id,createDate
+		FROM
+		t_recharge r
+		WHERE
+		member_id =
+		#{member_id}
+		UNION ALL
+		SELECT
+		id,createDate
+		FROM
+		t_withdraw w
+		WHERE
+		member_id =
+		#{member_id}
+		) temp
+		<where>
+			<if test="beginDate !=null and beginDate !=''">
+				date_format(createDate,"%Y-%m-%d %T") &gt;=#{beginDate}
+			</if>
+			<if test="endDate !=null and endDate !=''">
+				and date_format(createDate,"%Y-%m-%d %T") &lt;=#{endDate}
+			</if>
+		</where>
+	</select>
+
+	<select id="getIncomAmountYesterDay" parameterType="long" resultType="float">
+<!-- 		SELECT SUM(amount) FROM t_income WHERE (TO_DAYS(NOW()) -TO_DAYS(createDate)) &lt;=1 and member_id = #{member_id} -->
+<!-- 	SELECT SUM(i.amount) FROM t_income i LEFT JOIN t_house_info h ON i.houseInfo_id=h.id  WHERE h.available=1 AND (TO_DAYS(NOW()) -TO_DAYS(i.createDate)) &lt;=1 and i.member_id = #{member_id} -->
+	SELECT SUM(i.amount) FROM t_income i LEFT JOIN t_house_info h ON i.houseInfo_id=h.id  WHERE h.available=1 AND i.createDate &gt;=(NOW()-INTERVAL 1 day) and i.member_id = #{member_id}
+	</select>
+	
+	<select id="getAllIncomAmount" parameterType="long"
+		resultType="float">
+		SELECT SUM(amount)  FROM t_income WHERE member_id = #{member_id}
+	</select>
+	
+</mapper>

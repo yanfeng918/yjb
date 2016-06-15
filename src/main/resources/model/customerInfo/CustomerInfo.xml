@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yongjinbao.customerinfo.entity.CustomerInfo">
+    <sql id="selectSql">
+        <where>
+            <if test="city_id!= 0">
+                city_id=#{city_id},
+            </if>
+            <if test="region_id!= 0">
+                and region_id=#{region_id},
+            </if>
+            <if test="town_id!= 0">
+                and town_id=#{town_id},
+            </if>
+            <if test="community!= null">
+                and community=#{community},
+            </if>
+            <if test="address!= null">
+                and address=#{address},
+            </if>
+            <if test="maxAreaSize!= 0">
+                and maxAreaSize &lt;=#{maxAreaSize},
+            </if>
+            <if test="minAreaSize!= 0">
+                and minAreaSize &gt;=#{minAreaSize},
+            </if>
+            <if test="maxSalePrice!= 0">
+                and maxSalePrice &lt;=#{maxSalePrice},
+            </if>
+            <if test="minSalePrice!= 0">
+                and minSalePrice &gt;=#{minSalePrice},
+            </if>
+
+            <if test="maxInfoPrice!= 0">
+                and maxInfoPrice &lt;=#{maxInfoPrice},
+            </if>
+            <if test="minInfoPrice!= 0">
+                and minInfoPrice &gt;=#{minInfoPrice},
+            </if>
+            <if test="saleWay!= null">
+                and saleWay=#{saleWay},
+            </if>
+            <if test="status!= null">
+                and status=#{status},
+            </if>
+            <if test="member_id!= 0">
+                and member_id=#{member_id},
+            </if>
+            <if test="beginDate !=null ">
+                and date_format(createDate,"%Y-%m-%d %T") &gt;=#{beginDate}
+            </if>
+            <if test="endDate !=null ">
+                and date_format(createDate,"%Y-%m-%d %T")&lt;=#{endDate}
+            </if>
+        </where>
+    </sql>
+    <insert id="add" parameterType="com.yongjinbao.customerinfo.entity.CustomerInfo">
+        INSERT INTO t_customer_Info (createDate,modifyDate,name,phone,mobile,city_id,region_id,town_id,community,address,
+        areaSize,ban,floor,roomNumber,houseDespt,salePrice,infoPrice,saleWay,isSingle,area_id,member_id,isAvailable,readTime,status)
+        VALUES (now(),now(),#{name},#{phone},#{mobile},#{city_id},#{region_id},#{town_id},#{community},#{address},
+        #{areaSize},#{ban},#{floor},#{roomNumber},#{houseDespt},#{salePrice},#{infoPrice},#{saleWay},#{isSingle},
+        #{area.id},#{member.id},#{isAvailable},#{readTime},#{status})
+    </insert>
+    <select id="getCustomerInfo" parameterType="com.yongjinbao.customerinfo.dto.GetCustomerInfoDto"
+            resultType="com.yongjinbao.customerinfo.entity.CustomerInfo">
+        select * from t_customer_Info
+        <where>
+            <include refid="selectSql"/>
+        </where>
+        <if test="sort!=null">
+            order by ${sort}
+            <if test="order!=null">
+                ${order}
+            </if>
+        </if>
+        <if test="sort==null">
+            order by createDate desc
+        </if>
+        <if test="pageOffset >= 0 and pageSize>0" >
+            limit #{pageOffset} , #{pageSize}
+        </if>
+    </select>
+
+    <select id="getCustomerInfoCount" parameterType="com.yongjinbao.customerinfo.dto.GetCustomerInfoDto"
+            resultType="java.lang.Integer">
+        select count(*) from t_customer_Info
+        <include refid="selectSql"/>
+    </select>
+
+    <update id="update" parameterType="com.yongjinbao.customerinfo.entity.CustomerInfo">
+        UPDATE t_customer_Info
+        <set>
+            modifyDate= now(),
+            <if test="name!= null">
+                name=#{name},
+            </if>
+            <if test="phone!= null">
+                phone=#{phone},
+            </if>
+            <if test="mobile!= null">
+                mobile=#{mobile},
+            </if>
+            <if test="city_id!= 0">
+                city_id=#{city_id},
+            </if>
+            <if test="region_id!= 0">
+                region_id=#{region_id},
+            </if>
+            <if test="town_id!= 0">
+                town_id=#{town_id},
+            </if>
+            <if test="community!= null">
+                community=#{community},
+            </if>
+            <if test="address!= null">
+                address=#{address},
+            </if>
+            <if test="areaSize!= 0">
+                areaSize=#{areaSize},
+            </if>
+            <if test="ban!= null">
+                ban=#{ban},
+            </if>
+            <if test="floor!= null">
+                floor=#{floor},
+            </if>
+            <if test="roomNumber!= null">
+                roomNumber=#{roomNumber},
+            </if>
+            <if test="houseDespt!= null">
+                houseDespt=#{houseDespt},
+            </if>
+            <if test="salePrice!= null">
+                salePrice=#{salePrice},
+            </if>
+            <if test="infoPrice!= 0">
+                infoPrice=#{infoPrice},
+            </if>
+            <if test="saleWay!= null">
+                saleWay=#{saleWay},
+            </if>
+            <if test="isSingle!= null">
+                isSingle=#{isSingle},
+            </if>
+            <if test="area.id!= 0">
+                area_id=#{area.id},
+            </if>
+            <if test="member.id!= 0">
+                member_id=#{member.id},
+            </if>
+            <if test="isAvailable!= null">
+                isAvailable=#{isAvailable},
+            </if>
+            <if test="status!= null">
+                status=#{status},
+            </if>
+            <if test="readTime!= 0">
+                readTime=#{readTime}
+            </if>
+        </set>
+        WHERE
+        id=#{id}
+    </update>
+</mapper>

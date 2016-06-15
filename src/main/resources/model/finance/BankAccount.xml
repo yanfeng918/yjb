@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yongjinbao.finance.entity.BankAccount">
+
+	<select id="getBankList" parameterType="java.lang.Long"
+		resultType="com.yongjinbao.finance.entity.BankAccount">
+		SELECT * FROM t_bank_account where member_id=#{member_id} and available=true ORDER BY createDate desc
+	</select>
+	<insert id="add" parameterType="com.yongjinbao.finance.entity.BankAccount" flushCache="true">
+		INSERT INTO t_bank_account (createDate,modifyDate,member_id,accountNum,branchName,bankAddress,available
+		,accountHolder)
+		VALUES (now(),now(),#{member.id},#{accountNum},#{branchName},#{bankAddress},#{available},#{accountHolder})
+	</insert>
+	<update id="update" parameterType="com.yongjinbao.finance.entity.BankAccount">
+		UPDATE t_bank_account
+        <set>
+                modifyDate= now(),
+            <if test="accountNum!= null">
+                accountNum=#{accountNum},
+            </if>
+            <if test="branchName!= null">
+                branchName=#{branchName},
+            </if>
+            <if test="bankAddress!= null">
+                bankAddress=#{bankAddress},
+            </if>
+            <if test="available!= null">
+                available=#{available},
+            </if>
+            <if test="accountHolder!= null">
+                accountHolder=#{accountHolder}
+            </if>
+        </set>
+		 WHERE
+		id=#{id}
+	</update>
+</mapper>
