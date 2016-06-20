@@ -100,8 +100,8 @@ public class HouseInfoNewService extends BaseServiceImpl<HouseInfoNew,Integer>
      * @return
      */
     private String initRedisKeyForHouseInfoList(long area_id, int pageNumber, boolean isList, boolean isLevel3){
-    	String keyList = isLevel3?"HouseInfoCdtList":"HouseInfoLikeList";
-    	String keyCount = isLevel3?"HouseInfoCdtListCount":"HouseInfoLikeListCount";
+    	String keyList = isLevel3?"HouseInfoCdtListNew":"HouseInfoLikeListNew";
+    	String keyCount = isLevel3?"HouseInfoCdtListCountNew":"HouseInfoLikeListCountNew";
     	return (isList?keyList:keyCount)+"-"+area_id+"-"+pageNumber;
     }
     
