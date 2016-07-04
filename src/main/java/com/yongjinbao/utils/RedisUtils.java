@@ -48,7 +48,8 @@ public final class RedisUtils {
             config.setMaxIdle(MAX_IDLE);
             config.setMaxWait(MAX_WAIT);
             config.setTestOnBorrow(TEST_ON_BORROW);
-            jedisPool = new JedisPool(config, ADDR, PORT, TIMEOUT,AUTH);
+            //jedisPool = new JedisPool(config, ADDR, PORT, TIMEOUT,AUTH);
+            jedisPool = new JedisPool(config, ADDR, PORT, TIMEOUT);
         } catch (Exception e) {
             e.printStackTrace();
         }
