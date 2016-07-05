@@ -4,9 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -15,27 +12,13 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFCellUtil;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.yongjinbao.commons.entity.Area;
-import com.yongjinbao.houseinfo.dto.GetHouseInfoDto;
-import com.yongjinbao.houseinfo.dto.HouseInfoExistDto;
-import com.yongjinbao.houseinfo.entity.HouseInfo;
 import com.yongjinbao.houseinfo.service.IHouseInfoService;
-import com.yongjinbao.houseinfo.vo.GetAreaHouseCountByCityVO;
-import com.yongjinbao.houseinfo.vo.HouseInfoAndFavouriteStatusVO;
-import com.yongjinbao.houseinfo.vo.TopTenRankingVO;
-import com.yongjinbao.houseinfo.vo.UpdateHouseInfoVO;
-import com.yongjinbao.member.dto.MyBrowseInfoDto;
-import com.yongjinbao.member.entity.Member;
 import com.yongjinbao.member.service.IMemberService;
-import com.yongjinbao.mybatis.entity.Pager;
-import com.yongjinbao.mybatis.entity.SystemContext;
-import com.yongjinbao.utils.houseinfo.ExcelParseToList;
 
 /**
  * Created by fddxiaohui on 2015/8/20.

@@ -138,7 +138,8 @@ public class HouseInfoValidService extends BaseServiceImpl<HouseInfoValid,Intege
     @SuppressWarnings("unchecked")
 	@Override
     public <T> Pager<T> getHouseInfo(GetHouseInfoDto getHouseInfoDto) {
-        getHouseInfoDto.setPageOffset((getHouseInfoDto.getPageNumber()-1)*getHouseInfoDto.getPageSize());
+		if (getHouseInfoDto.getPageOffset()==0)
+	        getHouseInfoDto.setPageOffset((getHouseInfoDto.getPageNumber()-1)*getHouseInfoDto.getPageSize());
         Pager<HouseInfoValidAndFavouriteStatusVO> pages=new Pager<HouseInfoValidAndFavouriteStatusVO>();
         int total=0;
         List<HouseInfoValidAndFavouriteStatusVO> list = new ArrayList<HouseInfoValidAndFavouriteStatusVO>();
@@ -161,8 +162,8 @@ public class HouseInfoValidService extends BaseServiceImpl<HouseInfoValid,Intege
 		}else {
 			if(findChildren.isEmpty()){
 	        	//子节点为空时，表示当前区域为板块，即第三级
-	        	String listCdtKey = initRedisKeyForHouseInfoList(area_id, getHouseInfoDto.getPageNumber(),true, true);
-	        	String listCdtCountKey = initRedisKeyForHouseInfoList(area_id, getHouseInfoDto.getPageNumber(),false, true);
+	        	String listCdtKey = initRedisKeyForHouseInfoList(area_id, getHouseInfoDto.getPageOffset(),true, true);
+	        	String listCdtCountKey = initRedisKeyForHouseInfoList(area_id, getHouseInfoDto.getPageOffset(),false, true);
 	            byte[] listCdtBs = RedisUtils.get(SerializeUtil.serialize(listCdtKey));
 	            byte[] listCdtCountBs = RedisUtils.get(SerializeUtil.serialize(listCdtCountKey));
 	            

@@ -1,5 +1,6 @@
 package com.yongjinbao.mybatis.entity;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -26,6 +27,8 @@ public class Pager<T> {
 	private String orderBy = "createDate";// 排序字段
 	private OrderType orderType = OrderType.desc;// 排序方式
 	private List<T> list;// 数据List
+
+	private T[] data;// 数据List
 
 	public Integer getPageNumber() {
 		return pageNumber;
@@ -118,7 +121,12 @@ public class Pager<T> {
 	public void setList(List<T> list) {
 		this.list = list;
 	}
-	
 
+	public T[] getData() {
+		return data;
+	}
 
+	public void setData(T[] data) {
+		this.data = data;
+	}
 }

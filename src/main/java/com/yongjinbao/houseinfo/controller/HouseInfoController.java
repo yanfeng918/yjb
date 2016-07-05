@@ -23,7 +23,6 @@ import com.yongjinbao.houseinfo.dto.HouseInfoExistDto;
 import com.yongjinbao.houseinfo.dto.StateStatusDto;
 import com.yongjinbao.houseinfo.entity.Community;
 import com.yongjinbao.houseinfo.entity.HouseInfo;
-import com.yongjinbao.houseinfo.entity.HouseInfo.HouseInfo_STATUS;
 import com.yongjinbao.houseinfo.entity.State;
 import com.yongjinbao.houseinfo.entity.State.stateStatus;
 import com.yongjinbao.houseinfo.service.IHouseInfoService;
@@ -31,7 +30,7 @@ import com.yongjinbao.houseinfo.vo.AgentDynamicVO;
 import com.yongjinbao.houseinfo.vo.BatchCheckMobileVO;
 import com.yongjinbao.houseinfo.vo.BrowseHouseInfoVO;
 import com.yongjinbao.houseinfo.vo.GetAreaHouseCountByCityVO;
-import com.yongjinbao.houseinfo.vo.HouseInfoAndFavouriteStatusVO;
+import com.yongjinbao.houseinfo.vo.HouseInfoVandFavouriteStatusVO;
 import com.yongjinbao.houseinfo.vo.StateStatusVO;
 import com.yongjinbao.houseinfo.vo.TopTenRankingVO;
 import com.yongjinbao.houseinfo.vo.UpdateHouseInfoVO;
@@ -63,7 +62,7 @@ public class HouseInfoController {
      */
     @RequestMapping(value = "auth/getHouseInfoList",method = RequestMethod.POST)
     @ResponseBody
-    public Pager<HouseInfoAndFavouriteStatusVO> getHouseInfoList(@ModelAttribute("getHouseInfoDto") GetHouseInfoDto getHouseInfoDto,HttpServletRequest request){
+    public Pager<HouseInfoVandFavouriteStatusVO> getHouseInfoList(@ModelAttribute("getHouseInfoDto") GetHouseInfoDto getHouseInfoDto, HttpServletRequest request){
         if(getHouseInfoDto.getAreaSize()!=null&&getHouseInfoDto.getAreaSize().split(",").length==2){
             getHouseInfoDto.setMinAreaSize(Integer.parseInt(getHouseInfoDto.getAreaSize().split(",")[0]));
             getHouseInfoDto.setMaxAreaSize(Integer.parseInt(getHouseInfoDto.getAreaSize().split(",")[1]));
@@ -76,7 +75,7 @@ public class HouseInfoController {
         getHouseInfoDto.setAvailable(true);
         //【修改 2015年9月18】此member_id用于判断是否属于自己的收藏
         getHouseInfoDto.setMember_id(memberService.getMemberId(request));
-        Pager<HouseInfoAndFavouriteStatusVO> pager=houseInfoService.getHouseInfo(getHouseInfoDto);
+        Pager<HouseInfoVandFavouriteStatusVO> pager=houseInfoService.getHouseInfo(getHouseInfoDto);
         return pager;
      }
     /**

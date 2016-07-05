@@ -8,7 +8,7 @@ import com.yongjinbao.houseValid.entity.HouseInfoValid;
 import com.yongjinbao.houseValid.service.IHouseInfoValidService;
 import com.yongjinbao.houseValid.vo.*;
 import com.yongjinbao.houseinfo.entity.Community;
-import com.yongjinbao.houseinfo.entity.HouseInfo.HouseInfo_STATUS;
+import com.yongjinbao.houseinfo.vo.HouseInfoVandFavouriteStatusVO;
 import com.yongjinbao.member.dto.UpdateBalanceDto;
 import com.yongjinbao.member.entity.Member;
 import com.yongjinbao.member.service.IMemberService;
@@ -46,7 +46,7 @@ public class HouseInfoValidController {
      */
     @RequestMapping(value = "auth/getHouseInfoList")
     @ResponseBody
-    public Pager<HouseInfoValidAndFavouriteStatusVO> getHouseInfoList(@ModelAttribute("getHouseInfoDto") GetHouseInfoDto getHouseInfoDto, HttpServletRequest request){
+    public Pager<HouseInfoVandFavouriteStatusVO> getHouseInfoList(GetHouseInfoDto getHouseInfoDto, HttpServletRequest request){
         if(getHouseInfoDto.getAreaSize()!=null&&getHouseInfoDto.getAreaSize().split(",").length==2){
             getHouseInfoDto.setMinAreaSize(Integer.parseInt(getHouseInfoDto.getAreaSize().split(",")[0]));
             getHouseInfoDto.setMaxAreaSize(Integer.parseInt(getHouseInfoDto.getAreaSize().split(",")[1]));
@@ -59,7 +59,11 @@ public class HouseInfoValidController {
         getHouseInfoDto.setAvailable(true);
         //【修改 2015年9月18】此member_id用于判断是否属于自己的收藏
 //        getHouseInfoDto.setMember_id(memberService.getMemberId(request));
-        Pager<HouseInfoValidAndFavouriteStatusVO> pager=houseInfoService.getHouseInfo(getHouseInfoDto);
+        Pager<HouseInfoVandFavouriteStatusVO> pager=houseInfoService.getHouseInfo(getHouseInfoDto);
+		List<HouseInfoVandFavouriteStatusVO> list = pager.getList();
+		HouseInfoVandFavouriteStatusVO[] data = list.toArray(new HouseInfoVandFavouriteStatusVO[list.size()]);
+		pager.setList(null);
+		pager.setData(data);
         return pager;
      }
     /**
@@ -69,10 +73,18 @@ public class HouseInfoValidController {
      */
     @RequestMapping(value = "/auth/getReleaseHouseInfo")
     @ResponseBody
-    public Pager<HouseInfoValid> getReleaseHouseInfo(@ModelAttribute("getHouseInfoDto") GetHouseInfoDto getHouseInfoDto, HttpServletRequest request){
+    public Pager<Test> getReleaseHouseInfo(@ModelAttribute("getHouseInfoDto") GetHouseInfoDto getHouseInfoDto, HttpServletRequest request){
         getHouseInfoDto.setMember_id(houseInfoService.getMemberId(request));
         Pager<HouseInfoValid> pager=houseInfoService.getReleaseHouseInfo(getHouseInfoDto);
-        return pager;
+
+		Pager<Test> test= new Pager<>();
+		List<Test> list = new ArrayList<>();
+		for(HouseInfoValid houseInfoValid:pager.getList()){
+			Test te = new Test();
+			te.setId(houseInfoValid.getId());
+			list.add(te);
+		}
+        return test;
     }
     
     /**

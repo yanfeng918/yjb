@@ -5,6 +5,9 @@
  */
 package com.yongjinbao.commons.entity;
 
+import com.yongjinbao.utils.DateUtils;
+import org.apache.poi.ss.usermodel.DateUtil;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -77,7 +80,9 @@ public abstract class BaseEntity implements Serializable {
 	 * @return 创建日期
 	 */
 	public Date getCreateDate() {
-		return createDate;
+
+		System.out.print(1123);
+		return DateUtils.dateToFormatDate(createDate);
 	}
 
 	/**
@@ -87,7 +92,8 @@ public abstract class BaseEntity implements Serializable {
 	 *            创建日期
 	 */
 	public void setCreateDate(Date createDate) {
-		this.createDate = createDate;
+		System.out.print(1123);
+		this.createDate = DateUtils.dateToFormatDate(createDate);
 	}
 
 	/**

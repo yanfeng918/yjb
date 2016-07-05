@@ -11,7 +11,7 @@ public class BaseDto {
     /**会员id**/
     private long member_id;
     /**分页的页码大小**/
-    private int pageSize =20;
+    private int pageSize =10;
     /**分页的偏移量 pageSize*(pageNun-1) **/
     private int pageOffset =0;
     /**排序字段**/
