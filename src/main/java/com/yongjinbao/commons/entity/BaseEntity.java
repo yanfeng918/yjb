@@ -50,6 +50,8 @@ public abstract class BaseEntity implements Serializable {
 	/** 创建日期 */
 	private Date createDate;
 
+	private String createDateStr;
+
 	/** 修改日期 */
 	private Date modifyDate;
 
@@ -80,9 +82,7 @@ public abstract class BaseEntity implements Serializable {
 	 * @return 创建日期
 	 */
 	public Date getCreateDate() {
-
-		System.out.print(1123);
-		return DateUtils.dateToFormatDate(createDate);
+		return createDate;
 	}
 
 	/**
@@ -92,8 +92,15 @@ public abstract class BaseEntity implements Serializable {
 	 *            创建日期
 	 */
 	public void setCreateDate(Date createDate) {
-		System.out.print(1123);
-		this.createDate = DateUtils.dateToFormatDate(createDate);
+		this.createDate = createDate;
+	}
+
+	public String getCreateDateStr() {
+		return DateUtils.dateToStr(getCreateDate());
+	}
+
+	public void setCreateDateStr(String createDateStr) {
+		this.createDateStr = createDateStr;
 	}
 
 	/**

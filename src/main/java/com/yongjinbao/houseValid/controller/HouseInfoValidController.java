@@ -38,7 +38,6 @@ public class HouseInfoValidController {
     private IAreaService areaService;
 
 
-
     /**
      * 条件查询房屋信息列表
      * @param getHouseInfoDto
@@ -66,49 +65,8 @@ public class HouseInfoValidController {
 		pager.setData(data);
         return pager;
      }
-    /**
-     * 条件查询房屋信息列表
-     * @param getHouseInfoDto
-     * @return
-     */
-    @RequestMapping(value = "/auth/getReleaseHouseInfo")
-    @ResponseBody
-    public Pager<Test> getReleaseHouseInfo(@ModelAttribute("getHouseInfoDto") GetHouseInfoDto getHouseInfoDto, HttpServletRequest request){
-        getHouseInfoDto.setMember_id(houseInfoService.getMemberId(request));
-        Pager<HouseInfoValid> pager=houseInfoService.getReleaseHouseInfo(getHouseInfoDto);
 
-		Pager<Test> test= new Pager<>();
-		List<Test> list = new ArrayList<>();
-		for(HouseInfoValid houseInfoValid:pager.getList()){
-			Test te = new Test();
-			te.setId(houseInfoValid.getId());
-			list.add(te);
-		}
-        return test;
-    }
     
-    /**
-	 * 获取区域及房源
-	 */
-	@RequestMapping(value = "/getAreaHouseCountByCityOld")
-	public @ResponseBody
-	List<GetAreaHouseCountByCityVO> getAreaHouseCountByCityOld(long area_id) {
-		List<GetAreaHouseCountByCityVO> list = new ArrayList<GetAreaHouseCountByCityVO>();
-		list = houseInfoService.getAreaHouseCountByCity(area_id);
-		return list;
-	}
-	
-	 /**
-	 * 获取区域及房源
-	 */
-	@RequestMapping(value = "/getAreaHouseCountByCity", method = RequestMethod.GET)
-	public @ResponseBody
-	List<GetAreaHouseCountByCityVO> getAreaHouseCountByCity(long area_id) {
-		List<GetAreaHouseCountByCityVO> list = new ArrayList<GetAreaHouseCountByCityVO>();
-		list = houseInfoService.getAreaHouseCountByCityV2(area_id);
-		return list;
-	}
-
 	/**
 	 * 确认购买信息时，返回房源信息
 	 * @param houseInfo_id
@@ -129,7 +87,8 @@ public class HouseInfoValidController {
 		Member houseInfoMember = houseInfoService.getHouseInfoMember(houseInfoValid, false);
 		houseInfoValid.setMember(houseInfoMember);
 		//更新账户余额状态
-		//收入者增加余额【即为房源信息提供会员】 
+		//收入者增加余额【即为房源信息提供会员】
+
 		//modify here yanfeng 系统扣除30%的手续费
 		Member systemMember = memberService.getSystemMember();
 		if(houseInfoMember.getId()==systemMember.getId()){
@@ -141,6 +100,7 @@ public class HouseInfoValidController {
 			houseInfoService.updateBalanceInfo(systemMember, 
 					Float.parseFloat(String.valueOf(houseInfoValid.getInfoPrice()*0.3)), UpdateBalanceDto.INCREASE);
 		}
+
 		//支出者减少余额【即为查看数据会员/登录会员】
 		if (loginMember.getId()==systemMember.getId()) {
 			//备用，系统登录时，更新一次系统账户信息
@@ -163,33 +123,6 @@ public class HouseInfoValidController {
 	}
 	
 
-	
-	/**
-     * 获取今日房源数
-     */
-	@RequestMapping(value = "/getTodayHouseInfoCount", method = RequestMethod.GET)
-	@ResponseBody
-    public int getTodayHouseInfoCount(int area_id){
-		return houseInfoService.getTodayHouseInfoCount(area_id);
-    }
-
-	
-	/**
-	 * 检查是否可以对当前房源进行申诉操作
-	 * @since 2015年11月6日16:03
-	 * @author masw
-	 * @return
-	 */
-	@RequestMapping(value = "auth/checkStateStatus", method = RequestMethod.GET)
-	@ResponseBody
-	public StateStatusVO checkStateStatus(long houseInfo_id, HttpServletRequest request){
-		StateStatusDto dto = new StateStatusDto();
-		dto.setHouseInfo_id(houseInfo_id);
-		dto.setMember_id(memberService.getMemberId(request));
-		StateStatusVO vo= houseInfoService.checkStateStatus(dto);
-		vo.setHouseInfo_id(houseInfo_id);
-		return vo;
-	}
 
 
     /**
