@@ -43,7 +43,7 @@ public class HouseInfoValidController {
      * @param getHouseInfoDto
      * @return
      */
-    @RequestMapping(value = "auth/getHouseInfoList")
+    @RequestMapping(value = "getHouseInfoList")
     @ResponseBody
     public Pager<HouseInfoVandFavouriteStatusVO> getHouseInfoList(GetHouseInfoDto getHouseInfoDto, HttpServletRequest request){
         if(getHouseInfoDto.getAreaSize()!=null&&getHouseInfoDto.getAreaSize().split(",").length==2){
