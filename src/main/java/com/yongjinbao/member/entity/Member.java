@@ -77,8 +77,6 @@ public class Member extends BaseEntity {
 	/** 出生日期 */
 	private Date birth;
 
-	/** 地址 */
-	private String address;
 
 
 	/** 电话 */
@@ -240,14 +238,6 @@ public class Member extends BaseEntity {
 
 	public void setBirth(Date birth) {
 		this.birth = birth;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
 	}
 
 	public String getPhone() {

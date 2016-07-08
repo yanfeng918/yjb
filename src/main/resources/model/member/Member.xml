@@ -7,12 +7,12 @@
 	    SELECT * FROM t_member where id=#{id} 
 	</select>  
 	<insert id="add" parameterType="com.yongjinbao.member.entity.Member" flushCache="true">
-	   INSERT INTO t_member (createDate,modifyDate,address,balance,birth,email,isEnabled,isLocked,lockedDate,
-	   loginDate,loginFailureCount,loginIp,mobile,name,password,phone,point,registerIp,username,safeKeyExpire,
-	   safeKeyValue,area_id,isActivateEmail,promoterId,isActivateMobile) VALUES
-	   (now(),now(),#{address},#{balance},#{birth},#{email},#{isEnabled},#{isLocked},#{lockedDate},#{loginDate}
-	   ,#{loginFailureCount},#{loginIp},#{mobile},#{name},#{password},#{phone},#{point},#{registerIp},#{username},
-	   #{safeKeyExpire},#{safeKeyValue},#{area.id},#{isActivateEmail},#{promoterId},#{isActivateMobile})
+	   INSERT INTO t_member (createDate,modifyDate,balance,email,isEnabled,isLocked,lockedDate,
+	   loginDate,loginFailureCount,loginIp,mobile,name,password,phone,registerIp,username,safeKeyExpire,
+	   safeKeyValue,area_id,isActivateEmail,isActivateMobile) VALUES
+	   (now(),now(),#{balance},#{email},#{isEnabled},#{isLocked},#{lockedDate},#{loginDate}
+	   ,#{loginFailureCount},#{loginIp},#{mobile},#{name},#{password},#{phone},#{registerIp},#{username},
+	   #{safeKeyExpire},#{safeKeyValue},#{area.id},#{isActivateEmail},#{isActivateMobile})
 	</insert>
 	
 

@@ -94,7 +94,7 @@ public class RegisterController  {
 			map.put("content","shop.register.disabled");
 			return map;
 		}
-		Long promoteId = memberService.getIdByInviteCode(inviteCode);
+//		Long promoteId = memberService.getIdByInviteCode(inviteCode);
 //		if (promoteId==null) {
 //			map.put("type", "inviteCodeError");
 //			map.put("content","邀请码未正常获取，请重新填写注册！");
@@ -139,8 +139,8 @@ public class RegisterController  {
 //			return map;
 //		}
 		//添加推广人的推广ID
-        if(promoteId!=null)
-		    member.setPromoterId(promoteId);
+//        if(promoteId!=null)
+//		    member.setPromoterId(promoteId);
 		member.setUsername(member.getUsername().toLowerCase());
 		member.setPassword(DigestUtils.md5Hex(password));
 		member.setEmail(member.getEmail());
@@ -178,7 +178,7 @@ public class RegisterController  {
 		map.put("username",member.getUsername());
 		Long cityId = areaService.getCityByArea(member.getArea_id());
 		map.put("cityId", cityId.toString());
-		map.put("cityName", areaService.load(cityId).getName());
+//		map.put("cityName", areaService.load(cityId).getName());
 		return map;
 	}
 	
