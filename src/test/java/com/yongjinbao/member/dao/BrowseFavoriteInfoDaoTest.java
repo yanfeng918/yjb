@@ -13,7 +13,6 @@ import com.yongjinbao.houseinfo.entity.HouseInfo;
 import com.yongjinbao.member.dto.GetBrowseFavoriteInfoListDto;
 import com.yongjinbao.member.entity.BrowseFavoriteInfo;
 import com.yongjinbao.member.entity.BrowseFavoriteInfo.BrowseFavoriteStyle;
-import com.yongjinbao.member.entity.BrowseFavoriteInfo.CustomerHouseStyle;
 import com.yongjinbao.member.entity.Member;
 import com.yongjinbao.member.service.IMemberService;
 import com.yongjinbao.mybatis.entity.Pager;
@@ -36,7 +35,7 @@ public class BrowseFavoriteInfoDaoTest {
 		Member load = memberService.load(1l);
 		BrowseFavoriteInfo b = new BrowseFavoriteInfo();
 		b.setBrowseFavoriteStyle(BrowseFavoriteInfo.BrowseFavoriteStyle.Favorites);
-		b.setCustomerHouseStyle(CustomerHouseStyle.CustomerInfo);
+//		b.setCustomerHouseStyle(CustomerHouseStyle.CustomerInfo);
 		b.setCreateDate(new Date());
 		b.setMember(load);
 		browseFavoriteInfoDao.add(b);
@@ -54,7 +53,7 @@ public class BrowseFavoriteInfoDaoTest {
 		Member load = memberService.load(2l);
 		GetBrowseFavoriteInfoListDto a= new GetBrowseFavoriteInfoListDto();
 		a.setBrowseFavoriteStyle(BrowseFavoriteStyle.Favorites);
-		a.setCustomerHouseStyle(CustomerHouseStyle.HouseInfo);
+//		a.setCustomerHouseStyle(CustomerHouseStyle.HouseInfo);
 		a.setMember_id(2);
 		SystemContext.setPageSize(10);
 		SystemContext.setPageNumber(1);

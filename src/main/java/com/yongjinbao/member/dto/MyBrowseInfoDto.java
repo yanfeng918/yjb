@@ -19,12 +19,9 @@ public class MyBrowseInfoDto {
 	 */
 	private String browseFavoriteStyle;
 	
-	private String customerHouseStyle;
+	private String houseStyle;
 	
-	public MyBrowseInfoDto(){
-//		this.browseFavoriteStyle = "Browse";
-		this.customerHouseStyle = "HouseInfoNew";
-	}
+
 	public long getHouseInfo_id() {
 		return houseInfo_id;
 	}
@@ -48,8 +45,12 @@ public class MyBrowseInfoDto {
 	public void setBrowseFavoriteStyle(String browseFavoriteStyle) {
 		this.browseFavoriteStyle = browseFavoriteStyle;
 	}
-	
-	public String getCustomerHouseStyle() {
-		return customerHouseStyle;
+
+	public String getHouseStyle() {
+		return houseStyle;
+	}
+
+	public void setHouseStyle(String houseStyle) {
+		this.houseStyle = houseStyle;
 	}
 }

@@ -1,7 +1,7 @@
 package com.yongjinbao.member.dto;
 
 import com.yongjinbao.commons.dto.BaseDto;
-import com.yongjinbao.member.entity.BrowseFavoriteInfo.CustomerHouseStyle;
+import com.yongjinbao.member.entity.BrowseFavoriteInfo;
 
 public class BrowseFavoriteInfoDto extends BaseDto{
 	
@@ -10,6 +10,6 @@ public class BrowseFavoriteInfoDto extends BaseDto{
 	/**
 	 * 客源、房源信息类型
 	 */
-	public CustomerHouseStyle customerHouseStyle;
+	public BrowseFavoriteInfo.HouseStyle houseStyle;
 
 }

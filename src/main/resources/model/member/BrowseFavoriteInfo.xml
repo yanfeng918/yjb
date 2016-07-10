@@ -9,7 +9,7 @@
 	  
 	 <insert id="add" parameterType="com.yongjinbao.member.entity.BrowseFavoriteInfo" flushCache="true">  
 	   INSERT INTO t_browse_favorite_info (createDate,member_id,houseInfo_id,customerHouseStyle,browseFavoriteStyle) 
-	   VALUES (now(),#{member.id},#{houseInfoNew.id},#{customerHouseStyle},#{browseFavoriteStyle})
+	   VALUES (now(),#{member.id},#{houseInfoId},#{houseStyle},#{browseFavoriteStyle})
 	</insert>  
 	
 	<update id="update" parameterType="com.yongjinbao.member.entity.BrowseFavoriteInfo">  
@@ -27,7 +27,7 @@
                 (b.browseFavoriteStyle = #{browseFavoriteStyle})
             </if>
 			<if test="customerHouseStyle!=null">
-                and b.customerHouseStyle=#{customerHouseStyle}
+                and b.houseStyle=#{houseStyle}
             </if>
 			<if test="member_id!=null">
 			  and b.member_id=#{member_id}
@@ -69,7 +69,7 @@
 		select * from t_browse_favorite_info b
 		 <where>
 			<if test="browseFavoriteStyle!=null"> (b.browseFavoriteStyle = #{browseFavoriteStyle})</if>
-			<if test="customerHouseStyle!=null"> and b.customerHouseStyle=#{customerHouseStyle}</if>
+			<if test="houseStyle!=null"> and b.customerHouseStyle=#{houseStyle}</if>
 			<if test="member_id!=null"> and b.member_id=#{member_id}</if>
 			<if test="houseInfo_id!=null"> and b.houseInfo_id=#{houseInfo_id}</if>
 		</where>

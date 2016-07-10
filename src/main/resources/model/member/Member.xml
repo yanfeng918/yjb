@@ -20,9 +20,7 @@
 	    UPDATE t_member
         <set>
             modifyDate= now(),
-            <if test="address!= null">
-                address=#{address},
-            </if>
+
             <if test="balance!= null">
                 balance=#{balance},
             </if>
@@ -63,9 +61,7 @@
             <if test="phone!= null">
                 phone=#{phone},
             </if>
-            <if test="point!= null">
-                point=#{point},
-            </if>
+
             <if test="registerIp!= null">
                 registerIp=#{registerIp},
             </if>

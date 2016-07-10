@@ -260,7 +260,7 @@
 	</select>
 
 	<select id="browseHouseInfoByHouseId" parameterType="long"
-		resultType="com.yongjinbao.houseinfo.entity.HouseInfo">
+		resultType="com.yongjinbao.houseNew.entity.HouseInfoNew">
 		SELECT * FROM t_house_info_new WHERE id =#{id}
 	</select>
 

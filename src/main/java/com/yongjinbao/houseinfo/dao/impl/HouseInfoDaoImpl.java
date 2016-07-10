@@ -110,7 +110,7 @@ public class HouseInfoDaoImpl extends BaseDaoImpl<HouseInfo,Integer> implements 
 		if (hList.size()>0) {
 			houseInfo = hList.get(0);
 		}
-		houseInfo.setArea(getHouseInfoArea(houseInfo_id));
+		//houseInfo.setArea(getHouseInfoArea(houseInfo_id));
 		return houseInfo;
 	}
 

@@ -8,10 +8,10 @@ public class BrowseFavoriteInfo extends BaseEntity{
 	
 	private static final long serialVersionUID = -5736496576360334753L;
 	
-    public enum CustomerHouseStyle{
-        HouseInfo("房源信息"),CustomerInfo("客源信息");
+    public enum HouseStyle{
+        VALID("有效"),NEW("最新"),PROPERTY("物业");
         private String outername;
-        private CustomerHouseStyle(String outername){
+        private HouseStyle(String outername){
             this.outername = outername;
         }
         public String getOutername() {
@@ -33,25 +33,27 @@ public class BrowseFavoriteInfo extends BaseEntity{
 	/** 所属会员 */
 	private Member member;
 	/** 所属房源 */
-	private HouseInfo houseInfo;
+	private long houseInfoId;
 
 	/**
 	 * 客源、房源信息类型
 	 */
-	public CustomerHouseStyle customerHouseStyle;
+	public HouseStyle houseStyle;
 	
 	/**
 	 * 浏览 、收藏 信息类型
 	 */
 	public BrowseFavoriteStyle browseFavoriteStyle;
-	
-	
-	public CustomerHouseStyle getCustomerHouseStyle() {
-		return customerHouseStyle;
+
+
+	public HouseStyle getHouseStyle() {
+		return houseStyle;
 	}
-	public void setCustomerHouseStyle(CustomerHouseStyle customerHouseStyle) {
-		this.customerHouseStyle = customerHouseStyle;
+
+	public void setHouseStyle(HouseStyle houseStyle) {
+		this.houseStyle = houseStyle;
 	}
+
 	public BrowseFavoriteStyle getBrowseFavoriteStyle() {
 		return browseFavoriteStyle;
 	}
@@ -67,11 +69,12 @@ public class BrowseFavoriteInfo extends BaseEntity{
 		this.member = member;
 	}
 
-	public HouseInfo getHouseInfo() {
-		return houseInfo;
+	public long getHouseInfoId() {
+		return houseInfoId;
 	}
-	public void setHouseInfo(HouseInfo houseInfo) {
-		this.houseInfo = houseInfo;
+
+	public void setHouseInfoId(long houseInfoId) {
+		this.houseInfoId = houseInfoId;
 	}
-	
+
 }

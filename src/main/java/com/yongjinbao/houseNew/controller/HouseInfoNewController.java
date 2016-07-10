@@ -1,5 +1,6 @@
 package com.yongjinbao.houseNew.controller;
 
+import com.yongjinbao.commons.Constants;
 import com.yongjinbao.commons.service.IAreaService;
 import com.yongjinbao.houseNew.dto.GetCommunityV2Dto;
 import com.yongjinbao.houseNew.dto.GetHouseInfoDto;
@@ -127,12 +128,12 @@ public class HouseInfoNewController {
 		Member systemMember = memberService.getSystemMember();
 		if(houseInfoMember.getId()==systemMember.getId()){
 			houseInfoService.updateBalanceInfo(houseInfoMember, 
-					Float.parseFloat(String.valueOf(houseInfoNew.getInfoPrice())), UpdateBalanceDto.INCREASE);
+					Float.parseFloat(String.valueOf(Constants.infoPrice)), UpdateBalanceDto.INCREASE);
 		}else{
 			houseInfoService.updateBalanceInfo(houseInfoMember, 
-					Float.parseFloat(String.valueOf(houseInfoNew.getInfoPrice()*0.7)), UpdateBalanceDto.INCREASE);
+					Float.parseFloat(String.valueOf(Constants.infoPrice*0.7)), UpdateBalanceDto.INCREASE);
 			houseInfoService.updateBalanceInfo(systemMember, 
-					Float.parseFloat(String.valueOf(houseInfoNew.getInfoPrice()*0.3)), UpdateBalanceDto.INCREASE);
+					Float.parseFloat(String.valueOf(Constants.infoPrice*0.3)), UpdateBalanceDto.INCREASE);
 		}
 		//支出者减少余额【即为查看数据会员/登录会员】
 		if (loginMember.getId()==systemMember.getId()) {
@@ -140,7 +141,7 @@ public class HouseInfoNewController {
 			loginMember = memberService.getSystemMember();
 		}
 		houseInfoService.updateBalanceInfo(loginMember, 
-				Float.parseFloat(String.valueOf(houseInfoNew.getInfoPrice())), UpdateBalanceDto.REDUCE);
+				Float.parseFloat(String.valueOf(Constants.infoPrice)), UpdateBalanceDto.REDUCE);
 		//更改收支明细、并写入我的查看房源信息
 		houseInfoService.addIncomeExpenseAndBrowseInfo(houseInfoMember, loginMember, houseInfoNew);
 		return houseInfoNew;

@@ -10,7 +10,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.yongjinbao.houseinfo.entity.HouseInfo;
 import com.yongjinbao.member.dto.GetBrowseFavoriteInfoListDto;
 import com.yongjinbao.member.entity.BrowseFavoriteInfo.BrowseFavoriteStyle;
-import com.yongjinbao.member.entity.BrowseFavoriteInfo.CustomerHouseStyle;
 import com.yongjinbao.mybatis.entity.Pager;
 import com.yongjinbao.mybatis.entity.SystemContext;
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -55,7 +54,7 @@ public class TestBrowseFavoriteInfoService {
 		dto.setPageNumber(1);
 		dto.setPageSize(10);
 		dto.setPageOffset(0);
-		dto.setCustomerHouseStyle(CustomerHouseStyle.HouseInfo);
+//		dto.setCustomerHouseStyle(CustomerHouseStyle.HouseInfo);
 		dto.setBrowseFavoriteStyle(BrowseFavoriteStyle.Browse);
 		dto.setMember_id(1l);
 //		Pager<HouseInfoNew> pH = browseHouseInfoService.getFavoriteHouseInfoList(dto);

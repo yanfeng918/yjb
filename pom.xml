@@ -271,13 +271,13 @@
 			    <version>2.2</version>
 			    <configuration>
 			    	<!-- http://121.40.162.48/ -->
-			    	<!-- http://139.196.13.240:8080/ -->
+			    	<!-- http://139.196.13.240:32981/ -->
 					<!--139.196.203.139-->
-			        <url>http://139.196.203.139:8080/manager/text</url>
+			        <url>http://139.196.6.9:32981//manager/text</url>
 			        <server>tomcat</server>
 			        <path>/yjb</path>
 			        <username>admin</username>
-			        <password>6565177</password>
+			        <password>!UM)9=9)JD(1Ltyl</password>
 			    </configuration>
 			</plugin>
 	       

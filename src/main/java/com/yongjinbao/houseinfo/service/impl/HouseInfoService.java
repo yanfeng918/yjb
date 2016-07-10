@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
+import com.yongjinbao.commons.Constants;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
@@ -63,7 +64,6 @@ import com.yongjinbao.member.dto.MyBrowseInfoDto;
 import com.yongjinbao.member.dto.UpdateBalanceDto;
 import com.yongjinbao.member.entity.BrowseFavoriteInfo;
 import com.yongjinbao.member.entity.BrowseFavoriteInfo.BrowseFavoriteStyle;
-import com.yongjinbao.member.entity.BrowseFavoriteInfo.CustomerHouseStyle;
 import com.yongjinbao.member.entity.Member;
 import com.yongjinbao.member.service.IBrowseFavoriteHouseInfoService;
 import com.yongjinbao.member.service.IMemberService;
@@ -310,7 +310,7 @@ public class HouseInfoService extends BaseServiceImpl<HouseInfo,Integer>
     }
     @Override
 	public boolean isBalanceEnoughToBrowse(float balance, long houseInfo_id) {
-		Float infoPrice = new Float(houseInfoDao.getHouseInfoPrice(houseInfo_id));
+		Float infoPrice = Constants.infoPrice;
 		int enoughOrNot = new Float(balance).compareTo(infoPrice);
 		//2者作比较，balace大于或等于infoPrice时，即余额充足，此时enoughOrNot>0
 		return enoughOrNot<0?false:true;
@@ -353,14 +353,16 @@ public class HouseInfoService extends BaseServiceImpl<HouseInfo,Integer>
 				houseInfoDao.updateHouseInfoWhenBrowse(tempHouseInfo);
 			}
 		}else if (houseInfo.getSaleWay().compareTo(HouseInfo_SaleWay.SYSTEM)==0) {
-			//系统房源
-			member = memberService.getSystemMember();
-			if (!isBought) {
-				//readTime更新为readTime+1
-				tempHouseInfo.setReadTime(readTime+1);
-				tempHouseInfo.setAvailable(true);
-				houseInfoDao.updateHouseInfoWhenBrowse(tempHouseInfo);
-			}
+
+		}
+
+		//系统房源
+		member = memberService.getSystemMember();
+		if (!isBought) {
+			//readTime更新为readTime+1
+			tempHouseInfo.setReadTime(readTime+1);
+			tempHouseInfo.setAvailable(true);
+			houseInfoDao.updateHouseInfoWhenBrowse(tempHouseInfo);
 		}
 		return member;
 	}
@@ -414,8 +416,8 @@ public class HouseInfoService extends BaseServiceImpl<HouseInfo,Integer>
 		browseFavoriteInfo.setCreateDate(new Date());
 		browseFavoriteInfo.setModifyDate(new Date());
 		browseFavoriteInfo.setMember(loginMember);
-		browseFavoriteInfo.setHouseInfo(houseInfo);
-		browseFavoriteInfo.setCustomerHouseStyle(CustomerHouseStyle.HouseInfo);
+		browseFavoriteInfo.setHouseInfoId(houseInfo.getId());
+//		browseFavoriteInfo.setCustomerHouseStyle(CustomerHouseStyle.HouseInfo);
 		browseFavoriteInfo.setBrowseFavoriteStyle(BrowseFavoriteStyle.Browse);
 		brosweHouseInfoService.addBrowseHouseInfo(browseFavoriteInfo);
 	}
@@ -434,7 +436,7 @@ public class HouseInfoService extends BaseServiceImpl<HouseInfo,Integer>
 		myBrowseInfoDto.setBrowseFavoriteStyle(MyBrowseInfoDto.Browse);
 		//首先判断是否是自己发布的房源
 		Member isMymember = houseInfoDao.getHouseMember(houseInfo_id);
-		if (new Long(isMymember.getId()).compareTo(new Long(loginMember.getId()))==0) {
+		if (isMymember!=null && new Long(isMymember.getId()).compareTo(new Long(loginMember.getId()))==0) {
 			//自己发布的房源时，直接反回houseInfo
 			isMine = true;
 			houseInfo = new HouseInfo();

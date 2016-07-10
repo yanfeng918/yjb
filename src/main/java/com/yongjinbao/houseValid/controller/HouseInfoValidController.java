@@ -1,5 +1,6 @@
 package com.yongjinbao.houseValid.controller;
 
+import com.yongjinbao.commons.Constants;
 import com.yongjinbao.commons.service.IAreaService;
 import com.yongjinbao.houseValid.dto.GetCommunityV2Dto;
 import com.yongjinbao.houseValid.dto.GetHouseInfoDto;
@@ -91,23 +92,17 @@ public class HouseInfoValidController {
 
 		//modify here yanfeng 系统扣除30%的手续费
 		Member systemMember = memberService.getSystemMember();
-		if(houseInfoMember.getId()==systemMember.getId()){
-			houseInfoService.updateBalanceInfo(houseInfoMember, 
-					Float.parseFloat(String.valueOf(houseInfoValid.getInfoPrice())), UpdateBalanceDto.INCREASE);
-		}else{
-			houseInfoService.updateBalanceInfo(houseInfoMember, 
-					Float.parseFloat(String.valueOf(houseInfoValid.getInfoPrice()*0.7)), UpdateBalanceDto.INCREASE);
-			houseInfoService.updateBalanceInfo(systemMember, 
-					Float.parseFloat(String.valueOf(houseInfoValid.getInfoPrice()*0.3)), UpdateBalanceDto.INCREASE);
-		}
+
+		houseInfoService.updateBalanceInfo(systemMember,
+					Float.parseFloat(String.valueOf(Constants.infoPrice)), UpdateBalanceDto.INCREASE);
 
 		//支出者减少余额【即为查看数据会员/登录会员】
 		if (loginMember.getId()==systemMember.getId()) {
 			//备用，系统登录时，更新一次系统账户信息
-			loginMember = memberService.getSystemMember();
+			//loginMember = memberService.getSystemMember();
 		}
 		houseInfoService.updateBalanceInfo(loginMember, 
-				Float.parseFloat(String.valueOf(houseInfoValid.getInfoPrice())), UpdateBalanceDto.REDUCE);
+				Float.parseFloat(String.valueOf(Constants.infoPrice)), UpdateBalanceDto.REDUCE);
 		//更改收支明细、并写入我的查看房源信息
 		houseInfoService.addIncomeExpenseAndBrowseInfo(houseInfoMember, loginMember, houseInfoValid);
 		return houseInfoValid;

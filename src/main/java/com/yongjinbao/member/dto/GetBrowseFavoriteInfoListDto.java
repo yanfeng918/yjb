@@ -1,8 +1,8 @@
 package com.yongjinbao.member.dto;
 
 import com.yongjinbao.commons.dto.BaseDto;
+import com.yongjinbao.member.entity.BrowseFavoriteInfo;
 import com.yongjinbao.member.entity.BrowseFavoriteInfo.BrowseFavoriteStyle;
-import com.yongjinbao.member.entity.BrowseFavoriteInfo.CustomerHouseStyle;
 
 /**
  * 获取 浏览 收藏(房源)信息的Dto
@@ -18,7 +18,7 @@ public class GetBrowseFavoriteInfoListDto extends BaseDto{
 	/**
 	 * 房源还是客源类型
 	 */
-	private CustomerHouseStyle customerHouseStyle;
+	private BrowseFavoriteInfo.HouseStyle houseStyle;
 
 	public BrowseFavoriteStyle getBrowseFavoriteStyle() {
 		return browseFavoriteStyle;
@@ -28,12 +28,11 @@ public class GetBrowseFavoriteInfoListDto extends BaseDto{
 		this.browseFavoriteStyle = browseFavoriteStyle;
 	}
 
-	public CustomerHouseStyle getCustomerHouseStyle() {
-		return customerHouseStyle;
+	public BrowseFavoriteInfo.HouseStyle getHouseStyle() {
+		return houseStyle;
 	}
 
-	public void setCustomerHouseStyle(CustomerHouseStyle customerHouseStyle) {
-		this.customerHouseStyle = customerHouseStyle;
+	public void setHouseStyle(BrowseFavoriteInfo.HouseStyle houseStyle) {
+		this.houseStyle = houseStyle;
 	}
-	
 }

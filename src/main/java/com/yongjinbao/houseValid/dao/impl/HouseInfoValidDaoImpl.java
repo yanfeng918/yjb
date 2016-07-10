@@ -91,7 +91,7 @@ public class HouseInfoValidDaoImpl extends BaseDaoImpl<HouseInfoValid,Integer> i
 		if (hList.size()>0) {
 			houseInfoValid = hList.get(0);
 		}
-		houseInfoValid.setArea(getHouseInfoArea(houseInfo_id));
+//		houseInfoValid.setArea(getHouseInfoArea(houseInfo_id));
 		return houseInfoValid;
 	}
 

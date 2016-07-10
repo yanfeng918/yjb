@@ -15,7 +15,6 @@ import com.yongjinbao.member.dto.GetBrowseFavoriteInfoListDto;
 import com.yongjinbao.member.dto.MyBrowseInfoDto;
 import com.yongjinbao.member.entity.BrowseFavoriteInfo;
 import com.yongjinbao.member.entity.BrowseFavoriteInfo.BrowseFavoriteStyle;
-import com.yongjinbao.member.entity.BrowseFavoriteInfo.CustomerHouseStyle;
 import com.yongjinbao.member.entity.Member;
 import com.yongjinbao.member.service.IMemberService;
 import com.yongjinbao.member.service.impl.BrowseFavoriteHouseInfoService;
@@ -85,10 +84,10 @@ public class BrowseFavoriteHouseController {
 		}
 		BrowseFavoriteInfo browseFavoriteInfo = new BrowseFavoriteInfo();
 		browseFavoriteInfo.setBrowseFavoriteStyle(BrowseFavoriteStyle.Favorites);
-		browseFavoriteInfo.setCustomerHouseStyle(CustomerHouseStyle.HouseInfo);
+//		browseFavoriteInfo.setHouseStyle(BrowseFavoriteInfo.HouseStyle.PROPERTY);
 		HouseInfo houseInfo = new HouseInfo();
 		houseInfo.setId(houseInfo_id);
-		browseFavoriteInfo.setHouseInfo(houseInfo);
+		browseFavoriteInfo.setHouseInfoId(houseInfo.getId());
 		browseFavoriteInfo.setMember(member);
 		try {
 			browseFavoriteHouseInfoService.addFavoriteHouseInfo(browseFavoriteInfo);

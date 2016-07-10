@@ -9,7 +9,6 @@ import com.yongjinbao.member.dao.IBrowseFavoriteInfoDao;
 import com.yongjinbao.member.dto.GetBrowseFavoriteInfoListDto;
 import com.yongjinbao.member.entity.BrowseFavoriteInfo;
 import com.yongjinbao.member.entity.BrowseFavoriteInfo.BrowseFavoriteStyle;
-import com.yongjinbao.member.entity.BrowseFavoriteInfo.CustomerHouseStyle;
 import com.yongjinbao.member.service.IBrowseFavoriteCustomerInfoService;
 import com.yongjinbao.mybatis.entity.Pager;
 import com.yongjinbao.mybatis.service.impl.BaseServiceImpl;
@@ -31,7 +30,7 @@ public class BrowseFavoriteCustomerInfoServiceImpl extends BaseServiceImpl<Brows
 	@Override
 	public void addBrowseCustomerInfo(BrowseFavoriteInfo browseFavoriteInfo) {
 		browseFavoriteInfo.setBrowseFavoriteStyle(BrowseFavoriteStyle.Browse);
-		browseFavoriteInfo.setCustomerHouseStyle(CustomerHouseStyle.CustomerInfo);
+//		browseFavoriteInfo.setCustomerHouseStyle(CustomerHouseStyle.CustomerInfo);
 		browseFavoriteInfoDao.add(browseFavoriteInfo);
 	}
 
@@ -39,7 +38,7 @@ public class BrowseFavoriteCustomerInfoServiceImpl extends BaseServiceImpl<Brows
 	public void addFavoriteCustomerInfo(BrowseFavoriteInfo browseFavoriteInfo) {
 		// TODO Auto-generated method stub
 		browseFavoriteInfo.setBrowseFavoriteStyle(BrowseFavoriteStyle.Favorites);
-		browseFavoriteInfo.setCustomerHouseStyle(CustomerHouseStyle.CustomerInfo);
+//		browseFavoriteInfo.setCustomerHouseStyle(CustomerHouseStyle.CustomerInfo);
 		browseFavoriteInfoDao.add(browseFavoriteInfo);
 	}
 
@@ -51,7 +50,7 @@ public class BrowseFavoriteCustomerInfoServiceImpl extends BaseServiceImpl<Brows
 	@Override
 	public Pager<HouseInfo> getBrowseCustomerInfoList(GetBrowseFavoriteInfoListDto getBrowseFavoriteHouseInfoListDto) {
 		getBrowseFavoriteHouseInfoListDto.setBrowseFavoriteStyle(BrowseFavoriteStyle.Browse);
-		getBrowseFavoriteHouseInfoListDto.setCustomerHouseStyle(CustomerHouseStyle.CustomerInfo);
+//		getBrowseFavoriteHouseInfoListDto.setCustomerHouseStyle(CustomerHouseStyle.CustomerInfo);
 //		Pager<HouseInfoNew> browseFavoriteHouseInfoList = browseFavoriteInfoDao.getBrowseFavoriteHouseInfoList(getBrowseFavoriteHouseInfoListDto);
 		return null;
 	}
@@ -59,7 +58,7 @@ public class BrowseFavoriteCustomerInfoServiceImpl extends BaseServiceImpl<Brows
 	@Override
 	public Pager<HouseInfo> getFavoriteCustomerInfoList(GetBrowseFavoriteInfoListDto getBrowseFavoriteHouseInfoListDto) {
 		getBrowseFavoriteHouseInfoListDto.setBrowseFavoriteStyle(BrowseFavoriteStyle.Favorites);
-		getBrowseFavoriteHouseInfoListDto.setCustomerHouseStyle(CustomerHouseStyle.CustomerInfo);
+//		getBrowseFavoriteHouseInfoListDto.setCustomerHouseStyle(CustomerHouseStyle.CustomerInfo);
 		
 //		Pager<HouseInfoNew> browseFavoriteHouseInfoList = browseFavoriteInfoDao.getBrowseFavoriteHouseInfoList(getBrowseFavoriteHouseInfoListDto);
 		return null;

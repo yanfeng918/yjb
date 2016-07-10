@@ -169,7 +169,7 @@ public class LoginController {
 		map.put("username",memberName);
 		map.put("id", id);
 		map.put("cityId", cityId.toString());
-		map.put("cityName", areaService.load(cityId).getName());
+//		map.put("cityName", areaService.load(cityId).getName());
 		//TODO 是否绑定
 		map.put("IsActivateMobile", member.getIsActivateMobile()==null?"false":member.getIsActivateMobile().toString());
 		return map;

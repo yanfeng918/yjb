@@ -1,5 +1,6 @@
 package com.yongjinbao.houseNew.service.impl;
 
+import com.yongjinbao.commons.Constants;
 import com.yongjinbao.commons.entity.Area;
 import com.yongjinbao.commons.service.IAreaService;
 import com.yongjinbao.finance.entity.Expenses;
@@ -23,7 +24,6 @@ import com.yongjinbao.member.dto.MyBrowseInfoDto;
 import com.yongjinbao.member.dto.UpdateBalanceDto;
 import com.yongjinbao.member.entity.BrowseFavoriteInfo;
 import com.yongjinbao.member.entity.BrowseFavoriteInfo.BrowseFavoriteStyle;
-import com.yongjinbao.member.entity.BrowseFavoriteInfo.CustomerHouseStyle;
 import com.yongjinbao.member.entity.Member;
 import com.yongjinbao.member.service.IBrowseFavoriteHouseInfoService;
 import com.yongjinbao.member.service.IMemberService;
@@ -294,7 +294,7 @@ public class HouseInfoNewService extends BaseServiceImpl<HouseInfoNew,Integer>
     }
     @Override
 	public boolean isBalanceEnoughToBrowse(float balance, long houseInfo_id) {
-		Float infoPrice = new Float(houseInfoDao.getHouseInfoPrice(houseInfo_id));
+		Float infoPrice = Constants.infoPrice;
 		int enoughOrNot = new Float(balance).compareTo(infoPrice);
 		//2者作比较，balace大于或等于infoPrice时，即余额充足，此时enoughOrNot>0
 		return enoughOrNot<0?false:true;
@@ -398,8 +398,8 @@ public class HouseInfoNewService extends BaseServiceImpl<HouseInfoNew,Integer>
 		browseFavoriteInfo.setCreateDate(new Date());
 		browseFavoriteInfo.setModifyDate(new Date());
 		browseFavoriteInfo.setMember(loginMember);
-		browseFavoriteInfo.setHouseInfo(houseInfoNew);
-		browseFavoriteInfo.setCustomerHouseStyle(CustomerHouseStyle.HouseInfo);
+		browseFavoriteInfo.setHouseInfoId(houseInfoNew.getId());
+		browseFavoriteInfo.setHouseStyle(BrowseFavoriteInfo.HouseStyle.NEW);
 		browseFavoriteInfo.setBrowseFavoriteStyle(BrowseFavoriteStyle.Browse);
 		brosweHouseInfoService.addBrowseHouseInfo(browseFavoriteInfo);
 	}

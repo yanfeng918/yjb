@@ -23,7 +23,6 @@ import com.yongjinbao.member.dto.MyBrowseInfoDto;
 import com.yongjinbao.member.dto.UpdateBalanceDto;
 import com.yongjinbao.member.entity.BrowseFavoriteInfo;
 import com.yongjinbao.member.entity.BrowseFavoriteInfo.BrowseFavoriteStyle;
-import com.yongjinbao.member.entity.BrowseFavoriteInfo.CustomerHouseStyle;
 import com.yongjinbao.member.entity.Member;
 import com.yongjinbao.member.service.IBrowseFavoriteHouseInfoService;
 import com.yongjinbao.member.service.IMemberService;
@@ -398,8 +397,8 @@ public class HouseInfoPropertyService extends BaseServiceImpl<HouseInfoProperty,
 		browseFavoriteInfo.setCreateDate(new Date());
 		browseFavoriteInfo.setModifyDate(new Date());
 		browseFavoriteInfo.setMember(loginMember);
-		browseFavoriteInfo.setHouseInfo(houseInfoProperty);
-		browseFavoriteInfo.setCustomerHouseStyle(CustomerHouseStyle.HouseInfo);
+		browseFavoriteInfo.setHouseInfoId(houseInfoProperty.getId());
+		browseFavoriteInfo.setHouseStyle(BrowseFavoriteInfo.HouseStyle.PROPERTY);
 		browseFavoriteInfo.setBrowseFavoriteStyle(BrowseFavoriteStyle.Browse);
 		brosweHouseInfoService.addBrowseHouseInfo(browseFavoriteInfo);
 	}

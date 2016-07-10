@@ -1,5 +1,6 @@
 package com.yongjinbao.houseValid.service.impl;
 
+import com.yongjinbao.commons.Constants;
 import com.yongjinbao.commons.entity.Area;
 import com.yongjinbao.commons.service.IAreaService;
 import com.yongjinbao.finance.entity.Expenses;
@@ -23,7 +24,6 @@ import com.yongjinbao.member.dto.MyBrowseInfoDto;
 import com.yongjinbao.member.dto.UpdateBalanceDto;
 import com.yongjinbao.member.entity.BrowseFavoriteInfo;
 import com.yongjinbao.member.entity.BrowseFavoriteInfo.BrowseFavoriteStyle;
-import com.yongjinbao.member.entity.BrowseFavoriteInfo.CustomerHouseStyle;
 import com.yongjinbao.member.entity.Member;
 import com.yongjinbao.member.service.IBrowseFavoriteHouseInfoService;
 import com.yongjinbao.member.service.IMemberService;
@@ -295,7 +295,7 @@ public class HouseInfoValidService extends BaseServiceImpl<HouseInfoValid,Intege
     }
     @Override
 	public boolean isBalanceEnoughToBrowse(float balance, long houseInfo_id) {
-		Float infoPrice = new Float(houseInfoDao.getHouseInfoPrice(houseInfo_id));
+		Float infoPrice = Constants.infoPrice;
 		int enoughOrNot = new Float(balance).compareTo(infoPrice);
 		//2者作比较，balace大于或等于infoPrice时，即余额充足，此时enoughOrNot>0
 		return enoughOrNot<0?false:true;
@@ -318,34 +318,14 @@ public class HouseInfoValidService extends BaseServiceImpl<HouseInfoValid,Intege
 		HouseInfoValid tempHouseInfoValid = new HouseInfoValid();
 		tempHouseInfoValid.setId(houseInfoValid.getId());
 		int readTime = houseInfoValid.getReadTime();
-		if (houseInfoValid.getSaleWay().compareTo(HouseInfoValid.HouseInfo_SaleWay.CUSTOMER)==0) {
-			//自定义房源
-			member = houseInfoDao.getHouseMember(houseInfoValid.getId());
-			//如果未购买，查看后，房源的readTime+1
-			//readTime+1后如果=3，更改为系统房源
-			//如果已经购买，则readTime不增加
-			if (!isBought) {
-				if (readTime+1 >= 3) {
-					//更改CUSTOMERINFO_SALEWAY方式为SYSTEM
-					tempHouseInfoValid.setInfoPrice(10f);
-					tempHouseInfoValid.setSaleWay(HouseInfoValid.HouseInfo_SaleWay.SYSTEM);
-					tempHouseInfoValid.setReadTime(readTime+1);
-				}else {
-					//readTime更新为readTime+1
-					tempHouseInfoValid.setReadTime(readTime+1);
-				}
-				tempHouseInfoValid.setAvailable(true);
-				houseInfoDao.updateHouseInfoWhenBrowse(tempHouseInfoValid);
-			}
-		}else if (houseInfoValid.getSaleWay().compareTo(HouseInfoValid.HouseInfo_SaleWay.SYSTEM)==0) {
-			//系统房源
-			member = memberService.getSystemMember();
-			if (!isBought) {
-				//readTime更新为readTime+1
-				tempHouseInfoValid.setReadTime(readTime+1);
-				tempHouseInfoValid.setAvailable(true);
-				houseInfoDao.updateHouseInfoWhenBrowse(tempHouseInfoValid);
-			}
+
+		//系统房源
+		member = memberService.getSystemMember();
+		if (!isBought) {
+			//readTime更新为readTime+1
+			tempHouseInfoValid.setReadTime(readTime+1);
+			tempHouseInfoValid.setAvailable(true);
+			houseInfoDao.updateHouseInfoWhenBrowse(tempHouseInfoValid);
 		}
 		return member;
 	}
@@ -399,8 +379,8 @@ public class HouseInfoValidService extends BaseServiceImpl<HouseInfoValid,Intege
 		browseFavoriteInfo.setCreateDate(new Date());
 		browseFavoriteInfo.setModifyDate(new Date());
 		browseFavoriteInfo.setMember(loginMember);
-		browseFavoriteInfo.setHouseInfo(houseInfoValid);
-		browseFavoriteInfo.setCustomerHouseStyle(CustomerHouseStyle.HouseInfo);
+		browseFavoriteInfo.setHouseInfoId(houseInfoValid.getId());
+		browseFavoriteInfo.setHouseStyle(BrowseFavoriteInfo.HouseStyle.VALID);
 		browseFavoriteInfo.setBrowseFavoriteStyle(BrowseFavoriteStyle.Browse);
 		brosweHouseInfoService.addBrowseHouseInfo(browseFavoriteInfo);
 	}
@@ -419,7 +399,7 @@ public class HouseInfoValidService extends BaseServiceImpl<HouseInfoValid,Intege
 		myBrowseInfoDto.setBrowseFavoriteStyle(MyBrowseInfoDto.Browse);
 		//首先判断是否是自己发布的房源
 		Member isMymember = houseInfoDao.getHouseMember(houseInfo_id);
-		if (new Long(isMymember.getId()).compareTo(new Long(loginMember.getId()))==0) {
+		if (isMymember!=null&&new Long(isMymember.getId()).compareTo(new Long(loginMember.getId()))==0) {
 			//自己发布的房源时，直接反回houseInfo
 			isMine = true;
 			houseInfoValid = new HouseInfoValid();
