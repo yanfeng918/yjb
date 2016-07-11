@@ -139,7 +139,7 @@
 			</if>
 		</if>
 		<if test="sort==null">
-			order by h.status DESC,h.available DESC , h.createDate DESC
+			order by  h.id DESC
 		</if>
 		<if test="pageOffset >= 0 and pageSize>0">
 			limit #{pageOffset} , #{pageSize}
@@ -162,7 +162,7 @@
 			</if>
 		</if>
 		<if test="sort==null">
-			order by h.status DESC,h.available DESC , h.createDate DESC
+			order by  h.id DESC
 		</if>
 		<if test="pageOffset >= 0 and pageSize>0">
 			limit #{pageOffset} , #{pageSize}
