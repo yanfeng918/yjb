@@ -55,7 +55,7 @@ import com.yongjinbao.houseinfo.vo.AgentDynamicVO;
 import com.yongjinbao.houseinfo.vo.BonusVO;
 import com.yongjinbao.houseinfo.vo.BrowseHouseInfoVO;
 import com.yongjinbao.houseinfo.vo.GetAreaHouseCountByCityVO;
-import com.yongjinbao.houseinfo.vo.HouseInfoVandFavouriteStatusVO;
+import com.yongjinbao.houseinfo.vo.HouseInfoValiddFavouriteStatusVO;
 import com.yongjinbao.houseinfo.vo.LevelDetailVO;
 import com.yongjinbao.houseinfo.vo.StateStatusVO;
 import com.yongjinbao.houseinfo.vo.TopTenRankingVO;
@@ -155,9 +155,9 @@ public class HouseInfoService extends BaseServiceImpl<HouseInfo,Integer>
 	@Override
     public <T> Pager<T> getHouseInfo(GetHouseInfoDto getHouseInfoDto) {
         getHouseInfoDto.setPageOffset((getHouseInfoDto.getPageNumber()-1)*getHouseInfoDto.getPageSize());
-        Pager<HouseInfoVandFavouriteStatusVO> pages=new Pager<HouseInfoVandFavouriteStatusVO>();
+        Pager<HouseInfoValiddFavouriteStatusVO> pages=new Pager<HouseInfoValiddFavouriteStatusVO>();
         int total=0;
-        List<HouseInfoVandFavouriteStatusVO> list = new ArrayList<HouseInfoVandFavouriteStatusVO>();
+        List<HouseInfoValiddFavouriteStatusVO> list = new ArrayList<HouseInfoValiddFavouriteStatusVO>();
         //新增逻辑：如果地域有子节点那就模糊查询，否则直接条件查询
         int area_id = getHouseInfoDto.getArea_id();
         List<Area> findChildren = areaService.findChildren(area_id);
@@ -194,7 +194,7 @@ public class HouseInfoService extends BaseServiceImpl<HouseInfo,Integer>
 	            	}
 				}else {
 					//System.out.println("******三级区域有缓存**********");
-					list = (List<HouseInfoVandFavouriteStatusVO> )SerializeUtil.unserialize(listCdtBs);
+					list = (List<HouseInfoValiddFavouriteStatusVO> )SerializeUtil.unserialize(listCdtBs);
 	            	total=(int) SerializeUtil.unserialize(listCdtCountBs);
 				}
 	        }else{
@@ -215,7 +215,7 @@ public class HouseInfoService extends BaseServiceImpl<HouseInfo,Integer>
 	            	}
 				}else {
 					//System.out.println("******一二级区域有缓存**********");
-					list = (List<HouseInfoVandFavouriteStatusVO> )SerializeUtil.unserialize(listLikeBs);
+					list = (List<HouseInfoValiddFavouriteStatusVO> )SerializeUtil.unserialize(listLikeBs);
 	            	total=(int) SerializeUtil.unserialize(listLikeCountBs);
 				}
 	        }

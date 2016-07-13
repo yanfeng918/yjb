@@ -50,7 +50,7 @@ public class HouseInfoNewController {
      * @param getHouseInfoDto
      * @return
      */
-    @RequestMapping(value = "auth/getHouseInfoList")
+    @RequestMapping(value = "/getHouseInfoList")
     @ResponseBody
     public Pager<HouseInfoNewAndFavouriteStatusVO> getHouseInfoList(@ModelAttribute("getHouseInfoDto") GetHouseInfoDto getHouseInfoDto, HttpServletRequest request){
         if(getHouseInfoDto.getAreaSize()!=null&&getHouseInfoDto.getAreaSize().split(",").length==2){
@@ -66,6 +66,17 @@ public class HouseInfoNewController {
         //【修改 2015年9月18】此member_id用于判断是否属于自己的收藏
 //        getHouseInfoDto.setMember_id(memberService.getMemberId(request));
         Pager<HouseInfoNewAndFavouriteStatusVO> pager=houseInfoService.getHouseInfo(getHouseInfoDto);
+		List<HouseInfoNewAndFavouriteStatusVO> list = pager.getList();
+//		HouseInfoValiddFavouriteStatusVO[] data = list.toArray(new HouseInfoValiddFavouriteStatusVO[list.size()]);
+		HouseInfoNewAndFavouriteStatusVO[] data = list.toArray(new HouseInfoNewAndFavouriteStatusVO[list.size()]);
+
+//		HouseInfoNewAndFavouriteStatusVO[] data1 = new HouseInfoNewAndFavouriteStatusVO[list.size()];
+//		for (HouseInfoNewAndFavouriteStatusVO house:list){
+//			int i = 0;
+//			data1[i++] = house;
+//		}
+		pager.setList(null);
+		pager.setData(data);
         return pager;
      }
     /**

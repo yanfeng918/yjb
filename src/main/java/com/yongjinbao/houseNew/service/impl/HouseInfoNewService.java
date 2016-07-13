@@ -138,7 +138,9 @@ public class HouseInfoNewService extends BaseServiceImpl<HouseInfoNew,Integer>
     @SuppressWarnings("unchecked")
 	@Override
     public <T> Pager<T> getHouseInfo(GetHouseInfoDto getHouseInfoDto) {
-        getHouseInfoDto.setPageOffset((getHouseInfoDto.getPageNumber()-1)*getHouseInfoDto.getPageSize());
+		if (getHouseInfoDto.getPageOffset()==0)
+			getHouseInfoDto.setPageOffset((getHouseInfoDto.getPageNumber()-1)*getHouseInfoDto.getPageSize());
+
         Pager<HouseInfoNewAndFavouriteStatusVO> pages=new Pager<HouseInfoNewAndFavouriteStatusVO>();
         int total=0;
         List<HouseInfoNewAndFavouriteStatusVO> list = new ArrayList<HouseInfoNewAndFavouriteStatusVO>();

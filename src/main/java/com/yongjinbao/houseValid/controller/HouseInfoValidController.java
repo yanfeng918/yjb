@@ -4,12 +4,11 @@ import com.yongjinbao.commons.Constants;
 import com.yongjinbao.commons.service.IAreaService;
 import com.yongjinbao.houseValid.dto.GetCommunityV2Dto;
 import com.yongjinbao.houseValid.dto.GetHouseInfoDto;
-import com.yongjinbao.houseValid.dto.StateStatusDto;
 import com.yongjinbao.houseValid.entity.HouseInfoValid;
 import com.yongjinbao.houseValid.service.IHouseInfoValidService;
 import com.yongjinbao.houseValid.vo.*;
 import com.yongjinbao.houseinfo.entity.Community;
-import com.yongjinbao.houseinfo.vo.HouseInfoVandFavouriteStatusVO;
+import com.yongjinbao.houseinfo.vo.HouseInfoValiddFavouriteStatusVO;
 import com.yongjinbao.member.dto.UpdateBalanceDto;
 import com.yongjinbao.member.entity.Member;
 import com.yongjinbao.member.service.IMemberService;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,7 +44,7 @@ public class HouseInfoValidController {
      */
     @RequestMapping(value = "getHouseInfoList")
     @ResponseBody
-    public Pager<HouseInfoVandFavouriteStatusVO> getHouseInfoList(GetHouseInfoDto getHouseInfoDto, HttpServletRequest request){
+    public Pager<HouseInfoValiddFavouriteStatusVO> getHouseInfoList(GetHouseInfoDto getHouseInfoDto, HttpServletRequest request){
         if(getHouseInfoDto.getAreaSize()!=null&&getHouseInfoDto.getAreaSize().split(",").length==2){
             getHouseInfoDto.setMinAreaSize(Integer.parseInt(getHouseInfoDto.getAreaSize().split(",")[0]));
             getHouseInfoDto.setMaxAreaSize(Integer.parseInt(getHouseInfoDto.getAreaSize().split(",")[1]));
@@ -59,9 +57,9 @@ public class HouseInfoValidController {
         getHouseInfoDto.setAvailable(true);
         //【修改 2015年9月18】此member_id用于判断是否属于自己的收藏
 //        getHouseInfoDto.setMember_id(memberService.getMemberId(request));
-        Pager<HouseInfoVandFavouriteStatusVO> pager=houseInfoService.getHouseInfo(getHouseInfoDto);
-		List<HouseInfoVandFavouriteStatusVO> list = pager.getList();
-		HouseInfoVandFavouriteStatusVO[] data = list.toArray(new HouseInfoVandFavouriteStatusVO[list.size()]);
+        Pager<HouseInfoValiddFavouriteStatusVO> pager=houseInfoService.getHouseInfo(getHouseInfoDto);
+		List<HouseInfoValiddFavouriteStatusVO> list = pager.getList();
+		HouseInfoValiddFavouriteStatusVO[] data = list.toArray(new HouseInfoValiddFavouriteStatusVO[list.size()]);
 		pager.setList(null);
 		pager.setData(data);
         return pager;

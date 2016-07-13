@@ -20,6 +20,8 @@ import com.yongjinbao.member.entity.Member;
 import com.yongjinbao.member.service.IMemberService;
 import com.yongjinbao.mybatis.entity.Pager;
 
+import java.util.List;
+
 /**
  * Created by fddxiaohui on 2015/8/24.
  */
@@ -37,18 +39,22 @@ public class RechargeController {
      * @param getRechargeDto
      * @return
      */
-    @RequestMapping(value = "/getRechargeList",method = RequestMethod.POST)
+    @RequestMapping(value = "/getRechargeList")
     @ResponseBody
     public Pager<Recharge> getRechargeList(GetRechargeDto getRechargeDto,HttpServletRequest request){
         Long id=rechargeService.getMemberId(request);
         getRechargeDto.setMember_id(id);
         Pager<Recharge> pager = rechargeService.getRechargeList(getRechargeDto);
+        List<Recharge> list = pager.getList();
+        Recharge[] data = list.toArray(new Recharge[list.size()]);
+        pager.setList(null);
+        pager.setData(data);
         return pager;
     }
     
     /**
      * 充值
-     * @param RechargetInfo
+     * @param
      * @return
      */
     @RequestMapping(value = "/addRechargetInfo",method = RequestMethod.POST)

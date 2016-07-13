@@ -17,7 +17,7 @@ import com.yongjinbao.houseinfo.entity.Community;
 import com.yongjinbao.houseinfo.entity.HouseInfo;
 import com.yongjinbao.houseinfo.entity.State;
 import com.yongjinbao.houseinfo.vo.GetAreaHouseCountByCityVO;
-import com.yongjinbao.houseinfo.vo.HouseInfoVandFavouriteStatusVO;
+import com.yongjinbao.houseinfo.vo.HouseInfoValiddFavouriteStatusVO;
 import com.yongjinbao.houseinfo.vo.LevelDetailVO;
 import com.yongjinbao.member.entity.Member;
 import com.yongjinbao.mybatis.dao.impl.BaseDaoImpl;
@@ -44,8 +44,8 @@ public class HouseInfoDaoImpl extends BaseDaoImpl<HouseInfo,Integer> implements 
     }*/
 	
 	@Override
-	public List<HouseInfoVandFavouriteStatusVO> getHouseInfoCdt(GetHouseInfoDto getHouseInfoDto) {
-		List<HouseInfoVandFavouriteStatusVO> list=getSqlSession().selectList(HouseInfo.class.getName()+".getHouseInfoCdt",getHouseInfoDto);
+	public List<HouseInfoValiddFavouriteStatusVO> getHouseInfoCdt(GetHouseInfoDto getHouseInfoDto) {
+		List<HouseInfoValiddFavouriteStatusVO> list=getSqlSession().selectList(HouseInfo.class.getName()+".getHouseInfoCdt",getHouseInfoDto);
 //		for (HouseInfoNewAndFavouriteStatusVO houseInfo : list) {
 //			houseInfo.setArea(getHouseArea(getHouseInfoDto.getArea_id()));
 //		}
@@ -59,8 +59,8 @@ public class HouseInfoDaoImpl extends BaseDaoImpl<HouseInfo,Integer> implements 
 	}
 
 	@Override
-	public List<HouseInfoVandFavouriteStatusVO> getHouseInfoLike(GetHouseInfoDto getHouseInfoDto) {
-		List<HouseInfoVandFavouriteStatusVO> list=getSqlSession().selectList(HouseInfo.class.getName()+".getHouseInfoLike",getHouseInfoDto);
+	public List<HouseInfoValiddFavouriteStatusVO> getHouseInfoLike(GetHouseInfoDto getHouseInfoDto) {
+		List<HouseInfoValiddFavouriteStatusVO> list=getSqlSession().selectList(HouseInfo.class.getName()+".getHouseInfoLike",getHouseInfoDto);
 //		for (HouseInfoNewAndFavouriteStatusVO houseInfo : list) {
 //			houseInfo.setArea(getHouseArea(getHouseInfoDto.getArea_id()));
 //		}

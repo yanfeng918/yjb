@@ -13,7 +13,7 @@ import com.yongjinbao.houseinfo.entity.Community;
 import com.yongjinbao.houseinfo.entity.HouseInfo;
 import com.yongjinbao.houseinfo.entity.State;
 import com.yongjinbao.houseinfo.vo.GetAreaHouseCountByCityVO;
-import com.yongjinbao.houseinfo.vo.HouseInfoVandFavouriteStatusVO;
+import com.yongjinbao.houseinfo.vo.HouseInfoValiddFavouriteStatusVO;
 import com.yongjinbao.houseinfo.vo.LevelDetailVO;
 import com.yongjinbao.member.entity.Member;
 import com.yongjinbao.mybatis.dao.IBaseDao;
@@ -37,7 +37,7 @@ public interface IHouseInfoDao extends IBaseDao<HouseInfo,Integer> {
 	/**
 	 * 查询 地区 售价 面积 小区名称等等（这个区域没有子节点的）例如：上海市黄浦区南京西路的房源
 	 */
-	public List<HouseInfoVandFavouriteStatusVO> getHouseInfoCdt(GetHouseInfoDto getHouseInfoDto);
+	public List<HouseInfoValiddFavouriteStatusVO> getHouseInfoCdt(GetHouseInfoDto getHouseInfoDto);
 	
     /**
      * 查询 地区 售价 面积 小区名称等等条件筛选后总数查询  例如：上海市黄浦区南京西路的房源总数
@@ -47,7 +47,7 @@ public interface IHouseInfoDao extends IBaseDao<HouseInfo,Integer> {
 	/**
 	 * 查询 地区 售价 面积 小区名称等等（这个区域有子节点的  ）例如：上海市的房源
 	 */
-	public List<HouseInfoVandFavouriteStatusVO> getHouseInfoLike(GetHouseInfoDto getHouseInfoDto);
+	public List<HouseInfoValiddFavouriteStatusVO> getHouseInfoLike(GetHouseInfoDto getHouseInfoDto);
 	
     /**
      * 查询 地区 售价 面积 小区名称等等条件筛选后总数查询  例如：上海市的房源总数

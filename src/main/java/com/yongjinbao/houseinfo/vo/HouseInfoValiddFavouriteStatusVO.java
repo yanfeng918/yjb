@@ -2,7 +2,7 @@ package com.yongjinbao.houseinfo.vo;
 
 import com.yongjinbao.houseinfo.entity.HouseInfo;
 
-public class HouseInfoVandFavouriteStatusVO extends HouseInfo{
+public class HouseInfoValiddFavouriteStatusVO extends HouseInfo{
 	
 	private static final long serialVersionUID = -7448822819742193188L;
 	
