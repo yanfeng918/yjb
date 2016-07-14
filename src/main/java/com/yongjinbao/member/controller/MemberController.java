@@ -205,6 +205,19 @@ public class MemberController {
 		}
 		return validateSMSCaptcha;
 	}
+
+	@RequestMapping(value = "/getBalance",method = RequestMethod.GET)
+	@ResponseBody
+	public Message getBalance(HttpServletRequest request){
+		Member member=new Member();
+		try {
+			Long id=memberService.getMemberId(request);
+			member=memberService.load(id);
+			return new Message(Message.Type.success,member.getBalance()+"");
+		}catch (Exception e){
+			return new Message(Message.Type.error,"查询余额失败");
+		}
+	}
 	
 	
 	
