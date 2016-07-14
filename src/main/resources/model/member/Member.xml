@@ -136,7 +136,7 @@ select * from t_member members where lower(members.mobile) = #{mobile}
     </update>
     
     <select id="getSystemMember" resultType="com.yongjinbao.member.entity.Member">
-    	SELECT * FROM t_member m  where m.id=0
+    	SELECT * FROM t_member m  where m.id=1
     </select>
 
 	<!-- 邀请码是否存在 -->

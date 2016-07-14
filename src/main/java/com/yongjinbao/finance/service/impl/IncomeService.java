@@ -69,7 +69,6 @@ public class IncomeService extends BaseServiceImpl<Income,Integer> implements II
 				}else {
 					//推广福利
 					houseInfo=houseInfoService.loadHouseInfoWithMember(incomeExpenseVO.getHouseInfo_id());
-//					houseInfo.set
 					HouseInfo temp = new HouseInfo();
 					temp.setId(houseInfo.getId());
 					temp.setCommunity(houseInfo.getCommunity());

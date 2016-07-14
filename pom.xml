@@ -273,7 +273,7 @@
 			    	<!-- http://121.40.162.48/ -->
 			    	<!-- http://139.196.13.240:32981/ -->
 					<!--139.196.203.139-->
-			        <url>http://139.196.6.9:32981//manager/text</url>
+			        <url>http://139.196.6.9:32981/manager/text</url>
 			        <server>tomcat</server>
 			        <path>/yjb</path>
 			        <username>admin</username>

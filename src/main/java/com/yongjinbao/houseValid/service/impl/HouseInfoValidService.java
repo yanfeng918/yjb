@@ -341,33 +341,19 @@ public class HouseInfoValidService extends BaseServiceImpl<HouseInfoValid,Intege
 	@Override
 	public void addIncomeExpenseAndBrowseInfo(Member houseInfoMember, Member loginMember, HouseInfoValid houseInfoValid) {
 		
-		if(houseInfoMember.getId()==memberService.getSystemMember().getId()){
-			//系统房源，系统增加一条10元收入记录
-			Income income = new Income();
-			income.setAmount(Float.parseFloat(String.valueOf(houseInfoValid.getInfoPrice())));
-			income.setIncomeFrom(loginMember.getId());//收入来源ID为当前登陆账号
-			income.setMember(houseInfoMember);//收入所属为房源信息人
-			income.setIncomeType(INCOME_TYPE.dealIncome);
-			income.setHouseInfo_id(houseInfoValid.getId());
-			incomeService.addIncomeInfo(income);
-		}else{
-			//非系统房源，增加两条收入记录，房源拥有者增加70%，系统增加30%
-			Income income = new Income();
-			income.setAmount(Float.parseFloat(String.valueOf(houseInfoValid.getInfoPrice()*0.3)));
-			income.setMember(memberService.getSystemMember());//收入所属为系统
-			income.setIncomeFrom(loginMember.getId());//收入来源ID为当前登陆账号
-			income.setIncomeType(INCOME_TYPE.dealIncome);
-			income.setHouseInfo_id(houseInfoValid.getId());
-			incomeService.addIncomeInfo(income);
-			//
-			income.setAmount(Float.parseFloat(String.valueOf(houseInfoValid.getInfoPrice()*0.7)));
-			income.setMember(houseInfoMember);
-			incomeService.addIncomeInfo(income);
-		}
-		
+
+		//系统房源，系统增加一条2元收入记录
+		Income income = new Income();
+		income.setAmount(Float.parseFloat(String.valueOf(Constants.infoPrice)));
+		income.setIncomeFrom(loginMember.getId());//收入来源ID为当前登陆账号
+		income.setMember(houseInfoMember);//收入所属为房源信息人
+		income.setIncomeType(INCOME_TYPE.dealIncome);
+		income.setHouseInfo_id(houseInfoValid.getId());
+		incomeService.addIncomeInfo(income);
+
 		//支出明细
 		Expenses expenses = new Expenses();
-		expenses.setAmount(String.valueOf(houseInfoValid.getInfoPrice()));
+		expenses.setAmount(String.valueOf(Constants.infoPrice));
 		expenses.setExpensesTo(houseInfoMember.getId());//支出对象为房源信息人
 		expenses.setMember(loginMember);//支出所属为登陆会员
 		expenses.setExpensesType(EXPENSES_TYPE.dealExpense);

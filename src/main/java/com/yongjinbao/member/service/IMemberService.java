@@ -126,7 +126,7 @@ public interface IMemberService extends IBaseService<Member,Long>{
 	
 	/**
 	 * 更改用户余额
-	 * @param increaseBalanceDto
+	 * @param
 	 * @return
 	 */
 	boolean updateBalance(UpdateBalanceDto updateBalanceDto);

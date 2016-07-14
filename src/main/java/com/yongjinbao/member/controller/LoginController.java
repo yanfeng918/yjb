@@ -74,7 +74,12 @@ public class LoginController {
 		member = memberService.findByUsername(username);
 		//3.其次，判断手机号码能够正确登录？
 		if (member == null) {
-			member = memberService.findByMobile(username);
+			try{
+				member = memberService.findByMobile(username);
+			}
+			catch (Exception e){
+				e.printStackTrace();
+			}
 		}
 		//2.其次，判断手机号是否对应多个账户
 		if (member == null) {
