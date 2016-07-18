@@ -141,7 +141,16 @@ public class HouseInfoValidController {
 	public List<Community>  getCommunityV2(GetCommunityV2Dto getCommunityV2Dto, HttpServletRequest request){
 		return houseInfoService.getTopTenCommunityV2(getCommunityV2Dto);
 	}
-	
+
+
+	/**
+	 * 获取已经购买的房源
+	 */
+	@RequestMapping(value = "/auth/getBoughtHouseInfo", method = RequestMethod.GET)
+	public @ResponseBody
+	HouseInfoValid getBoughtHouseInfo(long houseInfo_id, HttpServletRequest request) {
+		return houseInfoService.getBoughtHouseInfo(houseInfo_id, request);
+	}
 
 	
     

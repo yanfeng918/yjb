@@ -171,4 +171,10 @@ public interface IHouseInfoNewService extends IBaseService<HouseInfoNew,Integer>
     /** 发房人和发房地址是否同一区域 **/
     public boolean isHouseMemberFromSameCity(HttpServletRequest request, Long areaId2);
 
+	/** 获取已经购买的房源信息 **/
+	HouseInfoNew getBoughtHouseInfo(long houseInfo_id, HttpServletRequest request);
+
+	// 判断是否购买该房源
+	Boolean isBoughtHouseInfo(long houseInfo_id, HttpServletRequest request);
+
 }

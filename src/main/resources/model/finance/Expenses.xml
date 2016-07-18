@@ -15,13 +15,12 @@
 
     <insert id="add" parameterType="com.yongjinbao.finance.entity.Expenses"
             flushCache="true">
-        INSERT INTO t_expenses (createDate,modifyDate,member_id,amount,expensesType,expensesTo,houseInfo_id)
-               VALUES (now(),now(),#{member.id},#{amount},#{expensesType},#{expensesTo},#{houseInfo_id})
+        INSERT INTO t_expenses (createDate,modifyDate,member_id,amount,expensesType,expensesTo,houseInfo_id,houseType)
+               VALUES (now(),now(),#{member.id},#{amount},#{expensesType},#{expensesTo},#{houseInfo_id},#{houseType})
     </insert>
 
-    <select id="getExpensesList" parameterType="com.yongjinbao.finance.dto.GetExpensesDto" resultMap="expenseInfoMap">
-       SELECT *,e.id as 'e_id'  from t_expenses e left join t_member m on e.expensesTo=m.id left join t_house_info h
-        on e.houseInfo_id = h.id 
+    <select id="getExpensesList" parameterType="com.yongjinbao.finance.dto.GetExpensesDto" resultType="com.yongjinbao.finance.entity.Expenses">
+       SELECT e.* from t_expenses e
         <where>
             <if test="beginDate !=null and beginDate !=''">
                 date_format(e.createDate,"%Y-%m-%d %T") &gt;=#{beginDate}
@@ -65,11 +64,11 @@
     <resultMap id="expenseInfoMap" type="com.yongjinbao.finance.entity.Expenses"
 		autoMapping="true">
 		<id column="e_id" property="id" />
-		<association property="member" javaType="com.yongjinbao.member.entity.Member">
-			<id column="member_id" property="id" />
-			<result column="username" property="username" />
-		</association>
-		<association property="houseInfo" javaType="com.yongjinbao.houseinfo.entity.HouseInfo">
+		<!--<association property="member" javaType="com.yongjinbao.member.entity.Member">-->
+			<!--<id column="member_id" property="id" />-->
+			<!--<result column="username" property="username" />-->
+		<!--</association>-->
+		<association property="houseInfo" javaType="com.yongjinbao.houseinfo.entity.HouseInfo" autoMapping="true">
 			<id column="houseInfo_id" property="id" />
 			<result column="community" property="community" />
 			<result column="ban" property="ban" />

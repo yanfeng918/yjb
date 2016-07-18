@@ -2,6 +2,7 @@ package com.yongjinbao.houseValid.dao;
 
 import com.yongjinbao.commons.entity.Area;
 import com.yongjinbao.finance.entity.ExtraAward;
+import com.yongjinbao.houseNew.entity.HouseInfoNew;
 import com.yongjinbao.houseValid.dto.BonusProcessDto;
 import com.yongjinbao.houseValid.dto.GetCommunityV2Dto;
 import com.yongjinbao.houseValid.dto.GetHouseInfoDto;
@@ -15,6 +16,7 @@ import com.yongjinbao.houseinfo.entity.Community;
 import com.yongjinbao.member.entity.Member;
 import com.yongjinbao.mybatis.dao.IBaseDao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -193,6 +195,12 @@ public interface IHouseInfoValidDao extends IBaseDao<HouseInfoValid,Integer> {
     
    /**  激活房源时添加一条激活记录 **/
     public boolean addActiveRecord(long houseInfo_id);
+
+    /** 获取已经购买的房源信息 **/
+    HouseInfoValid getHouseInfo(long houseInfo_id);
+
+    // 判断是否购买该房源
+    Boolean isBoughtHouseInfo(HashMap<String,Long> map);
     
 }
 

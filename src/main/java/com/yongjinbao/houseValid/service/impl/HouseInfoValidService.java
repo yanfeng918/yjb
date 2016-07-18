@@ -3,8 +3,9 @@ package com.yongjinbao.houseValid.service.impl;
 import com.yongjinbao.commons.Constants;
 import com.yongjinbao.commons.entity.Area;
 import com.yongjinbao.commons.service.IAreaService;
+import com.yongjinbao.enums.expense.EXPENSES_TYPE;
+import com.yongjinbao.enums.house.HouseTypeEnum;
 import com.yongjinbao.finance.entity.Expenses;
-import com.yongjinbao.finance.entity.Expenses.EXPENSES_TYPE;
 import com.yongjinbao.finance.entity.ExtraAward;
 import com.yongjinbao.finance.entity.Income;
 import com.yongjinbao.finance.entity.Income.INCOME_TYPE;
@@ -53,10 +54,7 @@ import org.springframework.stereotype.Service;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by yanfeng on 2015/8/18.
@@ -356,7 +354,8 @@ public class HouseInfoValidService extends BaseServiceImpl<HouseInfoValid,Intege
 		expenses.setAmount(String.valueOf(Constants.infoPrice));
 		expenses.setExpensesTo(houseInfoMember.getId());//支出对象为房源信息人
 		expenses.setMember(loginMember);//支出所属为登陆会员
-		expenses.setExpensesType(EXPENSES_TYPE.dealExpense);
+		expenses.setExpensesType(EXPENSES_TYPE.dealExpense.getCode());
+		expenses.setHouseType(HouseTypeEnum.VALID.getCode());
 		expenses.setHouseInfo_id(houseInfoValid.getId());
 		expensesService.addExpenseInfo(expenses);
 		
@@ -744,6 +743,26 @@ public class HouseInfoValidService extends BaseServiceImpl<HouseInfoValid,Intege
 	@Override
 	public boolean isHouseMemberFromSameCity(HttpServletRequest request, Long areaId2) {
 		return areaService.isAreaFromSame(request, areaId2);
+	}
+
+	@Override
+	public HouseInfoValid getBoughtHouseInfo(long houseInfo_id, HttpServletRequest request) {
+
+		// 判断是否购买该房源
+		if(isBoughtHouseInfo(houseInfo_id,request)){
+			return houseInfoDao.getHouseInfo(houseInfo_id);
+		}
+		return null;
+	}
+
+	@Override
+	public Boolean isBoughtHouseInfo(long houseInfo_id, HttpServletRequest request) {
+		long memberId = memberService.getMemberId(request);
+		HashMap<String,Long> map = new HashMap<>();
+		map.put("member_id",memberId);
+		map.put("houseInfo_id",houseInfo_id);
+		Boolean boughtHouseInfo = houseInfoDao.isBoughtHouseInfo(map);
+		return boughtHouseInfo;
 	}
 
 }

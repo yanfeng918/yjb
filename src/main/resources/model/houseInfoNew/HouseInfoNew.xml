@@ -133,13 +133,13 @@
 		a on h.area_id = a.id
 		<include refid="selectSql" />
 		<if test="sort!=null">
-			order by h.status DESC,h.available DESC ,h.${sort} 
+			order by h.${sort}
 			<if test="order!=null">
 				${order}
 			</if>
 		</if>
 		<if test="sort==null">
-			order by h.status DESC,h.available DESC , h.createDate DESC
+			order by h.id DESC
 		</if>
 		<if test="pageOffset >= 0 and pageSize>0">
 			limit #{pageOffset} , #{pageSize}
@@ -156,13 +156,13 @@
 		on h.area_id = a.id
 		<include refid="selectSqlLike" />
 		<if test="sort!=null">
-			order by h.status DESC,h.available DESC ,h.${sort} 
+			order by h.${sort}
 			<if test="order!=null">
 				${order}
 			</if>
 		</if>
 		<if test="sort==null">
-			order by h.status DESC,h.available DESC , h.createDate DESC
+			order by h.id DESC
 		</if>
 		<if test="pageOffset >= 0 and pageSize>0">
 			limit #{pageOffset} , #{pageSize}
@@ -530,5 +530,14 @@
 		INSERT INTO t_house_active_record (createDate, modifyDate, houseInfo_id) 
 		VALUES(now(), now(), #{houseInfo_id})
 	</insert>
+
+
+	<select id="getHouseInfo" parameterType="long" resultType="com.yongjinbao.houseNew.entity.HouseInfoNew" >
+		SELECT * FROM t_house_info_new h WHERE h.id=#{id}
+	</select>
+
+	<select id="isBoughtHouseInfo" parameterType="map" resultType="int" >
+		SELECT count(*) FROM t_expenses WHERE member_id=#{member_id} AND houseInfo_id=#{houseInfo_id} AND houseType=2
+	</select>
 	
 </mapper>

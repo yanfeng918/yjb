@@ -1,5 +1,6 @@
 package com.yongjinbao.activityReward;
 
+import com.yongjinbao.enums.expense.EXPENSES_TYPE;
 import com.yongjinbao.finance.entity.Expenses;
 import com.yongjinbao.finance.entity.Income;
 import com.yongjinbao.finance.service.IExpensesService;
@@ -50,7 +51,7 @@ public class AddReward {
         expense.setMember(memberService.getSystemMember());
         expense.setExpensesTo(member.getId());
         expense.setAmount(String.valueOf(amount));
-        expense.setExpensesType(Expenses.EXPENSES_TYPE.activityReward);
+        expense.setExpensesType(EXPENSES_TYPE.activityReward.getCode());
         expenseService.addExpenseInfo(expense);
 
         UpdateBalanceDto dto = new UpdateBalanceDto();

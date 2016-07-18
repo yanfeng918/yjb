@@ -1,6 +1,7 @@
 package com.yongjinbao.houseValid.service;
 
 import com.yongjinbao.commons.entity.Area;
+import com.yongjinbao.houseNew.entity.HouseInfoNew;
 import com.yongjinbao.houseValid.dto.*;
 import com.yongjinbao.houseValid.entity.HouseInfoValid;
 import com.yongjinbao.houseValid.entity.State;
@@ -171,5 +172,11 @@ public interface IHouseInfoValidService extends IBaseService<HouseInfoValid,Inte
     
     /** 发房人和发房地址是否同一区域 **/
     public boolean isHouseMemberFromSameCity(HttpServletRequest request, Long areaId2);
+
+	/** 获取已经购买的房源信息 **/
+	HouseInfoValid getBoughtHouseInfo(long houseInfo_id, HttpServletRequest request);
+
+	// 判断是否购买该房源
+	Boolean isBoughtHouseInfo(long houseInfo_id, HttpServletRequest request);
 
 }

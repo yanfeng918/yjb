@@ -29,6 +29,7 @@ public class ExpensesService extends BaseServiceImpl<Expenses,Integer> implement
 
 	@Override
 	public <T>Pager<T> getExpensesList(GetExpensesDto getExpensesDto) {
+
         getExpensesDto.setPageOffset((getExpensesDto.getPageNumber()-1)*getExpensesDto.getPageSize());
         Pager<Expenses> pages=new Pager<Expenses>();
         List<Expenses> list=expensesDao.getExpensesList(getExpensesDto);

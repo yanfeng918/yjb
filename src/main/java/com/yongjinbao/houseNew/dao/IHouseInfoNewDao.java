@@ -15,6 +15,8 @@ import com.yongjinbao.houseinfo.entity.Community;
 import com.yongjinbao.member.entity.Member;
 import com.yongjinbao.mybatis.dao.IBaseDao;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -193,6 +195,12 @@ public interface IHouseInfoNewDao extends IBaseDao<HouseInfoNew,Integer> {
     
    /**  激活房源时添加一条激活记录 **/
     public boolean addActiveRecord(long houseInfo_id);
+
+    /** 获取已经购买的房源信息 **/
+    HouseInfoNew getHouseInfo(long houseInfo_id);
+
+    // 判断是否购买该房源
+    Boolean isBoughtHouseInfo(HashMap<String,Long> map);
     
 }
 

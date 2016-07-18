@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import com.yongjinbao.commons.Constants;
+import com.yongjinbao.enums.expense.EXPENSES_TYPE;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
@@ -30,7 +31,6 @@ import org.springframework.stereotype.Service;
 import com.yongjinbao.commons.entity.Area;
 import com.yongjinbao.commons.service.IAreaService;
 import com.yongjinbao.finance.entity.Expenses;
-import com.yongjinbao.finance.entity.Expenses.EXPENSES_TYPE;
 import com.yongjinbao.finance.entity.ExtraAward;
 import com.yongjinbao.finance.entity.Income;
 import com.yongjinbao.finance.entity.Income.INCOME_TYPE;
@@ -407,7 +407,7 @@ public class HouseInfoService extends BaseServiceImpl<HouseInfo,Integer>
 		expenses.setAmount(String.valueOf(houseInfo.getInfoPrice()));
 		expenses.setExpensesTo(houseInfoMember.getId());//支出对象为房源信息人
 		expenses.setMember(loginMember);//支出所属为登陆会员
-		expenses.setExpensesType(EXPENSES_TYPE.dealExpense);
+		expenses.setExpensesType(EXPENSES_TYPE.dealExpense.getCode());
 		expenses.setHouseInfo_id(houseInfo.getId());
 		expensesService.addExpenseInfo(expenses);
 		

@@ -3,8 +3,9 @@ package com.yongjinbao.houseNew.service.impl;
 import com.yongjinbao.commons.Constants;
 import com.yongjinbao.commons.entity.Area;
 import com.yongjinbao.commons.service.IAreaService;
+import com.yongjinbao.enums.expense.EXPENSES_TYPE;
+import com.yongjinbao.enums.house.HouseTypeEnum;
 import com.yongjinbao.finance.entity.Expenses;
-import com.yongjinbao.finance.entity.Expenses.EXPENSES_TYPE;
 import com.yongjinbao.finance.entity.ExtraAward;
 import com.yongjinbao.finance.entity.Income;
 import com.yongjinbao.finance.entity.Income.INCOME_TYPE;
@@ -53,10 +54,7 @@ import org.springframework.stereotype.Service;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by yanfeng on 2015/8/18.
@@ -319,34 +317,13 @@ public class HouseInfoNewService extends BaseServiceImpl<HouseInfoNew,Integer>
 		HouseInfoNew tempHouseInfoNew = new HouseInfoNew();
 		tempHouseInfoNew.setId(houseInfoNew.getId());
 		int readTime = houseInfoNew.getReadTime();
-		if (houseInfoNew.getSaleWay().compareTo(HouseInfoNew.HouseInfo_SaleWay.CUSTOMER)==0) {
-			//自定义房源
-			member = houseInfoDao.getHouseMember(houseInfoNew.getId());
-			//如果未购买，查看后，房源的readTime+1
-			//readTime+1后如果=3，更改为系统房源
-			//如果已经购买，则readTime不增加
-			if (!isBought) {
-				if (readTime+1 >= 3) {
-					//更改CUSTOMERINFO_SALEWAY方式为SYSTEM
-					tempHouseInfoNew.setInfoPrice(10f);
-					tempHouseInfoNew.setSaleWay(HouseInfoNew.HouseInfo_SaleWay.SYSTEM);
-					tempHouseInfoNew.setReadTime(readTime+1);
-				}else {
-					//readTime更新为readTime+1
-					tempHouseInfoNew.setReadTime(readTime+1);
-				}
-				tempHouseInfoNew.setAvailable(true);
-				houseInfoDao.updateHouseInfoWhenBrowse(tempHouseInfoNew);
-			}
-		}else if (houseInfoNew.getSaleWay().compareTo(HouseInfoNew.HouseInfo_SaleWay.SYSTEM)==0) {
-			//系统房源
-			member = memberService.getSystemMember();
-			if (!isBought) {
-				//readTime更新为readTime+1
-				tempHouseInfoNew.setReadTime(readTime+1);
-				tempHouseInfoNew.setAvailable(true);
-				houseInfoDao.updateHouseInfoWhenBrowse(tempHouseInfoNew);
-			}
+		//系统房源
+		member = memberService.getSystemMember();
+		if (!isBought) {
+			//readTime更新为readTime+1
+			tempHouseInfoNew.setReadTime(readTime+1);
+			tempHouseInfoNew.setAvailable(true);
+			houseInfoDao.updateHouseInfoWhenBrowse(tempHouseInfoNew);
 		}
 		return member;
 	}
@@ -362,37 +339,25 @@ public class HouseInfoNewService extends BaseServiceImpl<HouseInfoNew,Integer>
 	@Override
 	public void addIncomeExpenseAndBrowseInfo(Member houseInfoMember, Member loginMember, HouseInfoNew houseInfoNew) {
 		
-		if(houseInfoMember.getId()==memberService.getSystemMember().getId()){
-			//系统房源，系统增加一条10元收入记录
-			Income income = new Income();
-			income.setAmount(Float.parseFloat(String.valueOf(houseInfoNew.getInfoPrice())));
-			income.setIncomeFrom(loginMember.getId());//收入来源ID为当前登陆账号
-			income.setMember(houseInfoMember);//收入所属为房源信息人
-			income.setIncomeType(INCOME_TYPE.dealIncome);
-			income.setHouseInfo_id(houseInfoNew.getId());
-			incomeService.addIncomeInfo(income);
-		}else{
-			//非系统房源，增加两条收入记录，房源拥有者增加70%，系统增加30%
-			Income income = new Income();
-			income.setAmount(Float.parseFloat(String.valueOf(houseInfoNew.getInfoPrice()*0.3)));
-			income.setMember(memberService.getSystemMember());//收入所属为系统
-			income.setIncomeFrom(loginMember.getId());//收入来源ID为当前登陆账号
-			income.setIncomeType(INCOME_TYPE.dealIncome);
-			income.setHouseInfo_id(houseInfoNew.getId());
-			incomeService.addIncomeInfo(income);
-			//
-			income.setAmount(Float.parseFloat(String.valueOf(houseInfoNew.getInfoPrice()*0.7)));
-			income.setMember(houseInfoMember);
-			incomeService.addIncomeInfo(income);
-		}
+
+		//系统房源，系统增加一条10元收入记录
+		Income income = new Income();
+		income.setAmount(Float.parseFloat(String.valueOf(Constants.infoPrice)));
+		income.setIncomeFrom(loginMember.getId());//收入来源ID为当前登陆账号
+		income.setMember(houseInfoMember);//收入所属为房源信息人
+		income.setIncomeType(INCOME_TYPE.dealIncome);
+		income.setHouseInfo_id(houseInfoNew.getId());
+		incomeService.addIncomeInfo(income);
+
 		
 		//支出明细
 		Expenses expenses = new Expenses();
-		expenses.setAmount(String.valueOf(houseInfoNew.getInfoPrice()));
+		expenses.setAmount(String.valueOf(Constants.infoPrice));
 		expenses.setExpensesTo(houseInfoMember.getId());//支出对象为房源信息人
 		expenses.setMember(loginMember);//支出所属为登陆会员
-		expenses.setExpensesType(EXPENSES_TYPE.dealExpense);
+		expenses.setExpensesType(EXPENSES_TYPE.dealExpense.getCode());
 		expenses.setHouseInfo_id(houseInfoNew.getId());
+		expenses.setHouseType(HouseTypeEnum.NEW.getCode());
 		expensesService.addExpenseInfo(expenses);
 		
 		//加入查看房源信息
@@ -420,7 +385,7 @@ public class HouseInfoNewService extends BaseServiceImpl<HouseInfoNew,Integer>
 		myBrowseInfoDto.setBrowseFavoriteStyle(MyBrowseInfoDto.Browse);
 		//首先判断是否是自己发布的房源
 		Member isMymember = houseInfoDao.getHouseMember(houseInfo_id);
-		if (new Long(isMymember.getId()).compareTo(new Long(loginMember.getId()))==0) {
+		if (isMymember!=null&&new Long(isMymember.getId()).compareTo(new Long(loginMember.getId()))==0) {
 			//自己发布的房源时，直接反回houseInfo
 			isMine = true;
 			houseInfoNew = new HouseInfoNew();
@@ -776,6 +741,27 @@ public class HouseInfoNewService extends BaseServiceImpl<HouseInfoNew,Integer>
 	@Override
 	public boolean isHouseMemberFromSameCity(HttpServletRequest request, Long areaId2) {
 		return areaService.isAreaFromSame(request, areaId2);
+	}
+
+	@Override
+	public HouseInfoNew getBoughtHouseInfo(long houseInfo_id, HttpServletRequest request) {
+
+		// 判断是否购买该房源
+		if(isBoughtHouseInfo(houseInfo_id,request)){
+			return houseInfoDao.getHouseInfo(houseInfo_id);
+		}
+		return null;
+	}
+
+	@Override
+	public Boolean isBoughtHouseInfo(long houseInfo_id, HttpServletRequest request) {
+		long memberId = memberService.getMemberId(request);
+		HashMap<String,Long> map = new HashMap<>();
+		map.put("member_id",memberId);
+		map.put("houseInfo_id",houseInfo_id);
+
+		Boolean boughtHouseInfo = houseInfoDao.isBoughtHouseInfo(map);
+		return boughtHouseInfo;
 	}
 
 }

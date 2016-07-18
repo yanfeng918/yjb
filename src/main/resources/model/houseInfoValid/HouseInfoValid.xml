@@ -530,5 +530,13 @@
 		INSERT INTO t_house_active_record (createDate, modifyDate, houseInfo_id) 
 		VALUES(now(), now(), #{houseInfo_id})
 	</insert>
+
+	<select id="getHouseInfo" parameterType="long" resultType="com.yongjinbao.houseValid.entity.HouseInfoValid" >
+		SELECT * FROM t_house_info_valid h WHERE h.id=#{id}
+	</select>
+
+	<select id="isBoughtHouseInfo" parameterType="map" resultType="int" >
+		SELECT count(*) FROM t_expenses WHERE member_id=#{member_id} AND houseInfo_id=#{houseInfo_id} AND houseType=1
+	</select>
 	
 </mapper>

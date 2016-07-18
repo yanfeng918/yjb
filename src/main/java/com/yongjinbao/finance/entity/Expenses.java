@@ -1,6 +1,8 @@
 package com.yongjinbao.finance.entity;
 
 import com.yongjinbao.commons.entity.BaseEntity;
+import com.yongjinbao.enums.expense.EXPENSES_TYPE;
+import com.yongjinbao.enums.house.HouseTypeEnum;
 import com.yongjinbao.houseinfo.entity.HouseInfo;
 import com.yongjinbao.member.entity.Member;
 /**
@@ -9,23 +11,7 @@ import com.yongjinbao.member.entity.Member;
  */
 public class Expenses extends BaseEntity{
 	private static final long serialVersionUID = 6020976395339131285L;
-    /** 支出状态 */
-    public enum EXPENSES_TYPE{
-        refund("系统扣款",1),dealExpense("交易支出",2),promoteWelfare("推广福利",3),
-		extraAward("额外奖励",4),activityReward("活动奖励",5);
-        private String outername;
-        private int value;
-        private EXPENSES_TYPE(String outername,int value){
-            this.outername = outername;
-            this.value = value;
-        }
-        public String getOutername() {
-            return outername;
-        }
-        public int getValue() {
-            return value;
-        }
-    }
+
 
     /** 收入数量 */
 	private String amount;
@@ -33,7 +19,7 @@ public class Expenses extends BaseEntity{
 	/** 所属会员 */
 	private Member member;
     /**消费类型**/
-    private EXPENSES_TYPE expensesType;
+    private int expensesType;
     
     /**消费对象**/
     private long expensesTo;
@@ -45,16 +31,17 @@ public class Expenses extends BaseEntity{
     
     private String statusName;
 
-    public EXPENSES_TYPE getExpensesType() {
-        return expensesType;
-    }
+	private int houseType;
 
-    public void setExpensesType(EXPENSES_TYPE expensesType) {
-        this.expensesType = expensesType;
-        this.setStatusName(expensesType.getOutername());
-    }
+	public int getExpensesType() {
+		return expensesType;
+	}
 
-    public String getAmount() {
+	public void setExpensesType(int expensesType) {
+		this.expensesType = expensesType;
+	}
+
+	public String getAmount() {
 		return amount;
 	}
 
@@ -109,5 +96,11 @@ public class Expenses extends BaseEntity{
 		this.houseInfo = houseInfo;
 	}
 
-	
+	public int getHouseType() {
+		return houseType;
+	}
+
+	public void setHouseType(int houseType) {
+		this.houseType = houseType;
+	}
 }

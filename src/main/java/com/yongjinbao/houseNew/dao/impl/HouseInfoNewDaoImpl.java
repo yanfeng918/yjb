@@ -18,6 +18,7 @@ import com.yongjinbao.mybatis.dao.impl.BaseDaoImpl;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -311,6 +312,18 @@ public class HouseInfoNewDaoImpl extends BaseDaoImpl<HouseInfoNew,Integer> imple
 	public boolean addActiveRecord(long houseInfo_id) {
 		int insert = getSqlSession().insert(HouseInfoNew.class.getName()+".addActiveRecord", houseInfo_id);
 		return insert>0;
+	}
+
+	@Override
+	public HouseInfoNew getHouseInfo(long houseInfo_id) {
+		HouseInfoNew house = getSqlSession().selectOne(HouseInfoNew.class.getName()+".getHouseInfo", houseInfo_id);
+		return house;
+	}
+
+	@Override
+	public Boolean isBoughtHouseInfo(HashMap<String, Long> map) {
+		int count = getSqlSession().selectOne(HouseInfoNew.class.getName()+".isBoughtHouseInfo", map);
+		return count>0;
 	}
 
 }

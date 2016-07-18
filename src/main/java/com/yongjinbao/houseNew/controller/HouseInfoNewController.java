@@ -43,8 +43,6 @@ public class HouseInfoNewController {
     @Inject
     private IAreaService areaService;
 
-
-
     /**
      * 条件查询房屋信息列表
      * @param getHouseInfoDto
@@ -166,61 +164,21 @@ public class HouseInfoNewController {
 	BrowseHouseInfoVO getBrowseHouseInfoVO(long houseInfo_id, HttpServletRequest request) {
 		return houseInfoService.getBrowseHouseInfoVO(houseInfo_id, request);
 	}
-	
 
-	
+
 	/**
-     * 获取今日房源数
-     */
-	@RequestMapping(value = "/getTodayHouseInfoCount", method = RequestMethod.GET)
-	@ResponseBody
-    public int getTodayHouseInfoCount(int area_id){
-		return houseInfoService.getTodayHouseInfoCount(area_id);
-    }
-
-	
-	/**
-	 * 检查是否可以对当前房源进行申诉操作
-	 * @since 2015年11月6日16:03
-	 * @author masw
-	 * @return
+	 * 获取已经购买的房源
 	 */
-	@RequestMapping(value = "auth/checkStateStatus", method = RequestMethod.GET)
-	@ResponseBody
-	public StateStatusVO checkStateStatus(long houseInfo_id, HttpServletRequest request){
-		StateStatusDto dto = new StateStatusDto();
-		dto.setHouseInfo_id(houseInfo_id);
-		dto.setMember_id(memberService.getMemberId(request));
-		StateStatusVO vo= houseInfoService.checkStateStatus(dto);
-		vo.setHouseInfo_id(houseInfo_id);
-		return vo;
+	@RequestMapping(value = "/auth/getBoughtHouseInfo", method = RequestMethod.GET)
+	public @ResponseBody
+	HouseInfoNew getBoughtHouseInfo(long houseInfo_id, HttpServletRequest request) {
+
+		return houseInfoService.getBoughtHouseInfo(houseInfo_id, request);
 	}
 
 
-    /**
-	 * 获取关键字楼盘字典
-	 * @since 2015年11月11日
-	 * @author masw
-	 * @return
-	 */
-	@RequestMapping(value = "/getCommunity", method = RequestMethod.GET)
-	@ResponseBody
-	public List<Community>  getCommunity(String communityKeyWords, HttpServletRequest request){
-		return houseInfoService.getTopTenCommunity(communityKeyWords);
-	}
-	
-    /**
-	 * 获取关键字楼盘字典
-	 * @since 2015年11月11日
-	 * @author masw
-	 * @return
-	 */
-	@RequestMapping(value = "/getCommunityV2", method = RequestMethod.GET)
-	@ResponseBody
-	public List<Community>  getCommunityV2(GetCommunityV2Dto getCommunityV2Dto, HttpServletRequest request){
-		return houseInfoService.getTopTenCommunityV2(getCommunityV2Dto);
-	}
-	
+
+
 
 	
     

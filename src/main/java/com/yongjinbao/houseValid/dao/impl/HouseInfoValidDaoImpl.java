@@ -2,6 +2,7 @@ package com.yongjinbao.houseValid.dao.impl;
 
 import com.yongjinbao.commons.entity.Area;
 import com.yongjinbao.finance.entity.ExtraAward;
+import com.yongjinbao.houseNew.entity.HouseInfoNew;
 import com.yongjinbao.houseValid.dao.IHouseInfoValidDao;
 import com.yongjinbao.houseValid.dto.BonusProcessDto;
 import com.yongjinbao.houseValid.dto.GetCommunityV2Dto;
@@ -18,6 +19,7 @@ import com.yongjinbao.mybatis.dao.impl.BaseDaoImpl;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -311,6 +313,18 @@ public class HouseInfoValidDaoImpl extends BaseDaoImpl<HouseInfoValid,Integer> i
 	public boolean addActiveRecord(long houseInfo_id) {
 		int insert = getSqlSession().insert(HouseInfoValid.class.getName()+".addActiveRecord", houseInfo_id);
 		return insert>0;
+	}
+
+	@Override
+	public HouseInfoValid getHouseInfo(long houseInfo_id) {
+		HouseInfoValid house = getSqlSession().selectOne(HouseInfoValid.class.getName()+".getHouseInfo", houseInfo_id);
+		return house;
+	}
+
+	@Override
+	public Boolean isBoughtHouseInfo(HashMap<String, Long> map) {
+		int count = getSqlSession().selectOne(HouseInfoValid.class.getName()+".isBoughtHouseInfo", map);
+		return count>0;
 	}
 
 }

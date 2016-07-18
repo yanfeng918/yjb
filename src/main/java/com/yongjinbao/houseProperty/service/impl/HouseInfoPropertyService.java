@@ -2,8 +2,9 @@ package com.yongjinbao.houseProperty.service.impl;
 
 import com.yongjinbao.commons.entity.Area;
 import com.yongjinbao.commons.service.IAreaService;
+import com.yongjinbao.enums.expense.EXPENSES_TYPE;
+import com.yongjinbao.enums.house.HouseTypeEnum;
 import com.yongjinbao.finance.entity.Expenses;
-import com.yongjinbao.finance.entity.Expenses.EXPENSES_TYPE;
 import com.yongjinbao.finance.entity.ExtraAward;
 import com.yongjinbao.finance.entity.Income;
 import com.yongjinbao.finance.entity.Income.INCOME_TYPE;
@@ -388,8 +389,9 @@ public class HouseInfoPropertyService extends BaseServiceImpl<HouseInfoProperty,
 		expenses.setAmount(String.valueOf(houseInfoProperty.getInfoPrice()));
 		expenses.setExpensesTo(houseInfoMember.getId());//支出对象为房源信息人
 		expenses.setMember(loginMember);//支出所属为登陆会员
-		expenses.setExpensesType(EXPENSES_TYPE.dealExpense);
+		expenses.setExpensesType(EXPENSES_TYPE.dealExpense.getCode());
 		expenses.setHouseInfo_id(houseInfoProperty.getId());
+		expenses.setHouseType(HouseTypeEnum.PROPERTY.getCode());
 		expensesService.addExpenseInfo(expenses);
 		
 		//加入查看房源信息
