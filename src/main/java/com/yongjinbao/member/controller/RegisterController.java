@@ -169,7 +169,7 @@ public class RegisterController  {
         String memberName = member.getUsername();
         String token = DigestUtils.md5Hex(remoteHost+id+memberName);
 
-        RedisUtils.set(SerializeUtil.serialize(token), SerializeUtil.serialize(new Principal(member.getId(), member.getUsername())));
+        RedisUtils.set(SerializeUtil.serialize(token), SerializeUtil.serialize(new Principal(member.getId(), member.getUsername())),7 * 24 * 60 * 60);
 
         WebUtils.addCookie(request, response, Member.USERNAME_COOKIE_NAME, token);
         map.put("id", id);

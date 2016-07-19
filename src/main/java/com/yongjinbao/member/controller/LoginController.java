@@ -167,7 +167,7 @@ public class LoginController {
 		String id = member.getId().toString();
 		String memberName = member.getUsername();
 		String token = DigestUtils.md5Hex(remoteHost+id+memberName);
-		RedisUtils.set(SerializeUtil.serialize(token), SerializeUtil.serialize(new Principal(member.getId(), memberName)));
+		RedisUtils.set(SerializeUtil.serialize(token), SerializeUtil.serialize(new Principal(member.getId(), memberName)),7 * 24 * 60 * 60);
 		Long cityId = areaService.getCityByArea(member.getArea_id());
 		map.put("type", "success");
 		map.put("token",token);
