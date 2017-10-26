@@ -107,15 +107,15 @@
 		<property name="defaultLocale" value="${locale}" />
 	</bean>
 	
-	<bean id="imageCaptchaService" class="com.octo.captcha.service.image.DefaultManageableImageCaptchaService">
-		 	
-		<property name="captchaEngine">
-			<bean class="com.yongjinbao.beans.CaptchaEngine" />
-		</property>
-		<property name="minGuarantedStorageDelayInSeconds" value="3600" />
-	</bean>
-	
-	 <bean id="myCaptchaStore" class="com.yongjinbao.beans.CaptchaEngine"/> 
+	<!--<bean id="imageCaptchaService" class="com.octo.captcha.service.image.DefaultManageableImageCaptchaService">-->
+		 	<!---->
+		<!--<property name="captchaEngine">-->
+			<!--<bean class="com.yongjinbao.beans.CaptchaEngine" />-->
+		<!--</property>-->
+		<!--<property name="minGuarantedStorageDelayInSeconds" value="3600" />-->
+	<!--</bean>-->
+	<!---->
+	 <!--<bean id="myCaptchaStore" class="com.yongjinbao.beans.CaptchaEngine"/> -->
 	
 	<bean id="freeMarkerConfigurer" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
 		<property name="templateLoaderPaths" value="${template.loader_path}" />
@@ -140,15 +140,15 @@
 		<property name="freemarkerVariables">
 			<map>
 				<entry key="systemName" value="${system.name}" />
-				<entry key="systemVersion" value="${system.version}" />
-				<entry key="systemDescription" value="${system.description}" />
-				<entry key="systemShowPowered" value="${system.show_powered}" />
-				<!--<entry key="base" value="#{servletContext.contextPath}" />-->
-				<entry key="locale" value="${locale}" />
-				<entry key="message"><bean class="com.yongjinbao.utils.MessageMethod"></bean></entry>
-				<entry key="setting" value="#{T(com.yongjinbao.utils.SettingUtils).get()}" />
-			</map>
-		</property>
+		<entry key="systemVersion" value="${system.version}" />
+		<!--<entry key="systemDescription" value="${system.description}" />-->
+		<!--<entry key="systemShowPowered" value="${system.show_powered}" />-->
+		<!--<entry key="base" value="#{servletContext.contextPath}" />-->
+		<entry key="locale" value="${locale}" />
+		<entry key="message"><bean class="com.yongjinbao.utils.MessageMethod"></bean></entry>
+		<entry key="setting" value="#{T(com.yongjinbao.utils.SettingUtils).get()}" />
+	</map>
+</property>
 	</bean>
 	
 <!-- 	

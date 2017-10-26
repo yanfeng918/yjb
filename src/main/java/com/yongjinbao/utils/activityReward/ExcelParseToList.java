@@ -15,7 +15,7 @@ import java.util.List;
 
 public class ExcelParseToList {
 
-	public static final String houseInfoSourceFilePath = "/Users/Mac/documents/fangdd/战区奖金.xls";
+	public static final String houseInfoSourceFilePath = "/Users/Mac/Desktop/a.xls";
 
 	public static List<Member> parseExcel() throws Exception {
 

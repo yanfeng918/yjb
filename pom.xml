@@ -2,7 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.yongjinbao</groupId>
-	<artifactId>yjb</artifactId>
+	<artifactId>yfyk</artifactId>
 	<packaging>war</packaging>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>yjb Maven Webapp</name>
@@ -275,11 +275,11 @@
 			    <artifactId>tomcat7-maven-plugin</artifactId>
 			    <version>2.2</version>
 			    <configuration>
-			    	<!-- http://121.40.162.48/ -->
 			    	<!-- http://139.196.13.240:32981/ -->
-			        <url>http://139.196.13.240:32981/manager/text</url>
+					<url>http://119.23.50.218:32981/manager/text</url>
+					<!--<url>http://120.25.228.183:32981/manager/text</url>-->
 			        <server>tomcat</server>
-			        <path>/yjb</path>
+			        <path>/yfyk</path>
 			        <username>admin</username>
 			        <password>!UM)9=9)JD(1Ltyl</password>
 			    </configuration>
@@ -302,7 +302,7 @@
 				  <configuration>
 				    <scanIntervalSeconds>10</scanIntervalSeconds>
 				    <webApp>
-				      <contextPath>/yjb</contextPath>
+				      <contextPath>/yfyk</contextPath>
 				    </webApp>
 				    <connectors>
 				       <connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">

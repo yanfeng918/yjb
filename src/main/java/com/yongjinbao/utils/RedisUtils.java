@@ -12,13 +12,13 @@ public final class RedisUtils {
       //Redis服务器IP
 //	  private static String ADDR = "10.12.34.1";
 //	  private static String ADDR = "139.196.6.9";
-    private static String ADDR = "139.196.13.240";
+    private static String ADDR = "119.23.50.218";
 
     //Redis的端口号
     private static int PORT = 6379;
 
     //访问密码 SettingUtils.get().getRedisPwd()"yPK!OxP*nO5Cg%@zO5#9"
-    private static String AUTH = "my_redis";
+    private static String AUTH = "L!lhn$CGLzPiY!1r";
 
     
     //可用连接实例的最大数目，默认值为8；
@@ -48,8 +48,8 @@ public final class RedisUtils {
             config.setMaxIdle(MAX_IDLE);
             config.setMaxWait(MAX_WAIT);
             config.setTestOnBorrow(TEST_ON_BORROW);
-            //jedisPool = new JedisPool(config, ADDR, PORT, TIMEOUT,AUTH);
-            jedisPool = new JedisPool(config, ADDR, PORT, TIMEOUT);
+            jedisPool = new JedisPool(config, ADDR, PORT, TIMEOUT,AUTH);
+//            jedisPool = new JedisPool(config, ADDR, PORT, TIMEOUT);
         } catch (Exception e) {
             e.printStackTrace();
         }

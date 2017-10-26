@@ -1,17 +1,11 @@
 package com.yongjinbao.utils.redis;
 
+import redis.clients.jedis.*;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.JedisPoolConfig;
-import redis.clients.jedis.JedisShardInfo;
-import redis.clients.jedis.ShardedJedis;
-import redis.clients.jedis.ShardedJedisPool;
-import redis.clients.jedis.SortingParams;
 
 
 public class RedisClient {
@@ -43,7 +37,7 @@ public class RedisClient {
         config.setMaxWait(1000l); 
         config.setTestOnBorrow(false); 
         
-        jedisPool = new JedisPool(config,"127.0.0.1",6379);
+        jedisPool = new JedisPool(config,"120.25.228.183",6379);
     }
     
     /** 

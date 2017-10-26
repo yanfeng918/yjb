@@ -129,7 +129,7 @@
 		select
 		h.id,h.createDate,h.infoPrice,h.area_id,h.roomNumber, h.community,h.address,h.description,h.areaSize,h.salePrice,
 		h.ban,h.houseShape,h.name,REPLACE(h.mobile,substring(h.mobile,4,4),'****')
-		mobile,h.status,h.available,  a.fullName area_fullName from t_house_info_valid h LEFT JOIN t_area
+		mobile,h.available,  a.fullName area_fullName from t_house_info_valid h LEFT JOIN t_area
 		a on h.area_id = a.id
 		<include refid="selectSql" />
 		<if test="sort!=null">
@@ -151,7 +151,7 @@
 		resultType="com.yongjinbao.houseinfo.vo.HouseInfoValiddFavouriteStatusVO">
 		select h.id,h.createDate,h.infoPrice,h.area_id,h.community,h.address,h.description,h.areaSize,h.salePrice,h.floor,
 		h.roomNumber,h.ban,h.houseShape,h.name,REPLACE(h.mobile,substring(h.mobile,4,4),'****')
-		mobile,h.status,h.available, a.fullName area_fullName from t_house_info_valid h
+		mobile,h.available, a.fullName area_fullName from t_house_info_valid h
 		left join t_area a
 		on h.area_id = a.id
 		<include refid="selectSqlLike" />
